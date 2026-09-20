@@ -8,9 +8,9 @@
 |---|---|---|---|
 | TV1 | 2001240237 | Phạm Tuấn Kiệt (nhóm trưởng) | Nền tảng, layout chung, tài khoản và phân quyền |
 | TV2 | 2001240555 | Lê Quốc Việt | Loại sản phẩm, thương hiệu, nhà cung cấp, nhập kho |
-| TV3 | 2001240351 | Phạm Kim Hoàng Oanh | Sản phẩm, trang chủ, tìm kiếm, chi tiết sản phẩm |
-| TV4 | 2001240536 | Nguyễn Thanh Tuấn | Giỏ hàng, đặt hàng, lịch sử đơn, hồ sơ khách hàng |
-| TV5 | 2001240258 | Ngô Hoàng Anh Phát | Quản lý đơn hàng, khách hàng, thống kê |
+| TV3 | 2001240536 | Nguyễn Thanh Tuấn | Sản phẩm, trang chủ, tìm kiếm, chi tiết sản phẩm |
+| TV4 | 2001240258 | Ngô Hoàng Anh Phát | Giỏ hàng, đặt hàng, lịch sử đơn, hồ sơ khách hàng |
+| TV5 | 2001240351 | Phạm Kim Hoàng Oanh | Quản lý đơn hàng, khách hàng, thống kê |
 
 ## Công nghệ
 
