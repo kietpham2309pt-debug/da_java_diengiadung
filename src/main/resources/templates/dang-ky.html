@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Đăng ký')}"></head>
+<body>
+<div th:replace="~{layout/fragments :: menu}"></div>
+
+<main class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h4 mb-3">Đăng ký tài khoản</h1>
+                    <div class="alert alert-danger" th:if="${loiDangKy}" th:text="${loiDangKy}"></div>
+
+                    <form th:action="@{/dang-ky}" th:object="${taiKhoan}" method="post">
+                        <div class="mb-3">
+                            <label class="form-label" for="tenDangNhap">Tên đăng nhập</label>
+                            <input class="form-control" id="tenDangNhap" th:field="*{tenDangNhap}">
+                            <div class="text-danger small" th:if="${#fields.hasErrors('tenDangNhap')}"
+                                 th:errors="*{tenDangNhap}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="matKhau">Mật khẩu</label>
+                            <input class="form-control" id="matKhau" type="password" th:field="*{matKhau}">
+                            <div class="text-danger small" th:if="${#fields.hasErrors('matKhau')}"
+                                 th:errors="*{matKhau}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="hoTen">Họ và tên</label>
+                            <input class="form-control" id="hoTen" th:field="*{hoTen}">
+                            <div class="text-danger small" th:if="${#fields.hasErrors('hoTen')}"
+                                 th:errors="*{hoTen}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" id="email" th:field="*{email}">
+                            <div class="text-danger small" th:if="${#fields.hasErrors('email')}"
+                                 th:errors="*{email}"></div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="soDienThoai">Số điện thoại</label>
+                            <input class="form-control" id="soDienThoai" name="soDienThoai" th:value="${soDienThoai}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="diaChi">Địa chỉ</label>
+                            <input class="form-control" id="diaChi" name="diaChi" th:value="${diaChi}">
+                        </div>
+                        <button class="btn btn-primary w-100" type="submit">Đăng ký</button>
+                    </form>
+
+                    <p class="mt-3 mb-0 text-center">
+                        Đã có tài khoản? <a th:href="@{/dang-nhap}">Đăng nhập</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+</body>
+</html>

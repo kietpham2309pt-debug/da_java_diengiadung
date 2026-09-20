@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang(${tieuDe})}"></head>
+<body>
+<div th:replace="~{layout/fragments :: menu}"></div>
+
+<main class="container py-4">
+    <h1 class="h4 mb-3" th:text="${tieuDe}">Tất cả sản phẩm</h1>
+    <p class="text-muted" th:text="'Có ' + ${#lists.size(danhSachSanPham)} + ' sản phẩm'">Có 0 sản phẩm</p>
+
+    <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-3" th:each="sp : ${danhSachSanPham}">
+            <div class="card the-san-pham">
+                <img class="anh-san-pham" th:if="${sp.hinhAnh != null}" th:src="@{'/uploads/' + ${sp.hinhAnh}}"
+                     th:alt="${sp.tenSanPham}">
+                <div class="anh-trong" th:if="${sp.hinhAnh == null}" th:text="${sp.tenSanPham}">Chưa có ảnh</div>
+                <div class="card-body">
+                    <div class="small text-muted" th:text="${sp.thuongHieu != null} ? ${sp.thuongHieu.tenThuongHieu} : ''">Bosch</div>
+                    <div class="fw-semibold" th:text="${sp.tenSanPham}">Tên sản phẩm</div>
+                    <div class="small text-muted" th:text="${sp.maSanPham}">MSP</div>
+                    <div class="mt-2">
+                        <span class="gia-ban" th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' đ'">0 đ</span>
+                        <span class="gia-cu ms-1" th:if="${sp.giaKhuyenMai != null}"
+                              th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' đ'">0 đ</span>
+                    </div>
+                    <div class="small mt-1" th:classappend="${sp.conHang()} ? 'text-success' : 'text-danger'"
+                         th:text="${sp.conHang()} ? 'Còn ' + ${sp.soLuongTon} + ' sản phẩm' : 'Hết hàng'">Còn hàng</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12" th:if="${#lists.isEmpty(danhSachSanPham)}">
+            <div class="alert alert-light border">Không tìm thấy sản phẩm nào.</div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+</body>
+</html>
