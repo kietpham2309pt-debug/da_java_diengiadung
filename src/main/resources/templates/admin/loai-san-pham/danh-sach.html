@@ -1,98 +1,96 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Loại sản phẩm')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Loại sản phẩm', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than than--kem">
-    <div class="khung">
-        <div class="bo-cuc-qt">
-            <div th:replace="~{layout/fragments :: menuQuanTri('loai-san-pham')}"></div>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Loại sản phẩm</span>
+            </nav>
 
-            <div>
-                <div class="dau-trang">
-                    <div>
-                        <h1>Loại sản phẩm</h1>
-                        <p>Nhóm hàng hiển thị trên menu và trang chủ.</p>
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('loai-san-pham')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Loại sản phẩm</h1>
+                            <p>Nhóm hàng hiển thị trên menu, trang chủ và trang sản phẩm.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" th:href="@{/admin/loai-san-pham/them}">Thêm loại</a>
+                        </div>
                     </div>
-                    <div class="dau-trang__nut">
-                        <a th:href="@{/admin/loai-san-pham/them}" class="nut nut--nho">
-                            <svg class="ic"><use xlink:href="#ic-them"></use></svg>
-                            Thêm loại
-                        </a>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/loai-san-pham}" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên loại"
+                                   aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/loai-san-pham}"
+                               class="nut nut--nho">Bỏ lọc</a>
+                        </form>
                     </div>
-                </div>
 
-                <div th:replace="~{layout/fragments :: thongBao}"></div>
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Icon</th>
+                                    <th>Tên loại</th>
+                                    <th>Mã loại</th>
+                                    <th>Mô tả</th>
+                                    <th class="canh-giua">Số SP</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="loai : ${danhSach}">
+                                    <td>
+                                        <svg class="ic ic-dm"><use th:href="'#ic-' + ${loai.maLoai}"></use></svg>
+                                    </td>
+                                    <td th:text="${loai.tenLoai}">Bếp điện từ</td>
+                                    <td><span class="the-nhan" th:text="${loai.maLoai}">bep-dien-tu</span></td>
+                                    <td class="o-dai" th:text="${loai.moTa}">Mô tả</td>
+                                    <td class="canh-giua" th:text="${#lists.size(loai.danhSachSanPham)}">0</td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{'/admin/loai-san-pham/sua/' + ${loai.id}}">Sửa</a>
+                                            <form th:action="@{'/admin/loai-san-pham/xoa/' + ${loai.id}}" method="post"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <div class="hang-loc">
-                    <form th:action="@{/admin/loai-san-pham}" method="get">
-                        <input class="o-nhap" name="tuKhoa" placeholder="Tìm theo tên loại"
-                               aria-label="Từ khoá" th:value="${tuKhoa}">
-                        <button class="nut nut--nho" type="submit">
-                            <svg class="ic"><use xlink:href="#ic-tim-kiem"></use></svg>
-                            Tìm
-                        </button>
-                        <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/loai-san-pham}"
-                           class="nut-lien">Bỏ lọc</a>
-                    </form>
-                </div>
-
-                <div class="khung-bang" th:if="${not #lists.isEmpty(danhSach)}">
-                    <table class="bang-dl">
-                        <thead>
-                        <tr>
-                            <th style="width:64px">Mã</th>
-                            <th style="width:62px" class="canh-giua">Icon</th>
-                            <th>Tên loại</th>
-                            <th>Mã icon</th>
-                            <th>Mô tả</th>
-                            <th style="width:92px" class="canh-giua">Số SP</th>
-                            <th style="width:168px" class="canh-giua">Thao tác</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="loai : ${danhSach}">
-                            <td th:text="${loai.id}">1</td>
-                            <td class="canh-giua">
-                                <svg class="ic" style="margin-inline:auto"><use th:href="'#ic-' + ${loai.maLoai}"></use></svg>
-                            </td>
-                            <td th:text="${loai.tenLoai}">Bếp từ</td>
-                            <td><span class="the-nhan" th:text="${loai.maLoai}">bep-tu</span></td>
-                            <td th:text="${loai.moTa}">Mô tả</td>
-                            <td class="canh-giua" th:text="${#lists.size(loai.danhSachSanPham)}">0</td>
-                            <td>
-                                <div class="thao-tac">
-                                    <a class="nut nut--vien nut--nho" th:href="@{'/admin/loai-san-pham/sua/' + ${loai.id}}">
-                                        <svg class="ic"><use xlink:href="#ic-sua"></use></svg>
-                                        Sửa
-                                    </a>
-                                    <form th:action="@{'/admin/loai-san-pham/xoa/' + ${loai.id}}" method="post"
-                                          onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
-                                        <button class="nut nut--do nut--nho" type="submit">
-                                            <svg class="ic"><use xlink:href="#ic-xoa"></use></svg>
-                                            Xoá
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="trang-trong" th:if="${#lists.isEmpty(danhSach)}">
-                    <svg class="ic"><use xlink:href="#ic-hop-trong"></use></svg>
-                    <strong>Chưa có loại sản phẩm nào</strong>
-                    <a th:href="@{/admin/loai-san-pham/them}" class="nut nut--nho" style="margin-top:8px">Thêm loại đầu tiên</a>
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Chưa có loại sản phẩm nào.</p>
+                        <a class="nut nut--dac" th:href="@{/admin/loai-san-pham/them}">Thêm loại đầu tiên</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

@@ -1,239 +1,216 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="dauTrang(tieuDe)">
+<head th:fragment="dauTrang(tieuDe, coMoMan)">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${tieuDe} + ' | Bếp Nè'">Bếp Nè</title>
-    <meta name="description" content="Bếp Nè, cửa hàng thiết bị nhà bếp chính hãng: máy hút mùi, bếp từ, bếp điện từ, bếp hồng ngoại, máy rửa chén, máy giặt.">
-    <link rel="icon" th:href="@{/img/favicon.ico}">
-    <link rel="apple-touch-icon" th:href="@{/img/favicon.png}">
-    <script>document.documentElement.className += ' co-js';</script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title th:text="${tieuDe} + ' - Bep Nè'">Bep Nè</title>
+    <meta name="description" content="Bep Nè, cửa hàng thiết bị nhà bếp chính hãng: máy hút mùi, bếp điện từ, bếp hồng ngoại, máy rửa chén, lò nướng, lò vi sóng.">
+
+    <script th:inline="javascript">
+        (function () {
+            var g = document.documentElement;
+            g.className += ' co-js';
+            var bo = false;
+            try {
+                bo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            } catch (e) { }
+            if (bo) return;
+            if ([[${coMoMan}]]) {
+                g.className += ' dang-mo-man khoa-cuon';
+                return;
+            }
+            g.className += ' dang-luoi';
+            setTimeout(function () {
+                g.className = g.className.replace(/ *\bdang-luoi\b/g, '');
+            }, 2200);
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var g = document.documentElement;
+            setTimeout(function () {
+                if (g.className.indexOf('hien-san-sang') < 0) {
+                    g.className += ' hien-het';
+                }
+            }, 5000);
+        })();
+    </script>
+
+    <link rel="icon" th:href="@{/favicon.ico}" sizes="any">
+    <link rel="apple-touch-icon" th:href="@{/img/icon-180.png}">
+    <link rel="preload" th:href="@{/fonts/montserrat-latin.woff2}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" th:href="@{/fonts/montserrat-vietnamese.woff2}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" th:href="@{/css/site.css}">
     <link rel="stylesheet" th:href="@{/css/ung-dung.css}">
 </head>
 <body>
 
-<header class="thanh-dinh hien" th:fragment="menu">
-    <div class="khung">
-        <a th:href="@{/}" class="logo-thanh" aria-label="Bếp Nè, về trang chủ">
-            <img th:src="@{/img/logo-nau.png}" alt="Bếp Nè" width="252" height="110">
+<header class="thanh" id="thanh" th:fragment="thanh">
+    <div class="thanh__khung">
+        <a class="logo" th:href="@{/}" aria-label="Bep Nè, về trang chủ">
+            <div th:replace="~{layout/logo :: logo}"></div>
         </a>
 
         <nav class="dh" aria-label="Điều hướng chính">
-            <div class="dh-muc"><a th:href="@{/}" class="dh-nut">Trang chủ</a></div>
+            <a class="dh-nut" th:href="@{/}">Trang chủ</a>
 
             <div class="dh-muc">
-                <button type="button" class="dh-nut" aria-haspopup="true">
-                    Sản phẩm <i class="mui" aria-hidden="true"></i>
-                </button>
+                <a class="dh-nut" th:href="@{/san-pham}" aria-haspopup="true">
+                    Sản phẩm
+                    <svg class="ic ic--mui"><use xlink:href="#ic-chevron"></use></svg>
+                </a>
                 <div class="bang">
-                    <div class="bang__cot">
-                        <p class="bang__nhan">Danh mục sản phẩm</p>
-                        <a th:each="loai : ${loaiTrenMenu}" th:href="@{/san-pham(loai=${loai.id})}" class="mm">
-                            <span class="mm__ic">
-                                <svg class="ic"><use th:href="'#ic-' + ${loai.maLoai}"></use></svg>
-                            </span>
-                            <span>
-                                <span class="mm__ten" th:text="${loai.tenLoai}">Bếp từ</span><br>
-                                <span class="mm__so" th:text="${#lists.size(loai.danhSachSanPham)} + ' sản phẩm'">0 sản phẩm</span>
-                            </span>
-                        </a>
-                    </div>
-                    <div class="bang__ben">
-                        <div>
-                            <h4>Trọn bộ bếp và hút mùi</h4>
-                            <p>Mua theo combo tiết kiệm hơn, tặng gói vệ sinh máy 12 tháng.</p>
-                        </div>
-                        <a th:href="@{/san-pham}" class="lien-ket">
-                            Xem tất cả sản phẩm
-                            <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
-                        </a>
-                    </div>
+                    <a th:each="loai : ${loaiTrenMenu}" class="bang__muc"
+                       th:href="@{/san-pham(loai=${loai.id})}" th:text="${loai.tenLoai}">Bếp điện từ</a>
                 </div>
             </div>
 
-            <div class="dh-muc"><a th:href="@{/san-pham}" class="dh-nut">Tất cả sản phẩm</a></div>
-            <div class="dh-muc"><a href="#lien-he" class="dh-nut">Liên hệ</a></div>
+            <a class="dh-nut" th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}">Đăng nhập</a>
+            <a class="dh-nut" th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/admin}">Quản trị</a>
+            <a class="dh-nut" th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}"
+               th:text="'Đăng xuất (' + ${taiKhoanHienTai.hoTen} + ')'">Đăng xuất</a>
         </nav>
 
-        <form class="o-tim" th:action="@{/san-pham}" method="get" role="search">
-            <input type="search" name="tuKhoa" placeholder="Tìm kiếm" aria-label="Từ khoá tìm kiếm" th:value="${tuKhoa}">
-            <button type="submit" aria-label="Tìm kiếm">
+        <div class="thanh__phai">
+            <span class="thanh__vach" aria-hidden="true"></span>
+
+            <form class="o-tim" id="o-tim" role="search" th:action="@{/san-pham}" method="get">
+                <input type="search" name="tuKhoa" id="o-tim-nhap" placeholder="Tìm sản phẩm"
+                       aria-label="Từ khoá tìm kiếm" th:value="${tuKhoa}">
+            </form>
+
+            <button type="button" class="nut-tron" id="bat-tim" aria-label="Tìm kiếm" aria-expanded="false">
                 <svg class="ic"><use xlink:href="#ic-tim-kiem"></use></svg>
             </button>
-        </form>
 
-        <a th:href="@{/gio-hang}" class="nut-tron gio" aria-label="Giỏ hàng">
-            <svg class="ic"><use xlink:href="#ic-gio-hang"></use></svg>
-            <span class="gio__so" th:text="${soMonTrongGio != null} ? ${soMonTrongGio} : 0">0</span>
-        </a>
+            <a class="nut-tron" th:href="@{/gio-hang}" aria-label="Giỏ hàng">
+                <svg class="ic"><use xlink:href="#ic-gio-hang"></use></svg>
+                <span class="nut-tron__so" th:text="${soMonTrongGio != null} ? ${soMonTrongGio} : 0">0</span>
+            </a>
 
-        <a th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}" class="nut-tron" aria-label="Đăng nhập">
-            <svg class="ic"><use xlink:href="#ic-tai-khoan"></use></svg>
-        </a>
-
-        <a th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}" th:href="@{/admin}"
-           class="nut-tron" aria-label="Trang quản trị">
-            <svg class="ic"><use xlink:href="#ic-bang-dieu-khien"></use></svg>
-        </a>
-
-        <span th:if="${taiKhoanHienTai != null}" class="chi-lon chu-nguoi-dung" th:text="${taiKhoanHienTai.hoTen}">Tài khoản</span>
-
-        <a th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}" class="nut-tron" aria-label="Đăng xuất">
-            <svg class="ic"><use xlink:href="#ic-dang-xuat"></use></svg>
-        </a>
-
-        <button type="button" class="nut-tron nut-menu" data-mo-menu aria-label="Mở menu" aria-expanded="false">
-            <svg class="ic"><use xlink:href="#ic-menu"></use></svg>
-        </button>
+            <button type="button" class="nut-tron nut-menu" id="mo-menu" aria-label="Mở menu" aria-expanded="false">
+                <svg class="ic"><use xlink:href="#ic-menu"></use></svg>
+            </button>
+        </div>
     </div>
 </header>
 
+<section th:fragment="banner(tieuDe, moTa, anh, tenTrang)" class="hero-sp hero-sp--dm" id="banner">
+    <img class="hero-sp__anh" th:src="@{'/img/' + ${anh}}" alt="">
+    <span class="hero-sp__phu" aria-hidden="true"></span>
+    <div class="hero-sp__chu">
+        <div class="khung">
+            <h1 th:text="${tieuDe}">Tiêu đề</h1>
+            <p th:if="${moTa != null}" th:text="${moTa}">Mô tả</p>
+        </div>
+    </div>
+    <div class="hero-sp__duoi">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${tenTrang}">Trang</span>
+            </nav>
+        </div>
+    </div>
+</section>
+
 <div th:fragment="thongBao">
-    <div class="thong-bao thong-bao--ok" th:if="${thongBao}" role="status">
-        <svg class="ic"><use xlink:href="#ic-kiem"></use></svg>
+    <p class="thong-bao" th:if="${thongBao}" role="status">
+        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-bao-hanh"></use></svg>
         <span th:text="${thongBao}">Đã lưu</span>
-    </div>
-    <div class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
-        <svg class="ic"><use xlink:href="#ic-canh-bao"></use></svg>
+    </p>
+    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
         <span th:text="${thongBaoLoi}">Có lỗi</span>
-    </div>
+    </p>
 </div>
 
 <nav th:fragment="menuQuanTri(trang)" class="qt-ben" aria-label="Menu quản trị">
     <span class="qt-ben__nhan">Quản trị</span>
-    <a th:href="@{/admin}" th:classappend="${trang == 'tong-quan'} ? 'dang-chon'">
-        <svg class="ic"><use xlink:href="#ic-bang-dieu-khien"></use></svg> Tổng quan
-    </a>
-    <a th:href="@{/admin/loai-san-pham}" th:classappend="${trang == 'loai-san-pham'} ? 'dang-chon'">
-        <svg class="ic"><use xlink:href="#ic-bep-tu"></use></svg> Loại sản phẩm
-    </a>
-    <a th:href="@{/admin/tai-khoan}" th:classappend="${trang == 'tai-khoan'} ? 'dang-chon'">
-        <svg class="ic"><use xlink:href="#ic-tai-khoan"></use></svg> Tài khoản
-    </a>
+    <a th:href="@{/admin}" th:classappend="${trang == 'tong-quan'} ? 'dang-chon'">Tổng quan</a>
+    <a th:href="@{/admin/loai-san-pham}" th:classappend="${trang == 'loai-san-pham'} ? 'dang-chon'">Loại sản phẩm</a>
+    <a th:href="@{/admin/tai-khoan}" th:classappend="${trang == 'tai-khoan'} ? 'dang-chon'">Tài khoản</a>
     <span class="qt-ben__nhan">Đang xây dựng</span>
-    <a href="#" class="chua-lam" aria-disabled="true">Thương hiệu <span class="qt-ben__ai">TV2</span></a>
-    <a href="#" class="chua-lam" aria-disabled="true">Nhà cung cấp <span class="qt-ben__ai">TV2</span></a>
-    <a href="#" class="chua-lam" aria-disabled="true">Phiếu nhập <span class="qt-ben__ai">TV2</span></a>
-    <a href="#" class="chua-lam" aria-disabled="true">Sản phẩm <span class="qt-ben__ai">TV3</span></a>
-    <a href="#" class="chua-lam" aria-disabled="true">Đơn hàng <span class="qt-ben__ai">TV5</span></a>
-    <a href="#" class="chua-lam" aria-disabled="true">Khách hàng <span class="qt-ben__ai">TV5</span></a>
-    <a href="#" class="chua-lam" aria-disabled="true">Thống kê <span class="qt-ben__ai">TV5</span></a>
+    <span class="qt-ben__cho">Thương hiệu <b>TV2</b></span>
+    <span class="qt-ben__cho">Nhà cung cấp <b>TV2</b></span>
+    <span class="qt-ben__cho">Phiếu nhập <b>TV2</b></span>
+    <span class="qt-ben__cho">Sản phẩm <b>TV3</b></span>
+    <span class="qt-ben__cho">Đơn hàng <b>TV5</b></span>
+    <span class="qt-ben__cho">Khách hàng <b>TV5</b></span>
+    <span class="qt-ben__cho">Thống kê <b>TV5</b></span>
 </nav>
 
-<footer class="chan" id="lien-he" th:fragment="chanTrang">
+<footer class="chan" th:fragment="chanTrang">
     <div class="khung">
-        <div class="chan__tren">
-            <div class="chan__gt">
-                <img th:src="@{/img/logo-trang.png}" alt="Bếp Nè" width="252" height="94">
-                <p>Cửa hàng thiết bị nhà bếp chính hãng. Tư vấn theo mặt bằng bếp thật, lắp đặt đúng hẹn, bảo hành tận nhà.</p>
-                <div class="chan__lh">
-                    <a href="tel:19006688">
-                        <svg class="ic"><use xlink:href="#ic-dien-thoai"></use></svg>
-                        <span>1900 6688</span>
-                    </a>
-                    <a href="mailto:xinchao@bepne.vn">
-                        <svg class="ic"><use xlink:href="#ic-thu"></use></svg>
-                        <span>xinchao@bepne.vn</span>
-                    </a>
-                    <span>
-                        <svg class="ic"><use xlink:href="#ic-dong-ho"></use></svg>
-                        <span>8:00 tới 21:00, cả tuần</span>
-                    </span>
-                    <span>
-                        <svg class="ic"><use xlink:href="#ic-dia-diem"></use></svg>
-                        <span>140 Lê Trọng Tấn, phường Tây Thạnh, TP. Hồ Chí Minh</span>
-                    </span>
-                </div>
+        <a class="logo logo--chan" th:href="@{/}" aria-label="Bep Nè, về trang chủ">
+            <div th:replace="~{layout/logo :: logo}"></div>
+        </a>
+
+        <div class="chan__tren hien-dan-nhom">
+            <div class="chan__cot">
+                <h2>Cửa hàng Bep Nè</h2>
+                <ul class="chan__ds">
+                    <li>Địa chỉ: 140 Lê Trọng Tấn, phường Tây Thạnh, TP. Hồ Chí Minh</li>
+                    <li>Giờ làm việc: 8:00 tới 21:00, cả tuần</li>
+                    <li>Đồ án học phần Công nghệ Java, Trường Đại học Công Thương TP.HCM</li>
+                </ul>
+                <p class="chan__nhan">Số điện thoại</p>
+                <a class="chan__lon" href="tel:0339999999">0339 999 999</a>
             </div>
 
-            <div>
-                <h4>Sản phẩm</h4>
-                <ul>
-                    <li th:each="loai : ${loaiTrenMenu}">
-                        <a th:href="@{/san-pham(loai=${loai.id})}" th:text="${loai.tenLoai}">Bếp từ</a>
-                    </li>
+            <div class="chan__cot">
+                <h2>Nhóm thực hiện</h2>
+                <ul class="chan__ds">
+                    <li>Phạm Tuấn Kiệt, Lê Quốc Việt, Nguyễn Thanh Tuấn</li>
+                    <li>Ngô Hoàng Anh Phát, Phạm Kim Hoàng Oanh</li>
+                    <li>Khoa Công nghệ Thông tin, năm học 2026 - 2027</li>
                 </ul>
+                <p class="chan__nhan">Email</p>
+                <a class="chan__lon" href="mailto:Huit@edu.com.vn">Huit@edu.com.vn</a>
             </div>
 
-            <div>
-                <h4>Tài khoản</h4>
-                <ul>
-                    <li><a th:href="@{/dang-nhap}">Đăng nhập</a></li>
-                    <li><a th:href="@{/dang-ky}">Đăng ký</a></li>
-                    <li><a th:href="@{/gio-hang}">Giỏ hàng</a></li>
-                    <li><a th:href="@{/don-hang-cua-toi}">Đơn hàng của tôi</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4>Đồ án</h4>
-                <ul>
-                    <li><span>Học phần Công nghệ Java</span></li>
-                    <li><span>Khoa CNTT, HUIT</span></li>
-                    <li><span>Năm học 2026 - 2027</span></li>
-                    <li><span>Nhóm 5 sinh viên</span></li>
-                </ul>
+            <div class="chan__bd">
+                <div th:replace="~{layout/ban-do :: banDo}"></div>
             </div>
         </div>
 
         <div class="chan__duoi">
-            <p>© 2026 Bếp Nè. Đồ án học phần Công nghệ Java, Khoa Công nghệ Thông tin, Trường Đại học Công Thương TP.HCM.</p>
-            <nav>
-                <a href="#lien-he">Điều khoản sử dụng</a>
-                <a href="#lien-he">Chính sách bảo mật</a>
-                <a href="#lien-he">Phương thức thanh toán</a>
+            <p>&copy; 2026 Bep Nè. Đồ án học phần Công nghệ Java.</p>
+            <nav class="chan__lk" aria-label="Danh mục">
+                <a th:each="loai : ${loaiTrenMenu}" th:href="@{/san-pham(loai=${loai.id})}"
+                   th:text="${loai.tenLoai}">Danh mục</a>
             </nav>
         </div>
     </div>
 </footer>
 
-<div th:fragment="menuDienThoai">
-    <button type="button" class="len-dau" id="len-dau" aria-label="Lên đầu trang">
-        <svg class="ic"><use xlink:href="#ic-len"></use></svg>
-    </button>
-
-    <div class="menu-mb" id="menu-mb">
-        <div class="menu-mb__khay">
-            <div class="menu-mb__dau">
-                <img th:src="@{/img/logo-nau.png}" alt="Bếp Nè">
+<div th:fragment="menuNho">
+    <div class="menu-nho" id="menu-nho">
+        <div class="menu-nho__khay">
+            <div class="menu-nho__dau">
+                <span class="logo"><div th:replace="~{layout/logo :: logo}"></div></span>
                 <button type="button" class="nut-tron" id="dong-menu" aria-label="Đóng menu">
                     <svg class="ic"><use xlink:href="#ic-dong"></use></svg>
                 </button>
             </div>
 
-            <form class="menu-mb__tim" th:action="@{/san-pham}" method="get" role="search">
-                <input type="search" name="tuKhoa" placeholder="Tìm sản phẩm" aria-label="Từ khoá tìm kiếm">
-                <button type="submit" class="nut-tron" aria-label="Tìm kiếm">
-                    <svg class="ic"><use xlink:href="#ic-tim-kiem"></use></svg>
-                </button>
-            </form>
-
-            <div class="menu-mb__dm">
+            <div class="menu-nho__dm">
                 <a th:each="loai : ${loaiTrenMenu}" th:href="@{/san-pham(loai=${loai.id})}">
                     <svg class="ic"><use th:href="'#ic-' + ${loai.maLoai}"></use></svg>
-                    <span th:text="${loai.tenLoai}">Bếp từ</span>
+                    <span th:text="${loai.tenLoai}">Bếp điện từ</span>
                 </a>
             </div>
 
-            <a th:href="@{/san-pham}" class="muc-chinh">Tất cả sản phẩm
-                <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg></a>
-            <a th:href="@{/gio-hang}" class="muc-chinh">Giỏ hàng
-                <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg></a>
-            <a th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}" class="muc-chinh">Đăng nhập
-                <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg></a>
-            <a th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}" th:href="@{/admin}" class="muc-chinh">Trang quản trị
-                <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg></a>
-            <a th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}" class="muc-chinh">Đăng xuất
-                <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg></a>
-
-            <a href="tel:19006688" class="nut">
-                <svg class="ic"><use xlink:href="#ic-dien-thoai"></use></svg>
-                Gọi 1900 6688
-            </a>
+            <a class="menu-nho__chinh" th:href="@{/}">Trang chủ</a>
+            <a class="menu-nho__chinh" th:href="@{/san-pham}">Tất cả sản phẩm</a>
+            <a class="menu-nho__chinh" th:href="@{/gio-hang}">Giỏ hàng</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}">Đăng nhập</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/admin}">Trang quản trị</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}">Đăng xuất</a>
         </div>
     </div>
 

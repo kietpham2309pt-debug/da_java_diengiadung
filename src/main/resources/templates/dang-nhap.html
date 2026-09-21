@@ -1,52 +1,49 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Đăng nhập')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Đăng nhập', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than than--kem">
-    <div class="khung">
-        <div class="trang-the">
-            <div class="trang-the__dau">
-                <img th:src="@{/img/logo-nau.png}" alt="Bếp Nè">
-                <h1>Đăng nhập</h1>
-                <p>Đăng nhập để đặt hàng và theo dõi đơn của bạn.</p>
-            </div>
+<main>
+    <div th:replace="~{layout/fragments :: banner('Đăng nhập', 'Đăng nhập để theo dõi đơn hàng và lưu địa chỉ giao.', 'banner-tai-khoan.jpg', 'Đăng nhập')}"></div>
 
-            <div class="the-trang">
-                <div th:replace="~{layout/fragments :: thongBao}"></div>
-                <div class="thong-bao thong-bao--loi" th:if="${loiDangNhap}" role="alert">
-                    <svg class="ic"><use xlink:href="#ic-canh-bao"></use></svg>
-                    <span th:text="${loiDangNhap}">Sai tên đăng nhập hoặc mật khẩu</span>
-                </div>
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
 
-                <form class="form-dl" th:action="@{/dang-nhap}" method="post">
-                    <div class="o-truong">
-                        <label class="nhan" for="tenDangNhap">Tên đăng nhập</label>
-                        <input class="o-nhap" id="tenDangNhap" name="tenDangNhap" required
-                               th:value="${tenDangNhapCu}" autocomplete="username">
+            <p class="thong-bao thong-bao--loi" th:if="${loiDangNhap}" role="alert">
+                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                <span th:text="${loiDangNhap}">Sai tên đăng nhập hoặc mật khẩu</span>
+            </p>
+
+            <div class="the-tk hien-dan">
+                <form th:action="@{/dang-nhap}" method="post">
+                    <div class="o-nhap">
+                        <label for="tenDangNhap">Tên đăng nhập</label>
+                        <input type="text" id="tenDangNhap" name="tenDangNhap" required
+                               autocomplete="username" th:value="${tenDangNhapCu}" placeholder="admin">
                     </div>
-                    <div class="o-truong">
-                        <label class="nhan" for="matKhau">Mật khẩu</label>
-                        <input class="o-nhap" id="matKhau" name="matKhau" type="password" required
-                               autocomplete="current-password">
+
+                    <div class="o-nhap">
+                        <label for="matKhau">Mật khẩu</label>
+                        <input type="password" id="matKhau" name="matKhau" required autocomplete="current-password">
                     </div>
-                    <div class="hang-nut">
-                        <button class="nut" type="submit">
-                            Đăng nhập
-                            <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
-                        </button>
-                    </div>
+
+                    <button type="submit" class="nut nut--dac the-tk__gui">Đăng nhập</button>
                 </form>
-            </div>
 
-            <p class="duoi-form">Chưa có tài khoản? <a th:href="@{/dang-ky}">Đăng ký ngay</a></p>
+                <p class="the-tk__doi">
+                    Chưa có tài khoản?
+                    <a th:href="@{/dang-ky}">Đăng ký ngay</a>
+                </p>
+            </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

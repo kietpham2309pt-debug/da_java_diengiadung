@@ -29,7 +29,7 @@ mvnw spring-boot:run
 
 4. Mở trình duyệt: <http://localhost:8080>
 
-Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp danh mục, thương hiệu, nhà cung cấp và 24 sản phẩm mẫu.
+Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp và 25 sản phẩm mẫu.
 
 ## Tài khoản có sẵn
 
@@ -42,12 +42,13 @@ Mật khẩu lưu trong cơ sở dữ liệu ở dạng mã hoá BCrypt. Khi tri
 
 ## Giao diện
 
-Giao diện dùng lại hệ thống **Bếp Nè** (nâu `#48301F` trên nền trắng) từ project Lập trình Web của nhóm,
-chuyển từ Razor sang Thymeleaf: `static/css/site.css` (hệ thống nền) và `static/css/ung-dung.css` (thành phần cho cửa hàng và trang quản trị).
+Giao diện lấy từ nhánh `giao-dien-moi` của repo Lập trình Web (`kietpham2309pt-debug/bepne`),
+chuyển từ Razor sang Thymeleaf. Nền tối `#131313`, chữ kem, nhấn vàng đồng `#CBAA7D`, font Montserrat nhúng sẵn.
+Gồm `static/css/site.css` (hệ thống gốc, không sửa) và `static/css/ung-dung.css` (phần bổ sung cho khu quản trị).
 Không dùng Bootstrap hay bất kỳ thư viện giao diện nào.
 
-**Trước khi viết HTML, đọc `QUY_TAC_GIAO_DIEN.md`**: khung trang chuẩn, danh sách fragment dùng chung,
-bộ 44 icon, tên lớp cho thẻ sản phẩm, bảng, biểu mẫu, thông báo và trạng thái rỗng.
+**Trước khi viết HTML, đọc `QUY_TAC_GIAO_DIEN.md`**: khung trang chuẩn, 10 fragment dùng chung,
+bộ 44 icon, quy ước ảnh theo mã loại, tên lớp cho thẻ sản phẩm, bảng, biểu mẫu, thông báo và trạng thái rỗng.
 
 ## Cấu trúc thư mục
 

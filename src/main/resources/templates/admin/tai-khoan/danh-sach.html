@@ -1,89 +1,97 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Tài khoản')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Tài khoản', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than than--kem">
-    <div class="khung">
-        <div class="bo-cuc-qt">
-            <div th:replace="~{layout/fragments :: menuQuanTri('tai-khoan')}"></div>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Tài khoản</span>
+            </nav>
 
-            <div>
-                <div class="dau-trang">
-                    <div>
-                        <h1>Tài khoản</h1>
-                        <p>Khoá, mở khoá và đặt lại mật khẩu cho người dùng.</p>
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('tai-khoan')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tài khoản</h1>
+                            <p>Khoá, mở khoá và đặt lại mật khẩu cho người dùng.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div th:replace="~{layout/fragments :: thongBao}"></div>
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
 
-                <div class="hang-loc">
-                    <form th:action="@{/admin/tai-khoan}" method="get">
-                        <input class="o-nhap" name="tuKhoa" placeholder="Tìm theo tên hoặc tên đăng nhập"
-                               aria-label="Từ khoá" th:value="${tuKhoa}">
-                        <button class="nut nut--nho" type="submit">
-                            <svg class="ic"><use xlink:href="#ic-tim-kiem"></use></svg>
-                            Tìm
-                        </button>
-                        <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/tai-khoan}"
-                           class="nut-lien">Bỏ lọc</a>
-                    </form>
-                </div>
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/tai-khoan}" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc tên đăng nhập"
+                                   aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                        </form>
+                    </div>
 
-                <div class="khung-bang" th:if="${not #lists.isEmpty(danhSach)}">
-                    <table class="bang-dl">
-                        <thead>
-                        <tr>
-                            <th>Tên đăng nhập</th>
-                            <th>Họ tên</th>
-                            <th>Vai trò</th>
-                            <th class="canh-giua">Trạng thái</th>
-                            <th style="width:330px">Thao tác</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="tk : ${danhSach}">
-                            <td th:text="${tk.tenDangNhap}">admin</td>
-                            <td th:text="${tk.hoTen}">Họ tên</td>
-                            <td>
-                                <span class="the-nhan" th:text="${tk.laQuanTri()} ? 'Quản trị' : 'Khách hàng'">Khách hàng</span>
-                            </td>
-                            <td class="canh-giua">
-                                <span class="the-nhan" th:classappend="${tk.hoatDong} ? 'the-nhan--ok' : 'the-nhan--tat'"
-                                      th:text="${tk.hoatDong} ? 'Đang hoạt động' : 'Đã khoá'">Đang hoạt động</span>
-                            </td>
-                            <td>
-                                <form class="hang-nut" th:action="@{'/admin/tai-khoan/dat-lai-mat-khau/' + ${tk.id}}" method="post">
-                                    <input class="o-nhap" style="max-width:190px" name="matKhauMoi" type="password"
-                                           placeholder="Mật khẩu mới" aria-label="Mật khẩu mới" required>
-                                    <button class="nut nut--vien nut--nho" type="submit">Đặt lại</button>
-                                </form>
-                                <form th:action="@{'/admin/tai-khoan/doi-trang-thai/' + ${tk.id}}" method="post"
-                                      style="margin-top:8px">
-                                    <button class="nut nut--vien nut--nho" type="submit">
-                                        <svg class="ic"><use th:href="${tk.hoatDong} ? '#ic-khoa' : '#ic-mo-khoa'"></use></svg>
-                                        <span th:text="${tk.hoatDong} ? 'Khoá tài khoản' : 'Mở khoá'">Khoá tài khoản</span>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Tên đăng nhập</th>
+                                    <th>Họ tên</th>
+                                    <th>Vai trò</th>
+                                    <th class="canh-giua">Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="tk : ${danhSach}">
+                                    <td th:text="${tk.tenDangNhap}">admin</td>
+                                    <td th:text="${tk.hoTen}">Họ tên</td>
+                                    <td>
+                                        <span class="the-nhan" th:classappend="${tk.laQuanTri()} ? 'the-nhan--vang'"
+                                              th:text="${tk.laQuanTri()} ? 'Quản trị' : 'Khách hàng'">Khách hàng</span>
+                                    </td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan" th:classappend="${tk.hoatDong} ? 'the-nhan--ok' : 'the-nhan--tat'"
+                                              th:text="${tk.hoatDong} ? 'Đang hoạt động' : 'Đã khoá'">Đang hoạt động</span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <form th:action="@{'/admin/tai-khoan/dat-lai-mat-khau/' + ${tk.id}}" method="post"
+                                                  class="thanh-loc" style="margin:0">
+                                                <input type="password" name="matKhauMoi" placeholder="Mật khẩu mới"
+                                                       aria-label="Mật khẩu mới" required>
+                                                <button class="nut nut--nho" type="submit">Đặt lại</button>
+                                            </form>
+                                            <form th:action="@{'/admin/tai-khoan/doi-trang-thai/' + ${tk.id}}" method="post">
+                                                <button class="nut nut--nho" type="submit"
+                                                        th:text="${tk.hoatDong} ? 'Khoá' : 'Mở khoá'">Khoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                <div class="trang-trong" th:if="${#lists.isEmpty(danhSach)}">
-                    <svg class="ic"><use xlink:href="#ic-hop-trong"></use></svg>
-                    <strong>Không có tài khoản nào khớp từ khoá</strong>
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Không có tài khoản nào khớp từ khoá.</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

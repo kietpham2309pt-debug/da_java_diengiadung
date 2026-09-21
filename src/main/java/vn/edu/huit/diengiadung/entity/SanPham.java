@@ -163,6 +163,23 @@ public class SanPham {
         this.thuongHieu = thuongHieu;
     }
 
+    public String getDuongDanAnh() {
+        if (hinhAnh != null && !hinhAnh.isBlank()) {
+            return hinhAnh.startsWith("/") ? hinhAnh : "/uploads/" + hinhAnh;
+        }
+        if (loaiSanPham != null && loaiSanPham.getMaLoai() != null) {
+            return "/img/sp-" + loaiSanPham.getMaLoai() + ".jpg";
+        }
+        return "/img/hero-san-pham.jpg";
+    }
+
+    public int getPhanTramGiam() {
+        if (giaKhuyenMai == null || giaBan == null || giaBan <= 0 || giaKhuyenMai >= giaBan) {
+            return 0;
+        }
+        return (int) Math.round((giaBan - giaKhuyenMai) * 100.0 / giaBan);
+    }
+
     public Long getGiaHienTai() {
         if (giaKhuyenMai != null && giaKhuyenMai > 0) {
             return giaKhuyenMai;

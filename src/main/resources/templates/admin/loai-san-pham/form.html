@@ -1,75 +1,76 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Loại sản phẩm')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Loại sản phẩm', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than than--kem">
-    <div class="khung">
-        <div class="bo-cuc-qt">
-            <div th:replace="~{layout/fragments :: menuQuanTri('loai-san-pham')}"></div>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/loai-san-pham}">Loại sản phẩm</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${loaiSanPham.id == null} ? 'Thêm mới' : 'Chỉnh sửa'">Thêm mới</span>
+            </nav>
 
-            <div>
-                <nav class="duong-dan" aria-label="Đường dẫn">
-                    <a th:href="@{/admin}">Quản trị</a>
-                    <span aria-hidden="true">/</span>
-                    <a th:href="@{/admin/loai-san-pham}">Loại sản phẩm</a>
-                    <span aria-hidden="true">/</span>
-                    <span aria-current="page" th:text="${loaiSanPham.id == null} ? 'Thêm mới' : 'Chỉnh sửa'">Thêm mới</span>
-                </nav>
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('loai-san-pham')}"></div>
 
-                <div class="dau-trang">
-                    <div>
-                        <h1 th:text="${loaiSanPham.id == null} ? 'Thêm loại sản phẩm' : 'Sửa loại sản phẩm'">Thêm loại sản phẩm</h1>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${loaiSanPham.id == null} ? 'Thêm loại sản phẩm' : 'Sửa loại sản phẩm'">Thêm loại sản phẩm</h1>
+                        </div>
                     </div>
-                </div>
 
-                <div class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
-                    <svg class="ic"><use xlink:href="#ic-canh-bao"></use></svg>
-                    <span th:text="${thongBaoLoi}">Có lỗi</span>
-                </div>
+                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                        <span th:text="${thongBaoLoi}">Có lỗi</span>
+                    </p>
 
-                <div class="the-trang">
-                    <form class="form-dl" th:action="@{/admin/loai-san-pham/luu}" th:object="${loaiSanPham}" method="post">
-                        <input type="hidden" th:field="*{id}">
+                    <div class="khoi">
+                        <form th:action="@{/admin/loai-san-pham/luu}" th:object="${loaiSanPham}" method="post">
+                            <input type="hidden" th:field="*{id}">
 
-                        <div class="o-truong">
-                            <label class="nhan" for="tenLoai">Tên loại</label>
-                            <input class="o-nhap" id="tenLoai" th:field="*{tenLoai}" placeholder="Ví dụ: Bếp từ">
-                            <span class="loi-nhap" th:if="${#fields.hasErrors('tenLoai')}" th:errors="*{tenLoai}"></span>
-                        </div>
+                            <div class="o-nhap">
+                                <label for="tenLoai">Tên loại</label>
+                                <input type="text" id="tenLoai" th:field="*{tenLoai}" placeholder="Bếp điện từ">
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenLoai')}" th:errors="*{tenLoai}"></span>
+                            </div>
 
-                        <div class="o-truong">
-                            <label class="nhan" for="maLoai">Mã loại</label>
-                            <input class="o-nhap" id="maLoai" th:field="*{maLoai}" placeholder="bep-tu">
-                            <span class="goi-y">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã này chọn icon hiển thị trên menu.
-                                Icon có sẵn: bep-tu, bep-dien-tu, bep-hong-ngoai, hut-mui, rua-chen, may-giat, combo.</span>
-                            <span class="loi-nhap" th:if="${#fields.hasErrors('maLoai')}" th:errors="*{maLoai}"></span>
-                        </div>
+                            <div class="o-nhap">
+                                <label for="maLoai">Mã loại</label>
+                                <input type="text" id="maLoai" th:field="*{maLoai}" placeholder="bep-dien-tu">
+                                <span class="goi-y">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã này chọn icon,
+                                    ảnh danh mục <b>/img/sp-&lt;mã&gt;.jpg</b> và ảnh banner <b>/img/banner-&lt;mã&gt;.jpg</b>.
+                                    Mã có sẵn ảnh: bep-dien-tu, bep-hong-ngoai, hut-mui, rua-chen, lo-nuong, lo-vi-song.</span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('maLoai')}" th:errors="*{maLoai}"></span>
+                            </div>
 
-                        <div class="o-truong">
-                            <label class="nhan" for="moTa">Mô tả</label>
-                            <textarea class="o-nhap" id="moTa" rows="3" th:field="*{moTa}"
-                                      placeholder="Một câu ngắn mô tả nhóm hàng này"></textarea>
-                            <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
-                        </div>
+                            <div class="o-nhap">
+                                <label for="moTa">Mô tả</label>
+                                <textarea id="moTa" rows="3" th:field="*{moTa}"
+                                          placeholder="Một câu ngắn mô tả nhóm hàng này"></textarea>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                            </div>
 
-                        <div class="hang-nut">
-                            <button class="nut" type="submit">
-                                Lưu
-                                <svg class="ic"><use xlink:href="#ic-kiem"></use></svg>
-                            </button>
-                            <a class="nut nut--vien" th:href="@{/admin/loai-san-pham}">Quay lại</a>
-                        </div>
-                    </form>
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" th:href="@{/admin/loai-san-pham}">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

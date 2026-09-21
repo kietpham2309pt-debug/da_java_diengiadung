@@ -1,28 +1,31 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Không tìm thấy trang')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Không tìm thấy trang', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than">
-    <div class="khung">
-        <div class="trang-loi">
-            <div class="trang-loi__ma">404</div>
-            <h1>Trang này chưa có</h1>
-            <p>Đường dẫn bạn mở không tồn tại, hoặc chức năng đang được nhóm xây dựng trong các tuần tới.</p>
-            <div class="hang-nut" style="justify-content:center">
-                <a th:href="@{/}" class="nut">
-                    Về trang chủ
-                    <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
-                </a>
-                <a th:href="@{/san-pham}" class="nut nut--vien">Xem sản phẩm</a>
+<main>
+    <div th:replace="~{layout/fragments :: banner('Không tìm thấy trang', 'Đường dẫn bạn vừa mở không có trên website.', 'banner-tai-khoan.jpg', 'Không tìm thấy trang')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div class="the-tk hien-dan">
+                <p class="loi__so" aria-hidden="true">404</p>
+                <p class="loi__chu">Có thể đường dẫn gõ sai một chữ, hoặc chức năng này nhóm đang xây dựng
+                    trong các tuần tới. Bạn thử về trang chủ hoặc xem danh sách sản phẩm nhé.</p>
+
+                <div class="loi__nut">
+                    <a class="nut nut--dac" th:href="@{/}">Về trang chủ</a>
+                    <a class="nut" th:href="@{/san-pham}">Xem sản phẩm</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

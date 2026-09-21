@@ -1,93 +1,92 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Thiết bị nhà bếp chính hãng')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Thiết bị nhà bếp chính hãng', true)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div th:replace="~{layout/mo-man :: moMan}"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than">
-    <div class="khung">
-        <div th:replace="~{layout/fragments :: thongBao}"></div>
+<main>
+    <section class="banner" id="banner">
+        <img class="banner__anh hien" th:src="@{/img/banner-1.jpg}"
+             alt="Căn bếp tối màu với máy hút mùi, bếp điện từ và máy rửa chén">
+        <img class="banner__anh" th:src="@{/img/banner-2.jpg}"
+             alt="Gian bếp có tủ rượu và bếp mặt đá" loading="lazy">
 
-        <section class="hero">
-            <span class="nhan-muc" style="color:rgba(255,255,255,.72)">Bếp Nè</span>
-            <h1>Thiết bị nhà bếp chính hãng cho căn bếp của bạn</h1>
-            <p>Bếp từ, máy hút mùi, máy rửa chén và máy giặt từ Bosch, Kaff, Kocher, Chef's.
-                Tư vấn theo mặt bằng bếp thật, lắp đặt đúng hẹn, bảo hành tận nhà.</p>
-            <div class="hero__nut">
-                <a th:href="@{/san-pham}" class="nut nut--trang">
-                    Xem sản phẩm
-                    <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
-                </a>
-                <a href="#danh-muc" class="nut nut--kinh">Chọn theo danh mục</a>
+        <span class="banner__cuon" aria-hidden="true">
+            <span class="banner__chuot"><i></i></span>
+            <span class="banner__vach"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+        </span>
+
+        <div class="banner__cham">
+            <button type="button" aria-label="Ảnh 1"></button>
+            <button type="button" aria-label="Ảnh 2"></button>
+        </div>
+    </section>
+
+    <section class="muc muc--sp">
+        <div class="khung">
+            <div class="dau-sp">
+                <span class="nhan">Sản phẩm nổi bật</span>
+                <h2 class="dau-sp__td hien-dan">Bep Nè Thiết bị nhà bếp chính hãng</h2>
+                <p class="dau-sp__mt">Chúng tôi không chạy theo mẫu mã nhất thời. Các nhóm hàng
+                    dưới đây đều chọn theo cùng một tiêu chí: bền, dễ vệ sinh, và lắp vừa
+                    với căn bếp Việt.</p>
             </div>
-        </section>
+        </div>
 
-        <section id="danh-muc" style="margin-top:clamp(34px,5vw,64px)">
-            <span class="nhan-muc">Khám phá sản phẩm</span>
-            <h2 class="tieu-de-muc">Chọn theo đúng chỗ bạn định lắp</h2>
-            <p class="mo-ta-muc">Mỗi nhóm hàng ghi rõ kiểu lắp đặt và thông số để bạn đối chiếu với mặt bàn bếp trước khi đặt.</p>
-
-            <div class="luoi-dm" style="margin-top:24px">
-                <a th:each="loai : ${danhSachLoai}" th:href="@{/san-pham(loai=${loai.id})}" class="the-dm">
-                    <svg class="ic"><use th:href="'#ic-' + ${loai.maLoai}"></use></svg>
-                    <span>
-                        <span class="the-dm__ten" th:text="${loai.tenLoai}">Bếp từ</span>
-                        <span class="the-dm__so" th:text="${#lists.size(loai.danhSachSanPham)} + ' sản phẩm'">0 sản phẩm</span>
-                    </span>
-                </a>
+        <div class="dong-sp" id="dong-sp">
+            <div class="dong-sp__nen" aria-hidden="true">
+                <img th:each="loai, vt : ${danhSachLoai}" class="dong-sp__anh"
+                     th:classappend="${vt.first} ? 'hien'" th:src="@{${loai.anhDanhMuc}}" alt="" loading="lazy">
             </div>
+            <span class="dong-sp__phu" aria-hidden="true"></span>
 
-            <div class="trang-trong" th:if="${#lists.isEmpty(danhSachLoai)}">
-                <svg class="ic"><use xlink:href="#ic-hop-trong"></use></svg>
-                <strong>Chưa có danh mục nào</strong>
-                <span>Đăng nhập trang quản trị để thêm loại sản phẩm.</span>
-            </div>
-        </section>
-
-        <section style="margin-top:clamp(34px,5vw,64px)">
-            <div class="dau-trang">
-                <div>
-                    <span class="nhan-muc">Hàng mới về</span>
-                    <h2 class="tieu-de-muc">Sản phẩm mới</h2>
-                </div>
-                <div class="dau-trang__nut">
-                    <a th:href="@{/san-pham}" class="nut nut--vien nut--nho">
-                        Xem tất cả
-                        <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
-                    </a>
-                </div>
-            </div>
-
-            <div class="luoi-sp">
-                <a th:each="sp : ${sanPhamMoi}" th:href="@{'/san-pham/' + ${sp.id}}" class="the-sp">
-                    <img class="the-sp__anh" th:if="${sp.hinhAnh != null}" th:src="@{'/uploads/' + ${sp.hinhAnh}}"
-                         th:alt="${sp.tenSanPham}">
-                    <span class="the-sp__hoa" th:if="${sp.hinhAnh == null}" aria-hidden="true">
-                        <svg class="ic"><use th:href="'#ic-' + (${sp.loaiSanPham} != null ? ${sp.loaiSanPham.maLoai} : 'combo')"></use></svg>
-                    </span>
-                    <span class="the-sp__than">
-                        <span class="the-sp__hang" th:text="${sp.thuongHieu != null} ? ${sp.thuongHieu.tenThuongHieu} : ' '">Bosch</span>
-                        <span class="the-sp__ten" th:text="${sp.tenSanPham}">Tên sản phẩm</span>
-                        <span class="the-sp__gia">
-                            <span class="gia" th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' đ'">0 đ</span>
-                            <span class="gia-cu" th:if="${sp.giaKhuyenMai != null}"
-                                  th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' đ'">0 đ</span>
+            <div class="dong-sp__luoi hien-dan-nhom">
+                <a th:each="loai, vt : ${danhSachLoai}" class="o-sp" th:attr="data-anh=${vt.index}"
+                   th:href="@{/san-pham(loai=${loai.id})}">
+                    <span class="o-sp__noi">
+                        <span class="o-sp__ten" th:text="${loai.tenLoai}">Bếp điện từ</span>
+                        <span class="o-sp__mo-ta" th:text="${loai.moTa}">Mô tả nhóm hàng</span>
+                        <span class="o-sp__xem">
+                            Xem sản phẩm
+                            <svg class="ic ic--nho"><use xlink:href="#ic-mui-ten-phai"></use></svg>
                         </span>
                     </span>
                 </a>
             </div>
+        </div>
+    </section>
 
-            <div class="trang-trong" th:if="${#lists.isEmpty(sanPhamMoi)}">
-                <svg class="ic"><use xlink:href="#ic-hop-trong"></use></svg>
-                <strong>Chưa có sản phẩm nào</strong>
-                <span>Dữ liệu mẫu sẽ được nạp khi chạy ứng dụng lần đầu.</span>
+    <section class="muc muc--dl">
+        <div class="khung">
+            <div class="dau-sp dau-sp--giua">
+                <h2 class="dau-sp__td hien-dan">Hệ thống đại lý - đối tác</h2>
+                <p class="dau-sp__mt">Bep Nè là đại lý uỷ quyền của các thương hiệu dưới đây.
+                    Mọi thiết bị bán ra đều có tem hãng và bảo hành chính hãng.</p>
             </div>
-        </section>
-    </div>
+        </div>
+
+        <div class="dai-lo hien-dan">
+            <div class="dai-lo__day">
+                <div class="dai-lo__luot" th:each="luot : ${#numbers.sequence(0, 1)}"
+                     th:attr="aria-hidden=${luot == 1} ? 'true' : 'false'">
+                    <th:block th:each="lap : ${#numbers.sequence(0, 1)}">
+                        <span class="dai-lo__o" th:each="hang : ${danhSachThuongHieu}">
+                            <span class="dai-lo__chu" th:text="${hang.tenThuongHieu}">Bosch</span>
+                        </span>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="banner-cuoi hien-dan">
+        <img th:src="@{/img/banner-cuoi.jpg}" alt="Cooking with Bep Nè. Chảo cá hồi áp chảo trên bếp." loading="lazy">
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

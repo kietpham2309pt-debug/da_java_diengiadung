@@ -1,27 +1,30 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Có lỗi xảy ra')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Có lỗi xảy ra', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than">
-    <div class="khung">
-        <div class="trang-loi">
-            <div class="trang-loi__ma" th:text="${status}">500</div>
-            <h1>Có lỗi xảy ra</h1>
-            <p th:text="${error}">Lỗi không xác định</p>
-            <div class="hang-nut" style="justify-content:center">
-                <a th:href="@{/}" class="nut">
-                    Về trang chủ
-                    <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
-                </a>
+<main>
+    <div th:replace="~{layout/fragments :: banner('Có lỗi xảy ra', 'Hệ thống gặp sự cố khi xử lý yêu cầu này.', 'banner-tai-khoan.jpg', 'Lỗi hệ thống')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div class="the-tk hien-dan">
+                <p class="loi__so" aria-hidden="true" th:text="${status}">500</p>
+                <p class="loi__chu" th:text="${error}">Lỗi không xác định</p>
+
+                <div class="loi__nut">
+                    <a class="nut nut--dac" th:href="@{/}">Về trang chủ</a>
+                    <a class="nut" th:href="@{/san-pham}">Xem sản phẩm</a>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

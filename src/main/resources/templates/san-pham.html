@@ -1,71 +1,168 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang(${tieuDe})}"></head>
+<head th:replace="~{layout/fragments :: dauTrang(${tieuDe}, false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than">
-    <div class="khung">
-        <nav class="duong-dan" aria-label="Đường dẫn">
-            <a th:href="@{/}">Trang chủ</a>
-            <span aria-hidden="true">/</span>
-            <span aria-current="page" th:text="${tieuDe}">Sản phẩm</span>
-        </nav>
-
-        <div class="dau-trang">
-            <div>
-                <h1 th:text="${tieuDe}">Tất cả sản phẩm</h1>
-                <p th:text="'Có ' + ${#lists.size(danhSachSanPham)} + ' sản phẩm'">Có 0 sản phẩm</p>
+<main>
+    <section class="hero-sp hero-sp--dm" id="banner" th:if="${loaiHienTai != null}">
+        <img class="hero-sp__anh" th:src="@{${loaiHienTai.anhBanner}}" alt="">
+        <span class="hero-sp__phu" aria-hidden="true"></span>
+        <div class="hero-sp__chu">
+            <div class="khung">
+                <h1 th:text="${loaiHienTai.tenLoai}">Bếp điện từ</h1>
+                <p th:text="${loaiHienTai.moTa}">Mô tả</p>
             </div>
         </div>
-
-        <div class="hang-loc">
-            <form th:action="@{/san-pham}" method="get" role="search">
-                <input class="o-nhap" type="search" name="tuKhoa" placeholder="Tìm theo tên sản phẩm"
-                       aria-label="Từ khoá tìm kiếm" th:value="${tuKhoa}">
-                <button class="nut nut--nho" type="submit">
-                    <svg class="ic"><use xlink:href="#ic-tim-kiem"></use></svg>
-                    Tìm
-                </button>
-            </form>
-            <a th:href="@{/san-pham}" class="nut nut--vien nut--nho">Tất cả</a>
-            <a th:each="loai : ${loaiTrenMenu}" th:href="@{/san-pham(loai=${loai.id})}"
-               class="nut nut--vien nut--nho" th:text="${loai.tenLoai}">Bếp từ</a>
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a th:href="@{/}">Trang chủ</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <a th:href="@{/san-pham}">Sản phẩm</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span aria-current="page" th:text="${loaiHienTai.tenLoai}">Bếp điện từ</span>
+                </nav>
+            </div>
         </div>
+    </section>
 
-        <div class="luoi-sp">
-            <a th:each="sp : ${danhSachSanPham}" th:href="@{'/san-pham/' + ${sp.id}}" class="the-sp">
-                <img class="the-sp__anh" th:if="${sp.hinhAnh != null}" th:src="@{'/uploads/' + ${sp.hinhAnh}}"
-                     th:alt="${sp.tenSanPham}">
-                <span class="the-sp__hoa" th:if="${sp.hinhAnh == null}" aria-hidden="true">
-                    <svg class="ic"><use th:href="'#ic-' + (${sp.loaiSanPham} != null ? ${sp.loaiSanPham.maLoai} : 'combo')"></use></svg>
-                </span>
-                <span class="the-sp__than">
-                    <span class="the-sp__hang" th:text="${sp.thuongHieu != null} ? ${sp.thuongHieu.tenThuongHieu} : ' '">Bosch</span>
-                    <span class="the-sp__ten" th:text="${sp.tenSanPham}">Tên sản phẩm</span>
-                    <span class="the-sp__ma" th:text="${sp.maSanPham}">MSP</span>
-                    <span class="the-sp__gia">
-                        <span class="gia" th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' đ'">0 đ</span>
-                        <span class="gia-cu" th:if="${sp.giaKhuyenMai != null}"
-                              th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' đ'">0 đ</span>
+    <section class="hero-sp" id="banner" th:if="${loaiHienTai == null}">
+        <img class="hero-sp__anh" th:src="@{/img/hero-san-pham.jpg}" alt="Sản phẩm Bep Nè">
+        <div class="hero-sp__duoi">
+            <div class="khung">
+                <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                    <a th:href="@{/}">Trang chủ</a>
+                    <span aria-hidden="true">&middot;</span>
+                    <span th:if="${chonDanhMuc}" aria-current="page">Sản phẩm</span>
+                    <th:block th:unless="${chonDanhMuc}">
+                        <a th:href="@{/san-pham}">Sản phẩm</a>
+                        <span aria-hidden="true">&middot;</span>
+                        <span aria-current="page" th:text="${tieuDe}">Kết quả tìm kiếm</span>
+                    </th:block>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc" th:if="${chonDanhMuc}">
+        <div class="khung">
+            <h1 class="dau-sp__td hien-dan">Thiết bị bếp</h1>
+
+            <div class="luoi-dm hien-dan-nhom">
+                <a th:each="loai : ${danhSachLoai}" class="dm" th:href="@{/san-pham(loai=${loai.id})}">
+                    <img class="dm__anh" th:src="@{${loai.anhDanhMuc}}" th:alt="${loai.tenLoai}" loading="lazy">
+                    <span class="dm__phu" aria-hidden="true"></span>
+                    <span class="dm__mui" aria-hidden="true">
+                        <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
                     </span>
-                    <span class="the-sp__kho" th:classappend="${sp.conHang} ? '' : 'the-sp__kho--het'"
-                          th:text="${sp.conHang} ? 'Còn ' + ${sp.soLuongTon} + ' sản phẩm' : 'Hết hàng'">Còn hàng</span>
-                </span>
-            </a>
-        </div>
+                    <span class="dm__ten" th:text="${loai.tenLoai}">Bếp điện từ</span>
+                </a>
+            </div>
 
-        <div class="trang-trong" th:if="${#lists.isEmpty(danhSachSanPham)}">
-            <svg class="ic"><use xlink:href="#ic-hop-trong"></use></svg>
-            <strong>Không tìm thấy sản phẩm nào</strong>
-            <span>Thử từ khoá khác hoặc xem toàn bộ danh mục.</span>
-            <a th:href="@{/san-pham}" class="nut nut--vien nut--nho" style="margin-top:8px">Xem tất cả sản phẩm</a>
+            <div class="trong" th:if="${#lists.isEmpty(danhSachLoai)}">
+                <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                <p>Chưa có danh mục nào trong cơ sở dữ liệu.</p>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <section class="muc muc--sat-banner" th:unless="${chonDanhMuc}">
+        <div class="khung">
+            <form class="ds" method="get" th:action="@{/san-pham}">
+                <input type="hidden" name="loai" th:if="${loaiHienTai != null}" th:value="${loaiHienTai.id}">
+                <input type="hidden" name="tuKhoa" th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:value="${tuKhoa}">
+
+                <div class="ds__thanh hien-dan">
+                    <p class="ds__nhan">
+                        <svg class="ic"><use xlink:href="#ic-bo-loc"></use></svg>
+                        Bộ lọc
+                    </p>
+
+                    <div class="ds__tt">
+                        <p class="ds__dem">
+                            <th:block th:if="${tuKhoa != null and !tuKhoa.isBlank()}">
+                                Kết quả cho <b th:text="${tuKhoa}">từ khoá</b> &mdash;
+                            </th:block>
+                            (<span th:text="${#lists.size(danhSachSanPham)}">0</span> sản phẩm)
+                        </p>
+
+                        <div class="ds__sap">
+                            <label for="sapXep">Sắp xếp theo:</label>
+                            <span class="ds__o">
+                                <select id="sapXep" name="sapXep" data-tu-gui>
+                                    <option value="moi-nhat" th:selected="${sapXepDangChon == 'moi-nhat'}">Mới nhất</option>
+                                    <option value="gia-tang" th:selected="${sapXepDangChon == 'gia-tang'}">Giá tăng dần</option>
+                                    <option value="gia-giam" th:selected="${sapXepDangChon == 'gia-giam'}">Giá giảm dần</option>
+                                    <option value="ten" th:selected="${sapXepDangChon == 'ten'}">Tên A đến Z</option>
+                                </select>
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"></use></svg>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ds__than">
+                    <div class="loc hien-dan">
+                        <details class="loc__nhom" open>
+                            <summary>
+                                Thương hiệu
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"></use></svg>
+                            </summary>
+                            <ul class="loc__ds">
+                                <li th:each="hang : ${danhSachThuongHieu}">
+                                    <label class="loc__muc">
+                                        <input type="checkbox" name="hang" th:value="${hang.id}"
+                                               th:checked="${hangDangChon.contains(hang.id)}" data-tu-gui>
+                                        <span class="loc__o" aria-hidden="true"></span>
+                                        <span class="loc__ten" th:text="${hang.tenThuongHieu}">Bosch</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </details>
+
+                        <noscript>
+                            <button type="submit" class="nut loc__ap">Áp dụng bộ lọc</button>
+                        </noscript>
+
+                        <p class="loc__ve">
+                            <a th:href="@{/san-pham}">Xem tất cả danh mục</a>
+                        </p>
+                    </div>
+
+                    <div class="ds__phai" id="kq">
+                        <div class="luoi-sp hien-dan-nhom" th:if="${not #lists.isEmpty(danhSachSanPham)}">
+                            <a th:each="sp : ${danhSachSanPham}" class="sp" th:href="@{'/san-pham/' + ${sp.id}}">
+                                <span class="sp__anh">
+                                    <img th:src="@{${sp.duongDanAnh}}" th:alt="${sp.tenSanPham}" loading="lazy">
+                                    <span class="sp__giam" th:if="${sp.phanTramGiam > 0}"
+                                          th:text="'-' + ${sp.phanTramGiam} + '%'">-20%</span>
+                                </span>
+                                <span class="sp__hieu" th:text="${sp.thuongHieu != null} ? ${sp.thuongHieu.tenThuongHieu} : ' '">Bosch</span>
+                                <span class="sp__ten" th:text="${sp.tenSanPham}">Tên sản phẩm</span>
+                                <span class="sp__gia">
+                                    <b th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' ₫'">0 ₫</b>
+                                    <del th:if="${sp.giaKhuyenMai != null}"
+                                         th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' ₫'">0 ₫</del>
+                                </span>
+                            </a>
+                        </div>
+
+                        <div class="trong" th:if="${#lists.isEmpty(danhSachSanPham)}">
+                            <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                            <p>Không tìm thấy sản phẩm nào khớp với lựa chọn của bạn.</p>
+                            <a class="nut" th:href="@{/san-pham}">Xem tất cả danh mục</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>

@@ -1,276 +1,536 @@
-/* ============================================================
-   Bếp Nè : hiệu ứng giao diện
-   JavaScript thuần, không jQuery, không thư viện ngoài.
-   ============================================================ */
-(function () {
+﻿(function () {
   'use strict';
 
-  var $  = function (s, g) { return (g || document).querySelector(s); };
-  var $$ = function (s, g) { return Array.prototype.slice.call((g || document).querySelectorAll(s)); };
-  var itChuyenDong = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var itChuyenDong = window.matchMedia &&
+                     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ---------- 1. Hiện dần khi cuộn tới ---------- */
-  function hienDan() {
-    var moc = $$('.hien-dan');
-    if (itChuyenDong || !('IntersectionObserver' in window)) {
-      moc.forEach(function (el) { el.classList.add('da-hien'); });
+  var quanSatThem = null;
+
+  var batDauHienDan = null;
+
+  function moMan() {
+    var goc = document.documentElement;
+    var man = document.getElementById('mo-man');
+
+    if (!man) {
+      goc.classList.remove('dang-mo-man');
+      goc.classList.remove('khoa-cuon');
       return;
     }
-    var td = new IntersectionObserver(function (ms) {
-      ms.forEach(function (m) {
-        if (m.isIntersecting) { m.target.classList.add('da-hien'); td.unobserve(m.target); }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
-    moc.forEach(function (el) { td.observe(el); });
+
+    if (!goc.classList.contains('dang-mo-man')) {
+      if (man.parentNode) man.parentNode.removeChild(man);
+      return;
+    }
+
+    var so = function (ten, macDinh) {
+      var v = parseInt(man.getAttribute(ten), 10);
+      return isNaN(v) ? macDinh : v;
+    };
+    var VE = so('data-ve', 1700);
+    var REM = 1300;
+
+    var xongRoi = false;
+    function dong() {
+      if (xongRoi) return;
+      xongRoi = true;
+      man.classList.add('xong');
+
+      setTimeout(function () { goc.classList.remove('khoa-cuon'); }, 200);
+
+      setTimeout(function () {
+        goc.classList.remove('dang-mo-man');
+        if (man.parentNode) man.parentNode.removeChild(man);
+      }, REM);
+    }
+
+    setTimeout(dong, VE);
+
+    man.addEventListener('click', dong);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') dong();
+    });
+
+    setTimeout(dong, VE + 4000);
   }
 
-  /* ---------- 2. Thanh dính: chỉ trượt xuống sau khi cuộn qua banner ----------
-     Cuộn tới đâu thì thanh nổi ở đáy banner tắt đi, tránh hai menu cùng hiện. */
-  function thanhMenu() {
-    var dinh = $('#thanh-dinh');
-    if (!dinh) return;
-    var noi = $('#thanh-noi');
-    var banner = $('#banner');
+  function bannerDoiAnh() {
+    var banner = document.getElementById('banner');
+    if (!banner) return;
 
-    // Trang nào không có banner thì để thanh dính hiện luôn
-    if (!banner || !noi) { dinh.classList.add('hien'); return; }
+    var anh = banner.querySelectorAll('.banner__anh');
+    var cham = banner.querySelectorAll('.banner__cham button');
+    if (anh.length < 2) return;
+
+    var i = 0, hen = null, GIAY = 5500;
+
+    function chieu(k) {
+      i = (k + anh.length) % anh.length;
+      for (var n = 0; n < anh.length; n++) {
+        if (n === i) { anh[n].classList.add('hien'); } else { anh[n].classList.remove('hien'); }
+      }
+      for (var m = 0; m < cham.length; m++) {
+        cham[m].setAttribute('aria-current', m === i ? 'true' : 'false');
+      }
+    }
+
+    function henLai() {
+      clearTimeout(hen);
+      if (!itChuyenDong) hen = setTimeout(function () { chieu(i + 1); henLai(); }, GIAY);
+    }
+
+    for (var m = 0; m < cham.length; m++) {
+      (function (n) {
+        cham[n].addEventListener('click', function () { chieu(n); henLai(); });
+      })(m);
+    }
+
+    banner.addEventListener('mouseenter', function () { clearTimeout(hen); });
+    banner.addEventListener('mouseleave', henLai);
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { clearTimeout(hen); } else { henLai(); }
+    });
+
+    chieu(0);
+    henLai();
+  }
+
+  function thanhDieuHuong() {
+    var thanh = document.getElementById('thanh');
+    if (!thanh) return;
+
+    var banner = document.getElementById('banner');
+    if (!banner) { thanh.classList.add('dinh'); return; }
 
     function tinh() {
-      var moc = banner.offsetTop + banner.offsetHeight - dinh.offsetHeight - 40;
-      var qua = window.scrollY > moc;
-      dinh.classList.toggle('hien', qua);
-      noi.classList.toggle('tat', qua);
+      thanh.classList.toggle('dinh', window.scrollY > banner.offsetHeight - 90);
     }
     window.addEventListener('scroll', tinh, { passive: true });
     window.addEventListener('resize', tinh);
     tinh();
   }
 
-  /* ---------- 3. Banner: slide tự chạy, có nút trước / tạm dừng / kế tiếp ---------- */
-  function bannerSlide() {
-    var banner = $('#banner');
-    if (!banner) return;
-    var slide = $$('.banner__slide', banner);
-    var cham  = $$('.banner__cham button', banner);
-    if (slide.length < 2) return;
+  function menuManHep() {
+    var khay = document.getElementById('menu-nho');
+    var moNut = document.getElementById('mo-menu');
+    var dongNut = document.getElementById('dong-menu');
+    if (!khay || !moNut) return;
 
-    var i = 0, hen = null, dung = itChuyenDong, GIAY = 7000;
-    var nutTam = $('.banner__tam', banner);
+    function bat(mo) {
+      khay.classList.toggle('mo', mo);
+      document.body.style.overflow = mo ? 'hidden' : '';
+      moNut.setAttribute('aria-expanded', mo ? 'true' : 'false');
+    }
+
+    moNut.addEventListener('click', function () { bat(true); });
+    if (dongNut) dongNut.addEventListener('click', function () { bat(false); });
+
+    khay.addEventListener('click', function (e) { if (e.target === khay) bat(false); });
+
+    var lienKet = khay.querySelectorAll('a');
+    for (var i = 0; i < lienKet.length; i++) {
+      lienKet[i].addEventListener('click', function () { bat(false); });
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && khay.classList.contains('mo')) bat(false);
+    });
+  }
+
+  function oTimKiem() {
+    var thanh = document.getElementById('thanh');
+    var nut = document.getElementById('bat-tim');
+    var nhap = document.getElementById('o-tim-nhap');
+    if (!thanh || !nut || !nhap) return;
+
+    function bat(mo) {
+      thanh.classList.toggle('tim', mo);
+      nut.setAttribute('aria-expanded', mo ? 'true' : 'false');
+      if (mo) { nhap.focus(); } else { nhap.blur(); }
+    }
+
+    nut.addEventListener('click', function (e) {
+      e.stopPropagation();
+      bat(!thanh.classList.contains('tim'));
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!thanh.classList.contains('tim')) return;
+      if (e.target === nhap || nhap.contains(e.target)) return;
+      if (nhap.value === '') bat(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && thanh.classList.contains('tim')) bat(false);
+    });
+  }
+
+  function doiAnhDongSanPham() {
+    var dai = document.getElementById('dong-sp');
+    if (!dai) return;
+
+    var anh = dai.querySelectorAll('.dong-sp__anh');
+    var o = dai.querySelectorAll('.o-sp');
+    if (anh.length === 0 || o.length === 0) return;
 
     function chieu(k) {
-      i = (k + slide.length) % slide.length;
-      slide.forEach(function (s, n) { s.classList.toggle('dang-chieu', n === i); });
-      cham.forEach(function (c, n) {
-        c.setAttribute('aria-current', n === i ? 'true' : 'false');
-        // Ép vẽ lại để thanh tiến trình chạy lại từ đầu
-        if (n === i) { c.style.animation = 'none'; void c.offsetWidth; c.style.animation = ''; }
-      });
-      dat();
-    }
-    function dat() {
-      clearTimeout(hen);
-      if (!dung) hen = setTimeout(function () { chieu(i + 1); }, GIAY);
+      for (var n = 0; n < anh.length; n++) {
+        if (n === k) { anh[n].classList.add('hien'); } else { anh[n].classList.remove('hien'); }
+      }
     }
 
-    cham.forEach(function (c, n) { c.addEventListener('click', function () { chieu(n); }); });
-
-    var truoc = $('.banner__truoc', banner), sau = $('.banner__sau', banner);
-    if (truoc) truoc.addEventListener('click', function () { chieu(i - 1); });
-    if (sau)   sau.addEventListener('click', function () { chieu(i + 1); });
-
-    if (nutTam) {
-      nutTam.addEventListener('click', function () {
-        dung = !dung;
-        nutTam.setAttribute('aria-pressed', dung ? 'true' : 'false');
-        nutTam.setAttribute('aria-label', dung ? 'Chạy tiếp' : 'Tạm dừng tự chạy');
-        nutTam.innerHTML = '<svg class="ic"><use xlink:href="#ic-' +
-                           (dung ? 'phat' : 'tam-dung') + '" /></svg>';
-        // Đang dừng thì thanh tiến trình cũng phải đứng yên
-        cham.forEach(function (c) { c.style.animationPlayState = dung ? 'paused' : 'running'; });
-        dat();
-      });
+    for (var i = 0; i < o.length; i++) {
+      (function (el) {
+        var k = parseInt(el.getAttribute('data-anh'), 10);
+        if (isNaN(k)) return;
+        el.addEventListener('mouseenter', function () { chieu(k); });
+        el.addEventListener('focus', function () { chieu(k); });
+      })(o[i]);
     }
-
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) clearTimeout(hen); else dat();
-    });
-
-    chieu(0);
   }
 
-  /* ---------- 4. Băng chuyền khuyến mãi, chạy vòng lặp vô tận ----------
-     Nhân bản một lượt slide ở trước và một lượt ở sau, thành ba khối liền nhau.
-     Luôn chạy quanh khối giữa; hễ trượt lố sang khối nhân bản thì ngay sau khi
-     hiệu ứng chạy xong sẽ nhảy thầm về đúng slide tương ứng ở khối giữa,
-     nên người xem thấy dải slide chạy liền mạch không có điểm cuối. */
-  function bangKhuyenMai() {
-    var bang = $('#km-bang');
-    if (!bang) return;
-    var day = $('#km-day', bang);
-    if (!day) return;
+  function locSong() {
+    var form = document.querySelector('form.ds');
+    if (!form) return;
 
-    var goc = $$('.km-slide', day);
-    var N = goc.length;
-    if (N === 0) return;
+    if (!window.fetch || !window.history || !window.history.pushState) return;
 
-    var cham  = $$('#km-cham button');
-    var truoc = $('.km-nut--truoc', bang);
-    var sau   = $('.km-nut--sau', bang);
+    var vung = document.getElementById('kq');
+    var dem = document.getElementById('dem-so');
+    var diaChiLay = form.getAttribute('data-lay');
+    if (!vung || !diaChiLay) return;
 
-    // Nhân bản hai đầu. Bản sao chỉ để nhìn nên giấu khỏi trình đọc màn hình
-    // và khỏi thứ tự nhấn Tab.
-    if (N > 1) {
-      var truocKhoi = document.createDocumentFragment();
-      var sauKhoi   = document.createDocumentFragment();
-      goc.forEach(function (s) {
-        [truocKhoi, sauKhoi].forEach(function (khoi) {
-          var c = s.cloneNode(true);
-          c.setAttribute('aria-hidden', 'true');
-          $$('a', c).forEach(function (x) { x.setAttribute('tabindex', '-1'); });
-          khoi.appendChild(c);
+    function thamSo() {
+      var d = new FormData(form);
+      var q = [];
+      d.forEach(function (v, k) {
+        if (v === '') return;
+        q.push(encodeURIComponent(k) + '=' + encodeURIComponent(v));
+      });
+      return q.join('&');
+    }
+
+    function tai(qs, nutDay) {
+      vung.classList.add('dang-tai');
+
+      fetch(diaChiLay + '?' + qs, {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+        .then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          return r.text();
+        })
+        .then(function (html) {
+
+          var tam = document.createElement('div');
+          tam.innerHTML = html;
+          var o = tam.firstElementChild;
+          if (!o) throw new Error('rong');
+
+          vung.parentNode.replaceChild(o, vung);
+          vung = o;
+
+          if (dem) dem.textContent = vung.getAttribute('data-so') || '0';
+
+          if (quanSatThem) quanSatThem(vung);
+
+          if (nutDay) {
+            window.history.pushState(null, '', form.action.split('?')[0] + '?' + qs);
+          }
+        })
+        .catch(function () {
+
+          form.submit();
         });
-      });
-      day.insertBefore(truocKhoi, goc[0]);
-      day.appendChild(sauKhoi);
     }
 
-    var slide = $$('.km-slide', day);
-    var i = (N > 1) ? N : 0;          // bắt đầu ở slide đầu của khối giữa
-    var hen = null, TU_CHAY = 5500;
-
-    function dat(muot) {
-      var s = slide[i];
-      var lech = bang.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2);
-      if (muot === false) day.style.transition = 'none';
-      day.style.transform = 'translateX(' + Math.round(lech) + 'px)';
-      if (muot === false) { void day.offsetWidth; day.style.transition = ''; }
-
-      slide.forEach(function (e, n) { e.classList.toggle('giua', n === i); });
-      var thu = (N > 1) ? ((i - N) % N + N) % N : 0;
-      cham.forEach(function (c, n) { c.setAttribute('aria-current', n === thu ? 'true' : 'false'); });
-    }
-
-    // Kéo chỉ số về khối giữa mà không chạy hiệu ứng, người xem không nhận ra
-    function veKhoiGiua() {
-      if (N < 2) return;
-      var moi = i;
-      if (i < N) moi = i + N;
-      else if (i >= 2 * N) moi = i - N;
-      if (moi !== i) { i = moi; dat(false); }
-    }
-
-    function di(k) { i = k; dat(true); henLai(); }
-
-    function henLai() {
-      clearTimeout(hen);
-      if (N > 1 && !itChuyenDong) hen = setTimeout(function () { di(i + 1); }, TU_CHAY);
-    }
-
-    day.addEventListener('transitionend', function (e) {
-      if (e.target === day && e.propertyName === 'transform') veKhoiGiua();
+    form.addEventListener('change', function (e) {
+      var o = e.target;
+      if (o.type !== 'checkbox' && o.tagName !== 'SELECT') return;
+      tai(thamSo(), true);
     });
 
-    if (truoc) truoc.addEventListener('click', function () { di(i - 1); });
-    if (sau)   sau.addEventListener('click', function () { di(i + 1); });
+    form.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('.trang__nut') : null;
+      if (!a) return;
 
-    // Bấm chấm: chọn bản sao gần vị trí hiện tại nhất để đường trượt ngắn nhất
-    cham.forEach(function (c, n) {
-      c.addEventListener('click', function () {
-        if (N < 2) return;
-        var chon = n, ganNhat = Infinity;
-        [n, n + N, n + 2 * N].forEach(function (u) {
-          var d = Math.abs(u - i);
-          if (d < ganNhat) { ganNhat = d; chon = u; }
+      e.preventDefault();
+      tai(a.getAttribute('href').split('?')[1] || '', true);
+
+      var thanh = document.querySelector('.ds__thanh');
+      if (thanh) thanh.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    window.addEventListener('popstate', function () {
+      var qs = window.location.search.replace(/^\?/, '');
+
+      var p = new URLSearchParams(qs);
+      var o = form.querySelectorAll('input[type="checkbox"]');
+      for (var i = 0; i < o.length; i++) {
+        o[i].checked = p.getAll(o[i].name).indexOf(o[i].value) >= 0;
+      }
+      var sx = form.querySelector('#sapXep');
+      if (sx) sx.value = p.get('sapXep') || sx.options[0].value;
+
+      tai(qs, false);
+    });
+  }
+
+  function thuGonBoLoc() {
+    if (window.innerWidth >= 900) return;
+    var ds = document.querySelectorAll('.loc__nhom');
+    for (var i = 0; i < ds.length; i++) {
+
+      if (ds[i].querySelector('input:checked')) continue;
+      ds[i].removeAttribute('open');
+    }
+  }
+
+  function luoiChuyen() {
+    var g = document.documentElement;
+    if (g.className.indexOf('dang-luoi') < 0) return;
+
+    var hop = document.getElementById('luoi-chuyen');
+    if (!hop) { go(); return; }
+
+    var cot  = Math.min(28, Math.max(5, Math.round(window.innerWidth  / 60)));
+    var hang = Math.min(15, Math.max(4, Math.round(window.innerHeight / 60)));
+
+    hop.style.gridTemplateColumns = 'repeat(' + cot + ', 1fr)';
+    hop.style.gridTemplateRows    = 'repeat(' + hang + ', 1fr)';
+
+    var gx = (cot - 1) / 2;
+    var gy = (hang - 1) / 2;
+
+    var BUOC = 27;
+    var DAI  = 560;
+
+    var chuoi = '';
+    var xa = 0;
+    for (var y = 0; y < hang; y++) {
+      for (var x = 0; x < cot; x++) {
+        var d = Math.sqrt((x - gx) * (x - gx) + (y - gy) * (y - gy));
+        if (d > xa) xa = d;
+        chuoi += '<span style="animation-delay:' + Math.round(d * BUOC) + 'ms"></span>';
+      }
+    }
+    hop.innerHTML = chuoi;
+    hop.className += ' co-o';
+
+    var tong = Math.round(xa * BUOC) + DAI;
+
+    setTimeout(go, tong + 60);
+
+    setTimeout(function () {
+      if (batDauHienDan) batDauHienDan();
+    }, Math.round(tong * 0.6));
+
+    function go() {
+      g.className = g.className.replace(/ *\bdang-luoi\b/g, '');
+    }
+  }
+
+  function boAnhChiTiet() {
+    var to = document.getElementById('anh-to');
+    var nho = document.querySelectorAll('.gal__nho');
+    if (!to || !nho.length) return;
+
+    for (var i = 0; i < nho.length; i++) {
+      nho[i].addEventListener('click', function () {
+        var d = this.getAttribute('data-anh');
+        if (!d) return;
+
+        to.src = d;
+        for (var k = 0; k < nho.length; k++) nho[k].classList.remove('dang-chon');
+        this.classList.add('dang-chon');
+      });
+    }
+  }
+
+  function oDemSoLuong() {
+    var o = document.getElementById('so-luong');
+    if (!o) return;
+
+    var nut = document.querySelectorAll('[data-dem]');
+    for (var i = 0; i < nut.length; i++) {
+      nut[i].addEventListener('click', function () {
+        var moi = (parseInt(o.value, 10) || 1) + parseInt(this.getAttribute('data-dem'), 10);
+
+        var it = parseInt(o.min, 10) || 1;
+        var nhieu = parseInt(o.max, 10) || 99;
+        o.value = Math.max(it, Math.min(nhieu, moi));
+      });
+    }
+  }
+
+  function theNoiDung() {
+    var nav = document.querySelector('.tab__nav');
+    if (!nav) return;
+
+    var nut = nav.querySelectorAll('.tab__nut');
+
+    function chon(i) {
+      for (var k = 0; k < nut.length; k++) {
+        var bat = (k === i);
+        nut[k].classList.toggle('dang-chon', bat);
+        nut[k].setAttribute('aria-selected', bat ? 'true' : 'false');
+
+        var o = document.getElementById(nut[k].getAttribute('aria-controls'));
+        if (o) o.classList.toggle('hien', bat);
+      }
+    }
+
+    for (var i = 0; i < nut.length; i++) {
+      (function (i) {
+        nut[i].addEventListener('click', function () { chon(i); });
+
+        nut[i].addEventListener('keydown', function (e) {
+          var b = null;
+          if (e.key === 'ArrowRight') b = (i + 1) % nut.length;
+          if (e.key === 'ArrowLeft') b = (i - 1 + nut.length) % nut.length;
+          if (b === null) return;
+          e.preventDefault();
+          chon(b);
+          nut[b].focus();
         });
-        di(chon);
-      });
-    });
-
-    // Bấm vào slide bên cạnh thì đưa nó ra giữa, không mở liên kết
-    slide.forEach(function (s, n) {
-      s.addEventListener('click', function (e) {
-        if (n !== i) { e.preventDefault(); di(n); }
-      });
-    });
-
-    // Vuốt trên màn hình cảm ứng
-    var x0 = null;
-    day.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
-    day.addEventListener('touchend', function (e) {
-      if (x0 === null) return;
-      var dx = e.changedTouches[0].clientX - x0;
-      if (Math.abs(dx) > 40) di(i + (dx < 0 ? 1 : -1));
-      x0 = null;
-    });
-
-    // Rê chuột vào thì dừng tự chạy
-    bang.addEventListener('mouseenter', function () { clearTimeout(hen); });
-    bang.addEventListener('mouseleave', henLai);
-    bang.addEventListener('focusin',  function () { clearTimeout(hen); });
-    bang.addEventListener('focusout', henLai);
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) clearTimeout(hen); else henLai();
-    });
-
-    window.addEventListener('resize', function () { dat(false); });
-    dat(false);
-    henLai();
-  }
-
-  /* ---------- 5. Menu cho màn hình nhỏ ---------- */
-  function menuNho() {
-    var m = $('#menu-mb');
-    if (!m) return;
-    var moNut = $$('[data-mo-menu]');
-    var dong = $('#dong-menu');
-
-    function bat(tt) {
-      m.classList.toggle('mo', tt);
-      document.body.style.overflow = tt ? 'hidden' : '';
-      moNut.forEach(function (n) { n.setAttribute('aria-expanded', tt ? 'true' : 'false'); });
+      })(i);
     }
-    moNut.forEach(function (n) { n.addEventListener('click', function () { bat(true); }); });
-    if (dong) dong.addEventListener('click', function () { bat(false); });
-    m.addEventListener('click', function (e) { if (e.target === m) bat(false); });
-    $$('a', m).forEach(function (a) { a.addEventListener('click', function () { bat(false); }); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && m.classList.contains('mo')) bat(false);
-    });
   }
 
-  /* ---------- 6. Nút lên đầu trang ---------- */
-  function lenDau() {
-    var n = $('#len-dau');
+  function hienDan() {
+    var g = document.documentElement;
+
+    var khoi = document.querySelectorAll('.hien-dan, .hien-dan-nhom');
+    if (!khoi.length) {
+
+      g.className += ' hien-san-sang';
+      return;
+    }
+
+    function hienNgay(ds) {
+      for (var i = 0; i < ds.length; i++) danhDau(ds[i]);
+    }
+
+    function danhDau(o) {
+
+      if (o.className.indexOf('hien-dan-nhom') >= 0) {
+        var con = o.children;
+        for (var k = 0; k < con.length; k++) {
+          con[k].style.setProperty('--i', k);
+        }
+      }
+      o.classList.add('da-hien');
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      g.className += ' hien-san-sang';
+      hienNgay(khoi);
+      return;
+    }
+
+    var mat = new IntersectionObserver(function (dsGap) {
+      for (var i = 0; i < dsGap.length; i++) {
+        if (!dsGap[i].isIntersecting) continue;
+        danhDau(dsGap[i].target);
+
+        mat.unobserve(dsGap[i].target);
+      }
+    }, {
+
+      rootMargin: '0px 0px -12% 0px',
+      threshold: 0
+    });
+
+    function trongTamNhin(o) {
+      var r = o.getBoundingClientRect();
+      return r.top < (window.innerHeight || 0) && r.bottom > 0;
+    }
+
+    function theoDoi(goc) {
+      var ds = (goc || document).querySelectorAll('.hien-dan, .hien-dan-nhom');
+
+      for (var i = 0; i < ds.length; i++) {
+        if (ds[i].className.indexOf('da-hien') >= 0) continue;
+
+        if (trongTamNhin(ds[i])) {
+          danhDau(ds[i]);
+          continue;
+        }
+
+        mat.observe(ds[i]);
+      }
+    }
+
+    quanSatThem = theoDoi;
+
+    function batDau() {
+
+      if (g.className.indexOf('hien-san-sang') >= 0) return;
+
+      g.className += ' hien-san-sang';
+      theoDoi(document);
+    }
+
+    if (g.className.indexOf('dang-mo-man') >= 0) {
+      khiManTat(batDau);
+      return;
+    }
+
+    if (g.className.indexOf('dang-luoi') >= 0) {
+      batDauHienDan = batDau;
+
+      setTimeout(function () {
+        if (g.className.indexOf('hien-san-sang') < 0) batDau();
+      }, 1200);
+      return;
+    }
+
+    batDau();
+  }
+
+  function khiManTat(xong) {
+    var g = document.documentElement;
+
+    function conChe() {
+      return g.className.indexOf('dang-mo-man') >= 0;
+    }
+
+    if (!conChe()) { xong(); return; }
+
+    if (!('MutationObserver' in window)) { setTimeout(xong, 2500); return; }
+
+    var mat = new MutationObserver(function () {
+      if (conChe()) return;
+      mat.disconnect();
+      xong();
+    });
+    mat.observe(g, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  function nutInHoaDon() {
+    var n = document.getElementById('in-hoa-don');
     if (!n) return;
-    window.addEventListener('scroll', function () {
-      n.classList.toggle('hien', window.scrollY > 700);
-    }, { passive: true });
-    n.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: itChuyenDong ? 'auto' : 'smooth' });
-    });
-  }
 
-  /* ---------- 7. Cuộn ngang dải tin tức ---------- */
-  function cuonTin() {
-    var day = $('#cuon-tin');
-    if (!day) return;
-    $$('[data-cuon]').forEach(function (n) {
-      n.addEventListener('click', function () {
-        var buoc = day.firstElementChild ? day.firstElementChild.offsetWidth + 18 : 300;
-        day.scrollBy({ left: buoc * parseInt(n.getAttribute('data-cuon'), 10),
-                       behavior: itChuyenDong ? 'auto' : 'smooth' });
-      });
-    });
+    n.hidden = false;
+    n.addEventListener('click', function () { window.print(); });
   }
 
   function chay() {
+    moMan();
+    bannerDoiAnh();
+    thanhDieuHuong();
+    menuManHep();
+    oTimKiem();
+    doiAnhDongSanPham();
+    locSong();
+    thuGonBoLoc();
+    boAnhChiTiet();
+    oDemSoLuong();
+    theNoiDung();
+    nutInHoaDon();
     hienDan();
-    thanhMenu();
-    bannerSlide();
-    bangKhuyenMai();
-    menuNho();
-    lenDau();
-    cuonTin();
+    luoiChuyen();
   }
 
   if (document.readyState === 'loading') {

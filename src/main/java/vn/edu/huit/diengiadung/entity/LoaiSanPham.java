@@ -63,6 +63,14 @@ public class LoaiSanPham {
         this.moTa = moTa;
     }
 
+    public String getAnhDanhMuc() {
+        return "/img/sp-" + maLoai + ".jpg";
+    }
+
+    public String getAnhBanner() {
+        return "/img/banner-" + maLoai + ".jpg";
+    }
+
     public List<SanPham> getDanhSachSanPham() {
         return danhSachSanPham;
     }

@@ -1,86 +1,94 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{layout/fragments :: dauTrang('Tổng quan')}"></head>
+<head th:replace="~{layout/fragments :: dauTrang('Tổng quan', false)}"></head>
 <body>
 <div th:replace="~{layout/bo-icon :: boIcon}"></div>
-<div th:replace="~{layout/fragments :: menu}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
 
-<main class="than than--kem">
-    <div class="khung">
-        <div class="bo-cuc-qt">
-            <div th:replace="~{layout/fragments :: menuQuanTri('tong-quan')}"></div>
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Quản trị</span>
+            </nav>
 
-            <div>
-                <div class="dau-trang">
-                    <div>
-                        <h1>Tổng quan</h1>
-                        <p>Số liệu nhanh của cửa hàng.</p>
-                    </div>
-                </div>
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('tong-quan')}"></div>
 
-                <div th:replace="~{layout/fragments :: thongBao}"></div>
-
-                <div class="luoi-thong-ke">
-                    <div class="o-so">
-                        <div class="o-so__nhan">Loại sản phẩm</div>
-                        <div class="o-so__gia-tri" th:text="${soLoai}">0</div>
-                    </div>
-                    <div class="o-so">
-                        <div class="o-so__nhan">Thương hiệu</div>
-                        <div class="o-so__gia-tri" th:text="${soThuongHieu}">0</div>
-                    </div>
-                    <div class="o-so">
-                        <div class="o-so__nhan">Sản phẩm</div>
-                        <div class="o-so__gia-tri" th:text="${soSanPham}">0</div>
-                    </div>
-                    <div class="o-so">
-                        <div class="o-so__nhan">Tài khoản</div>
-                        <div class="o-so__gia-tri" th:text="${soTaiKhoan}">0</div>
-                    </div>
-                    <div class="o-so o-so--nhac">
-                        <div class="o-so__nhan">Đơn chờ xác nhận</div>
-                        <div class="o-so__gia-tri" th:text="${soDonChoXacNhan}">0</div>
-                    </div>
-                </div>
-
-                <div class="the-trang">
-                    <div class="the-trang__dau">
-                        <h2>Sản phẩm sắp hết hàng</h2>
-                        <span class="the-nhan the-nhan--cho">Tồn kho từ 5 trở xuống</span>
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tổng quan</h1>
+                            <p>Số liệu nhanh của cửa hàng.</p>
+                        </div>
                     </div>
 
-                    <div class="khung-bang" th:if="${not #lists.isEmpty(sanPhamSapHet)}">
-                        <table class="bang-dl">
-                            <thead>
-                            <tr>
-                                <th>Mã</th>
-                                <th>Tên sản phẩm</th>
-                                <th class="canh-giua">Tồn kho</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="sp : ${sanPhamSapHet}">
-                                <td th:text="${sp.maSanPham}">MSP</td>
-                                <td th:text="${sp.tenSanPham}">Tên</td>
-                                <td class="canh-giua">
-                                    <span class="the-nhan the-nhan--do" th:text="${sp.soLuongTon}">0</span>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="o-so-ds">
+                        <div class="o-so">
+                            <div class="o-so__nhan">Loại sản phẩm</div>
+                            <div class="o-so__gt" th:text="${soLoai}">0</div>
+                        </div>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Thương hiệu</div>
+                            <div class="o-so__gt" th:text="${soThuongHieu}">0</div>
+                        </div>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Sản phẩm</div>
+                            <div class="o-so__gt" th:text="${soSanPham}">0</div>
+                        </div>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Tài khoản</div>
+                            <div class="o-so__gt" th:text="${soTaiKhoan}">0</div>
+                        </div>
+                        <div class="o-so o-so--nhac">
+                            <div class="o-so__nhan">Đơn chờ xác nhận</div>
+                            <div class="o-so__gt" th:text="${soDonChoXacNhan}">0</div>
+                        </div>
                     </div>
 
-                    <div class="trang-trong" th:if="${#lists.isEmpty(sanPhamSapHet)}">
-                        <svg class="ic"><use xlink:href="#ic-kiem"></use></svg>
-                        <strong>Không có sản phẩm nào sắp hết hàng</strong>
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Sản phẩm sắp hết hàng</h2>
+                            <span class="the-nhan the-nhan--vang">Tồn kho từ 5 trở xuống</span>
+                        </div>
+
+                        <div class="cuon-ngang" th:if="${not #lists.isEmpty(sanPhamSapHet)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th class="canh-giua">Tồn kho</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="sp : ${sanPhamSapHet}">
+                                    <td class="ma-mo" th:text="${sp.maSanPham}">MSP</td>
+                                    <td th:text="${sp.tenSanPham}">Tên</td>
+                                    <td class="canh-giua">
+                                        <span class="the-nhan the-nhan--do" th:text="${sp.soLuongTon}">0</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="trong" th:if="${#lists.isEmpty(sanPhamSapHet)}">
+                            <p>Không có sản phẩm nào sắp hết hàng.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
-<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
 </body>
 </html>
