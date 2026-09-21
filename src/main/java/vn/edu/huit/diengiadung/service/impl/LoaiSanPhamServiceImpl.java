@@ -46,11 +46,20 @@ public class LoaiSanPhamServiceImpl implements LoaiSanPhamService {
     @Transactional
     public LoaiSanPham luu(LoaiSanPham loaiSanPham) {
         String tenLoai = loaiSanPham.getTenLoai().trim();
+        String maLoai = loaiSanPham.getMaLoai().trim().toLowerCase();
         loaiSanPham.setTenLoai(tenLoai);
+        loaiSanPham.setMaLoai(maLoai);
+
         Optional<LoaiSanPham> trungTen = loaiSanPhamRepository.findByTenLoaiIgnoreCase(tenLoai);
         if (trungTen.isPresent() && !trungTen.get().getId().equals(loaiSanPham.getId())) {
             throw new LoiNghiepVu("Loại sản phẩm \"" + tenLoai + "\" đã tồn tại");
         }
+
+        Optional<LoaiSanPham> trungMa = loaiSanPhamRepository.findByMaLoaiIgnoreCase(maLoai);
+        if (trungMa.isPresent() && !trungMa.get().getId().equals(loaiSanPham.getId())) {
+            throw new LoiNghiepVu("Mã loại \"" + maLoai + "\" đã được dùng cho loại khác");
+        }
+
         return loaiSanPhamRepository.save(loaiSanPham);
     }
 

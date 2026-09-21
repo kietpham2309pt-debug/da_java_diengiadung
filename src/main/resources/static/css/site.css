@@ -1,0 +1,752 @@
+@charset "UTF-8";
+/* ============================================================
+   Bếp Nè : hệ thống giao diện
+   Nâu (#48301F lấy từ logo) + trắng. CSS thuần, không thư viện.
+   Bố cục bám theo web mẫu aquavietnam.com.vn:
+   banner tràn màn hình, thanh menu bo tròn nổi ở đáy banner,
+   lưới bento lệch nhịp với thẻ ảnh bo 20px và tiêu đề cỡ lớn.
+   ============================================================ */
+
+/* ---------- 1. Token ---------- */
+:root{
+  --nau-950:#20120A;
+  --nau-900:#301C10;
+  --nau-800:#48301F;
+  --nau-700:#5C4029;
+  --nau-600:#74553A;
+  --nau-500:#94745A;
+  --nau-400:#B79A7E;
+  --nau-300:#D5BFA8;
+  --nau-200:#E8DACA;
+  --nau-100:#F3EAE0;
+  --nau-50:#FAF5EF;
+
+  --trang:#FFFFFF;
+  --kem:#FBF7F3;
+  --dong:#B0642E;
+  --dong-nhat:#F5E4D6;
+
+  --muc:#1F1610;
+  --muc-nhat:#6D5947;
+  --vien:#E7DCD0;
+
+  --khung:1368px;
+  --le:clamp(16px, 4vw, 76px);
+  --khoang-muc:clamp(56px, 7vw, 104px);
+
+  --bo:14px;
+  --bo-the:20px;          /* bo của thẻ bento, đúng như web mẫu */
+
+  --bong-the:0 2px 10px rgba(48,28,16,.05);
+  --bong-noi:0 4px 22px rgba(31,22,16,.22);
+
+  --nhanh:.18s ease-out;
+  --vua:.3s ease-out;
+  --cham:.72s cubic-bezier(.16,1,.3,1);
+
+  /* Chiều cao thanh menu nổi; bán kính bo = một nửa để thành viên thuốc */
+  --cao-thanh:clamp(62px, 5.6vw, 94px);
+  /* Khoảng chừa dưới đáy banner để thanh menu nằm TRỌN trong màn hình */
+  --chua-duoi:calc(var(--cao-thanh) / 2 + clamp(16px, 1.8vw, 26px));
+
+  /* Nền banner: khai báo một lần, thẻ ảnh và lớp mờ phía sau dùng chung */
+  --nen-banner:
+    radial-gradient(78% 62% at 76% 26%, rgba(176,100,46,.5), transparent 62%),
+    radial-gradient(64% 56% at 6% 96%, rgba(148,116,90,.4), transparent 62%),
+    linear-gradient(158deg, #3D2517 0%, #1E1109 100%);
+
+  --chu:Roboto, "Helvetica Neue", Arial, "Segoe UI", system-ui, sans-serif;
+}
+
+/* ---------- 2. Reset ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:110px}
+body{
+  margin:0; background:var(--trang); color:var(--muc);
+  font-family:var(--chu); font-size:16px; line-height:1.6; font-weight:400;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+img,svg,picture{display:block; max-width:100%}
+a{color:inherit; text-decoration:none}
+button{font:inherit; color:inherit; background:none; border:0; cursor:pointer}
+input{font:inherit}
+ul,ol{list-style:none; margin:0; padding:0}
+h1,h2,h3,h4,p,figure{margin:0}
+:focus-visible{outline:2.5px solid var(--dong); outline-offset:3px; border-radius:3px}
+
+/* ---------- 3. Tiện ích ---------- */
+.khung{width:100%; max-width:var(--khung); margin-inline:auto; padding-inline:var(--le)}
+.muc{padding-block:var(--khoang-muc)}
+.muc--kem{background:var(--kem)}
+
+/* Nhãn mục: chỉ chữ hoa giãn cách, không dùng nét gạch trang trí */
+.nhan-muc{
+  display:block; font-size:12px; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--nau-500);
+}
+.tieu-de-muc{
+  font-size:clamp(28px, 3.6vw, 46px); line-height:1.1; font-weight:700;
+  letter-spacing:-.02em; margin-top:12px; color:var(--nau-900);
+}
+.mo-ta-muc{margin-top:14px; max-width:58ch; color:var(--muc-nhat); font-size:clamp(14.5px,1.4vw,16.5px)}
+
+.nut{
+  --nen:var(--nau-800); --chu-nut:var(--trang);
+  position:relative; display:inline-flex; align-items:center; gap:10px;
+  padding:14px 28px; border-radius:999px;
+  background:var(--nen); color:var(--chu-nut);
+  font-weight:500; font-size:15px;
+  overflow:hidden; isolation:isolate;
+  transition:transform var(--nhanh), box-shadow var(--nhanh);
+}
+.nut::after{
+  content:""; position:absolute; inset:0; z-index:-1;
+  background:var(--nau-700); transform:translateY(101%); transition:transform var(--vua);
+}
+.nut:hover{transform:translateY(-2px); box-shadow:var(--bong-noi)}
+.nut:hover::after{transform:translateY(0)}
+.nut .ic{width:18px; height:18px; flex:none; transition:transform var(--vua)}
+.nut:hover .ic{transform:translateX(4px)}
+.nut--vien{--nen:transparent; --chu-nut:var(--nau-800); border:1.5px solid var(--nau-300)}
+.nut--vien::after{background:var(--nau-100)}
+.nut--trang{--nen:var(--trang); --chu-nut:var(--nau-900)}
+.nut--trang::after{background:var(--nau-100)}
+.nut--kinh{--nen:rgba(255,255,255,.1); --chu-nut:#fff; border:1px solid rgba(255,255,255,.3)}
+.nut--kinh::after{background:rgba(255,255,255,.22)}
+
+.lien-ket{
+  display:inline-flex; align-items:center; gap:8px;
+  font-weight:500; font-size:14px; color:var(--nau-800); position:relative; padding-block:3px;
+}
+.lien-ket::after{
+  content:""; position:absolute; left:0; bottom:0; height:1.5px; width:100%;
+  background:currentColor; transform:scaleX(0); transform-origin:right; transition:transform var(--vua);
+}
+.lien-ket:hover::after{transform:scaleX(1); transform-origin:left}
+.lien-ket .ic{width:15px; height:15px; transition:transform var(--vua)}
+.lien-ket:hover .ic{transform:translateX(4px)}
+
+.ic{width:24px; height:24px; fill:none; stroke:currentColor; stroke-width:1.6;
+    stroke-linecap:round; stroke-linejoin:round; flex:none}
+.ic--to{fill:currentColor; stroke:none}
+
+/* ---------- 4. Hiện dần khi cuộn ---------- */
+.hien-dan{
+  opacity:0; transform:translateY(24px);
+  transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+  transition-delay:calc(var(--tre, 0) * 70ms);
+}
+.hien-dan.da-hien{opacity:1; transform:none}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms !important; transition-duration:.01ms !important}
+  .hien-dan{opacity:1; transform:none}
+}
+/* Tắt JavaScript thì mọi thứ vẫn đọc được */
+html:not(.co-js) .hien-dan{opacity:1; transform:none}
+
+/* ============================================================
+   5. THANH MENU : dùng chung cho thanh nổi và thanh dính trên đầu
+   ============================================================ */
+.dh{display:flex; align-items:center}
+.dh-muc{position:relative}
+.dh-nut{
+  display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+  font-size:13px; font-weight:500; letter-spacing:.01em; text-transform:uppercase;
+  color:var(--nau-900); padding:0 clamp(9px, .95vw, 15px);
+  height:100%; transition:color var(--nhanh);
+}
+.dh-nut:hover{color:var(--dong)}
+/* Mũi tên chỉ lên, xoay xuống khi bảng mở, giống web mẫu */
+.dh-nut .mui{
+  width:7px; height:7px; flex:none;
+  border:1.8px solid currentColor; border-left:0; border-bottom:0;
+  transform:rotate(-45deg); position:relative; top:2px;
+  transition:transform var(--vua);
+}
+.dh-muc:hover .dh-nut .mui{transform:rotate(135deg); top:-1px}
+
+/* Bảng menu lớn */
+.bang{
+  position:absolute; left:50%; translate:-50% 0;
+  width:min(880px, calc(100vw - 40px));
+  background:var(--trang); border-radius:var(--bo-the);
+  box-shadow:0 10px 44px rgba(31,22,16,.2);
+  padding:24px; z-index:5;
+  display:grid; grid-template-columns:1fr 250px; gap:22px;
+  opacity:0; visibility:hidden; transition:opacity var(--vua), visibility var(--vua), transform var(--vua);
+}
+.dh-muc:hover .bang,.dh-muc:focus-within .bang{opacity:1; visibility:visible; transform:none}
+
+/* Từ thanh nổi ở đáy màn hình thì bảng mở NGƯỢC LÊN TRÊN */
+.thanh-noi .bang{bottom:calc(100% + 18px); transform:translateY(10px)}
+/* Từ thanh dính trên đầu thì bảng mở XUỐNG DƯỚI */
+.thanh-dinh .bang{top:calc(100% + 6px); transform:translateY(-10px)}
+
+.bang__cot{display:grid; grid-template-columns:repeat(2,1fr); gap:2px; align-content:start}
+.bang__nhan{
+  grid-column:1/-1; font-size:11px; font-weight:700; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--nau-500); margin-bottom:8px;
+}
+.mm{display:flex; align-items:center; gap:12px; padding:9px 11px; border-radius:11px;
+    transition:background var(--nhanh)}
+.mm:hover{background:var(--nau-50)}
+.mm__ic{
+  width:40px; height:40px; flex:none; display:grid; place-items:center;
+  color:var(--nau-800); transition:color var(--vua), transform var(--vua);
+}
+.mm:hover .mm__ic{color:var(--dong); transform:scale(1.1)}
+.mm__ic .ic{width:28px; height:28px; stroke-width:1.4}
+.mm__ten{font-size:14px; font-weight:500; color:var(--nau-900); line-height:1.3}
+.mm__so{font-size:12px; color:var(--muc-nhat)}
+.bang__ben{
+  border-radius:var(--bo); padding:22px; display:flex; flex-direction:column;
+  justify-content:space-between; gap:16px; color:var(--nau-200);
+  background:linear-gradient(150deg, var(--nau-800), var(--nau-950));
+}
+.bang__ben h4{font-size:18px; font-weight:700; color:var(--trang); line-height:1.3}
+.bang__ben p{font-size:13px; margin-top:8px; line-height:1.6}
+.bang__ben .lien-ket{color:var(--nau-300)}
+
+/* Ô tìm kiếm nằm ngay trong thanh menu */
+.o-tim{
+  display:flex; align-items:center; gap:6px; flex:none;
+  background:var(--nau-50); border:1px solid var(--vien); border-radius:999px;
+  padding:0 6px 0 18px; height:clamp(38px, 3.2vw, 46px);
+  transition:border-color var(--nhanh), background var(--nhanh);
+}
+.o-tim:focus-within{border-color:var(--nau-500); background:var(--trang)}
+.o-tim input{
+  border:0; background:none; width:clamp(96px, 11vw, 168px); min-width:0;
+  font-size:13.5px; color:var(--nau-900);
+}
+.o-tim input::placeholder{color:var(--nau-500)}
+.o-tim input:focus{outline:none}
+.o-tim button{
+  width:clamp(30px,2.6vw,36px); height:clamp(30px,2.6vw,36px); flex:none;
+  border-radius:50%; display:grid; place-items:center; color:var(--nau-800);
+  transition:background var(--nhanh);
+}
+.o-tim button:hover{background:var(--nau-200)}
+.o-tim .ic{width:17px; height:17px}
+
+.logo-thanh{flex:none; display:flex; align-items:center; margin-left:clamp(10px,1.4vw,22px)}
+.logo-thanh img{height:clamp(26px, 2.5vw, 40px); width:auto}
+
+.nut-tron{
+  width:40px; height:40px; display:grid; place-items:center; border-radius:50%;
+  color:var(--nau-900); transition:background var(--nhanh);
+}
+.nut-tron:hover{background:var(--nau-100)}
+.nut-tron .ic{width:20px; height:20px}
+.gio{position:relative}
+.gio__so{
+  position:absolute; top:2px; right:1px; min-width:17px; height:17px; padding:0 4px;
+  border-radius:9px; background:var(--dong); color:#fff;
+  font-size:10px; font-weight:700; display:grid; place-items:center; line-height:1;
+}
+.nut-menu{display:none}
+
+/* ---------- 5a. Thanh nổi bo tròn treo ở đáy banner ---------- */
+.thanh-noi{
+  position:absolute; z-index:6;
+  /* Căng giữa màn hình theo chiều ngang.
+     Tâm thanh nằm đúng trên mép dưới thẻ ảnh, và cả thanh vẫn nằm trọn trong màn hình. */
+  left:50%; translate:-50% 0;
+  bottom:calc(var(--chua-duoi) - var(--cao-thanh) / 2);
+  /* Phải chốt width:max-content. Phần tử absolute mà chỉ đặt left:50% thì bề rộng
+     co giãn chỉ được tính trong nửa màn hình còn lại, hộp bị bó hẹp hơn nội dung
+     và logo ở cuối thanh tràn ra ngoài. */
+  width:max-content;
+  height:var(--cao-thanh); border-radius:calc(var(--cao-thanh) / 2);
+  background:var(--trang); box-shadow:var(--bong-noi);
+  display:flex; align-items:center; gap:clamp(6px,.7vw,12px);
+  padding:0 clamp(14px, 1.6vw, 26px);
+  max-width:calc(100% - var(--le) * 2);
+}
+.thanh-noi .dh{height:100%}
+.thanh-noi .dh-nut{line-height:var(--cao-thanh)}
+
+/* ---------- 5b. Thanh dính trượt xuống khi cuộn qua banner ---------- */
+.thanh-dinh{
+  position:fixed; inset:0 0 auto; z-index:80; height:74px;
+  background:rgba(255,255,255,.94); backdrop-filter:saturate(150%) blur(12px);
+  border-bottom:1px solid var(--vien);
+  transform:translateY(-100%); transition:transform var(--vua);
+}
+.thanh-dinh.hien{transform:none}
+.thanh-dinh .khung{display:flex; align-items:center; height:100%; gap:clamp(8px,1.2vw,20px)}
+.thanh-dinh .logo-thanh{margin-left:0; margin-right:auto}
+.thanh-dinh .logo-thanh img{height:34px}
+.thanh-dinh .dh{height:100%}
+.thanh-dinh .dh-nut{line-height:74px}
+
+/* ============================================================
+   6. BANNER : tràn hết màn hình, thẻ ảnh bo góc, menu treo ở đáy
+   ============================================================ */
+.banner{
+  position:relative; z-index:4;
+  height:min(100svh, 1010px); min-height:620px;
+  /* Chừa đáy đúng bằng --chua-duoi để thanh menu treo mà vẫn nằm trọn trong màn hình */
+  padding:clamp(12px, 1.5vw, 24px) var(--le) var(--chua-duoi);
+}
+
+/* Lớp nền mờ trải kín mục banner, giống web mẫu: quanh thẻ ảnh không phải
+   nền trắng trơn mà là chính ảnh nền đã làm nhoè, rồi tan dần ra trắng ở đáy. */
+.banner__mo{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+.banner__mo::before{
+  content:""; position:absolute; inset:-10%;
+  background:var(--nen-banner);
+  filter:blur(46px) saturate(1.1);
+  transform:scale(1.06);
+}
+.banner__mo::after{
+  content:""; position:absolute; inset:auto 0 0 0; height:58%;
+  background:linear-gradient(to top, #fff 6%, rgba(255,255,255,.78) 42%, rgba(255,255,255,0));
+}
+
+.banner__the{
+  position:relative; z-index:2; height:100%; overflow:hidden;
+  border-radius:clamp(16px, 1.7vw, 26px);
+  background:var(--nau-900); display:grid;
+  box-shadow:0 18px 50px rgba(31,18,10,.22);
+}
+/* Nền thẻ: dùng khi chưa có ảnh chụp sản phẩm thật */
+.banner__nen{position:absolute; inset:0; z-index:0; background:var(--nen-banner)}
+.banner__nen::after{
+  content:""; position:absolute; inset:0; opacity:.1;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.55) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.55) 1px, transparent 1px);
+  background-size:86px 86px;
+  mask-image:radial-gradient(72% 62% at 50% 42%, #000 20%, transparent 78%);
+}
+.banner__anh{position:absolute; inset:0; z-index:0; object-fit:cover; width:100%; height:100%}
+.banner__lien{position:absolute; inset:0; z-index:1; display:block}
+
+.banner__slide{
+  grid-area:1/1; position:relative; z-index:1;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .55s ease-out, visibility .55s ease-out;
+}
+.banner__slide.dang-chieu{opacity:1; visibility:visible; pointer-events:auto}
+
+
+
+/* Cụm điều khiển slide: viên thuốc kính mờ ở góc dưới phải thẻ ảnh */
+.banner__dk{
+  position:absolute; z-index:3; right:clamp(18px,2vw,32px);
+  bottom:calc(var(--cao-thanh) / 2 + clamp(22px, 2.4vw, 40px));
+  display:flex; align-items:center;
+  background:rgba(255,255,255,.72); backdrop-filter:blur(10px);
+  border-radius:999px; overflow:hidden;
+}
+.banner__dk button{
+  display:grid; place-items:center; padding:11px 15px; color:var(--nau-900);
+  transition:background var(--nhanh);
+}
+.banner__dk button:hover{background:rgba(255,255,255,.85)}
+.banner__dk .ic{width:18px; height:18px; stroke-width:1.9}
+.banner__dk .vach{width:1px; align-self:stretch; background:rgba(31,22,16,.16)}
+
+/* Chấm chỉ số slide, đặt ở góc dưới trái */
+.banner__cham{
+  position:absolute; z-index:3; left:clamp(28px, 3.6vw, 64px);
+  bottom:calc(var(--cao-thanh) / 2 + clamp(24px, 2.6vw, 44px));
+  display:flex; gap:8px;
+}
+.banner__cham button{
+  width:34px; height:3px; border-radius:2px; background:rgba(255,255,255,.3);
+  position:relative; overflow:hidden;
+}
+.banner__cham button::after{
+  content:""; position:absolute; inset:0; background:#fff;
+  transform:scaleX(0); transform-origin:left;
+}
+.banner__cham button[aria-current="true"]::after{animation:chay 7s linear forwards}
+@keyframes chay{to{transform:scaleX(1)}}
+
+/* ============================================================
+   7. KHUYẾN MÃI: băng chuyền lấy slide giữa làm trọng tâm
+   Tỉ lệ đo từ web mẫu: slide phụ scale(.9), slide giữa scale(1.08),
+   thẻ bo 20px, hai mép mục phủ gradient trắng, nút tròn 40px
+   nằm sát mép trong của slide giữa.
+   ============================================================ */
+.km{padding-top:var(--khoang-muc)}
+
+.km-bang{
+  --rong-slide:clamp(280px, 52vw, 940px);
+  --khe:clamp(10px, 1.4vw, 22px);
+  position:relative; overflow:hidden;
+  /* Chừa trên dưới để slide giữa phóng to và đổ bóng không bị cắt */
+  padding-block:clamp(20px, 2.4vw, 40px);
+}
+/* Hai mép tan ra trắng, slide phụ mờ dần thay vì bị cắt cụt */
+.km-bang::before,.km-bang::after{
+  content:""; position:absolute; top:0; bottom:0; z-index:3; pointer-events:none;
+  width:clamp(24px, 9vw, 240px);
+}
+.km-bang::before{left:0;  background:linear-gradient(90deg,  var(--trang) 10%, rgba(255,255,255,0))}
+.km-bang::after {right:0; background:linear-gradient(270deg, var(--trang) 10%, rgba(255,255,255,0))}
+
+.km-bang__day{
+  position:relative; display:flex; align-items:center; width:max-content;
+  transition:transform .55s cubic-bezier(.22,.61,.36,1);
+  will-change:transform;
+}
+.km-slide{
+  flex:0 0 var(--rong-slide);
+  padding-inline:calc(var(--khe) / 2);
+  transform:scale(.9); opacity:.8;
+  transition:transform .35s ease-out, opacity .35s ease-out;
+}
+.km-slide.giua{transform:scale(1.06); opacity:1}
+.km-slide:not(.giua){cursor:pointer}
+
+.km-the{
+  position:relative; display:block; overflow:hidden; isolation:isolate;
+  border-radius:var(--bo-the); aspect-ratio:19 / 10; color:#fff;
+  background:linear-gradient(150deg, var(--t1, var(--nau-700)), var(--t2, var(--nau-950)));
+  box-shadow:0 10px 34px rgba(31,18,10,.15);
+}
+.km-the__anh{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+
+/* Bố cục khi chưa có ảnh: chữ bên trái, icon cỡ lớn bên phải */
+.km-the__hoa{
+  position:absolute; z-index:1; right:-3%; top:50%; translate:0 -50%;
+  width:min(40%, 272px); color:#fff; opacity:.16;
+  transition:transform var(--cham), opacity var(--vua);
+}
+.km-the__hoa .ic{width:100%; height:auto; stroke-width:.7}
+.km-slide.giua .km-the:hover .km-the__hoa{transform:rotate(-6deg) scale(1.06); opacity:.24}
+
+
+/* Nút tròn nằm sát mép trong của slide giữa */
+.km-nut{
+  position:absolute; top:50%; translate:0 -50%; z-index:4;
+  width:44px; height:44px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(31,18,10,.42); color:#fff; backdrop-filter:blur(6px);
+  transition:background var(--nhanh), transform var(--nhanh), opacity var(--nhanh);
+}
+.km-nut:hover{background:rgba(31,18,10,.74); transform:scale(1.08)}
+.km-nut .ic{width:19px; height:19px; stroke-width:1.9}
+/* Mep that cua the = (rong slide tru khe) nhan he so phong to 1.06 */
+.km-bang{--nua-the:calc((var(--rong-slide) - var(--khe)) * 1.06 / 2)}
+.km-nut--truoc{left:calc(50% - var(--nua-the) + 12px)}
+.km-nut--sau {right:calc(50% - var(--nua-the) + 12px)}
+
+
+@media (max-width:860px){
+  .km-bang{--rong-slide:84vw}
+  .km-nut{width:38px; height:38px}
+  .km-nut--truoc{left:10px}
+  .km-nut--sau {right:10px}
+}
+
+/* ============================================================
+   8. KHÁM PHÁ SẢN PHẨM : lưới bento lệch nhịp
+   Tỉ lệ cột 5/8 và bo 20px lấy theo web mẫu.
+   ============================================================ */
+.kp{background:var(--kem)}
+.kp__dau{max-width:640px}
+.kp__luoi{
+  margin-top:clamp(30px, 3.4vw, 46px);
+  display:grid; gap:clamp(14px, 1.6vw, 24px);
+  grid-template-columns:minmax(0,5fr) minmax(0,8fr);
+  grid-template-rows:clamp(240px,24vw,344px) clamp(104px,9.4vw,132px)
+                     clamp(190px,20vw,286px) clamp(190px,20vw,286px) clamp(160px,16vw,232px);
+}
+
+/* Thẻ tìm kiếm */
+.kp-tim{
+  grid-column:1; grid-row:1;
+  border-radius:var(--bo-the); padding:clamp(20px,2.2vw,32px);
+  display:flex; flex-direction:column; justify-content:center; gap:16px;
+  color:var(--nau-200);
+  background:linear-gradient(152deg, var(--nau-800), var(--nau-950));
+}
+.kp-tim h3{font-size:clamp(18px,1.9vw,24px); font-weight:700; color:#fff; letter-spacing:-.02em}
+.kp-tim form{
+  display:flex; align-items:center; gap:8px; background:#fff;
+  border-radius:999px; padding:5px 5px 5px 18px;
+}
+.kp-tim input{flex:1; min-width:0; border:0; background:none; font-size:14.5px;
+              color:var(--nau-900); padding:10px 0}
+.kp-tim input::placeholder{color:var(--nau-500)}
+.kp-tim input:focus{outline:none}
+.kp-tim button[type=submit]{
+  width:38px; height:38px; flex:none; border-radius:50%; display:grid; place-items:center;
+  background:var(--nau-800); color:#fff; transition:transform var(--nhanh)}
+.kp-tim button[type=submit]:hover{transform:scale(1.07)}
+.kp-tim__goi-y{display:flex; flex-wrap:wrap; gap:7px}
+.kp-tim__goi-y a{
+  padding:5px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.22);
+  font-size:12.5px; color:var(--nau-300); transition:background var(--nhanh), color var(--nhanh);
+}
+.kp-tim__goi-y a:hover{background:rgba(255,255,255,.15); color:#fff}
+
+/* Thẻ dịch vụ */
+.kp-dv{
+  grid-column:1; grid-row:2;
+  border-radius:var(--bo-the); background:var(--nau-800); color:#fff;
+  display:grid; grid-template-columns:repeat(4,1fr); align-items:center;
+  padding:0 clamp(8px,1vw,14px);
+}
+.kp-dv__muc{
+  display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center;
+  padding:10px 4px; border-radius:12px; transition:background var(--nhanh);
+}
+.kp-dv__muc:hover{background:rgba(255,255,255,.1)}
+.kp-dv__muc .ic{width:clamp(24px,2.3vw,30px); height:clamp(24px,2.3vw,30px); stroke-width:1.4}
+.kp-dv__ten{font-size:clamp(11px,1.05vw,13px); font-weight:500; line-height:1.25}
+
+/* Thẻ danh mục: ảnh phủ kín, tiêu đề cỡ lớn ở góc dưới trái */
+.dm-the{
+  position:relative; overflow:hidden; isolation:isolate;
+  border-radius:var(--bo-the); color:#fff; display:block;
+  background:linear-gradient(155deg, var(--t1, var(--nau-700)), var(--t2, var(--nau-950)));
+}
+.dm-the__anh{
+  position:absolute; inset:0; z-index:0; width:100%; height:100%; object-fit:cover;
+  transition:transform .6s cubic-bezier(.22,.61,.36,1);
+}
+.dm-the:hover .dm-the__anh{transform:scale(1.055)}
+/* Icon cỡ lớn làm mảng hình khi chưa có ảnh chụp */
+.dm-the__hoa{
+  position:absolute; z-index:1; right:-5%; top:50%; translate:0 -50%;
+  width:min(48%, 268px); color:#fff; opacity:.17;
+  transition:transform var(--cham), opacity var(--vua);
+}
+.dm-the__hoa .ic{width:100%; height:auto; stroke-width:.7}
+.dm-the:hover .dm-the__hoa{transform:translate(-6px,0) rotate(-5deg) scale(1.06); opacity:.24}
+/* Lớp tối chân thẻ để chữ luôn đọc được kể cả khi lắp ảnh sáng */
+
+/* Vị trí sáu thẻ trong lưới */
+.o1{grid-column:2; grid-row:1 / span 2}
+.o2{grid-column:1; grid-row:3}
+.o3{grid-column:2; grid-row:3}
+.o4{grid-column:1; grid-row:4}
+.o5{grid-column:2; grid-row:4 / span 2}
+.o6{grid-column:1; grid-row:5}
+
+.kp__chan{margin-top:clamp(24px,2.6vw,36px); display:flex; justify-content:center}
+
+/* ============================================================
+   9. TIN TỨC & SỰ KIỆN
+   ============================================================ */
+.tin__bo-cuc{display:grid; grid-template-columns:minmax(0,320px) minmax(0,1fr); gap:clamp(26px,3.6vw,54px)}
+.tin__trai{position:sticky; top:110px; align-self:start}
+.tin__phai{min-width:0}
+.tin__cuon{
+  display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory;
+  padding-bottom:18px; margin-right:calc(var(--le) * -1); padding-right:var(--le);
+  scrollbar-width:thin; scrollbar-color:var(--nau-300) transparent;
+}
+.tin__cuon::-webkit-scrollbar{height:4px}
+.tin__cuon::-webkit-scrollbar-thumb{background:var(--nau-300); border-radius:2px}
+.tin-the{
+  flex:0 0 clamp(248px, 29vw, 312px); scroll-snap-align:start;
+  display:flex; flex-direction:column; gap:10px;
+  padding:clamp(20px,2vw,26px); border-radius:var(--bo-the);
+  background:var(--trang); border:1px solid var(--vien);
+  transition:border-color var(--vua), box-shadow var(--vua), transform var(--vua);
+}
+.tin-the:hover{transform:translateY(-5px); border-color:var(--nau-300); box-shadow:var(--bong-the)}
+.tin-the__meta{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--muc-nhat)}
+.tin-the__loai{font-weight:700; color:var(--dong); letter-spacing:.06em; text-transform:uppercase}
+.tin-the h3{
+  font-size:17px; font-weight:700; line-height:1.35; letter-spacing:-.015em; color:var(--nau-900);
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.tin-the p{
+  font-size:13.5px; color:var(--muc-nhat); line-height:1.6;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.tin-the .lien-ket{margin-top:auto; padding-top:8px}
+
+/* ============================================================
+   10. MẠNG XÃ HỘI
+   ============================================================ */
+.mxh{background:var(--kem); border-top:1px solid var(--vien)}
+.mxh .khung{
+  display:flex; align-items:center; justify-content:space-between; gap:26px; flex-wrap:wrap;
+  padding-block:clamp(34px,4vw,54px);
+}
+.mxh h2{font-size:clamp(20px,2.4vw,29px); font-weight:700; letter-spacing:-.02em; color:var(--nau-900)}
+.mxh p{margin-top:7px; color:var(--muc-nhat); font-size:14.5px}
+.mxh__day{display:flex; gap:11px; flex-wrap:wrap}
+.mxh__o{
+  width:52px; height:52px; border-radius:50%; display:grid; place-items:center;
+  background:var(--trang); border:1px solid var(--vien); color:var(--nau-800);
+  transition:background var(--vua), color var(--vua), transform var(--vua), border-color var(--vua);
+}
+.mxh__o:hover{background:var(--nau-800); color:#fff; border-color:transparent; transform:translateY(-4px)}
+.mxh__o .ic{width:22px; height:22px}
+
+/* ============================================================
+   11. CHÂN TRANG
+   ============================================================ */
+.chan{background:var(--nau-950); color:var(--nau-300); font-size:14px}
+.chan__tren{
+  display:grid; grid-template-columns:minmax(0,1.3fr) repeat(4, minmax(0,1fr));
+  gap:clamp(22px,2.8vw,40px); padding-block:clamp(46px,5.4vw,74px);
+}
+.chan__gt img{height:48px; width:auto; margin-bottom:18px}
+.chan__gt p{line-height:1.72; max-width:34ch; color:var(--nau-400)}
+.chan__lh{margin-top:20px; display:flex; flex-direction:column; gap:10px}
+.chan__lh a,.chan__lh span{display:flex; align-items:flex-start; gap:10px; line-height:1.55}
+.chan__lh .ic{width:17px; height:17px; color:var(--nau-500); margin-top:3px}
+.chan__lh a:hover{color:var(--trang)}
+.chan h4{
+  font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--trang); margin-bottom:16px;
+}
+.chan ul li + li{margin-top:10px}
+.chan ul a{display:inline-block; color:var(--nau-400);
+           transition:color var(--nhanh), transform var(--nhanh)}
+.chan ul a:hover{color:var(--trang); transform:translateX(4px)}
+.chan__duoi{
+  border-top:1px solid rgba(255,255,255,.09); padding-block:22px;
+  display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap;
+  font-size:12.5px; color:var(--nau-500);
+}
+.chan__duoi nav{display:flex; gap:20px; flex-wrap:wrap}
+.chan__duoi a:hover{color:var(--trang)}
+
+.len-dau{
+  position:fixed; right:20px; bottom:20px; z-index:70;
+  width:46px; height:46px; border-radius:50%; display:grid; place-items:center;
+  background:var(--nau-800); color:#fff; box-shadow:var(--bong-noi);
+  opacity:0; visibility:hidden; transform:translateY(12px);
+  transition:opacity var(--vua), transform var(--vua), visibility var(--vua), background var(--nhanh);
+}
+.len-dau.hien{opacity:1; visibility:visible; transform:none}
+.len-dau:hover{background:var(--nau-900)}
+
+/* ============================================================
+   12. MÀN HÌNH NHỎ
+   ============================================================ */
+@media (max-width:1180px){
+  .kp__luoi{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto repeat(3, clamp(180px,26vw,240px));
+  }
+  .kp-tim,.kp-dv{grid-column:1 / span 2}
+  .kp-tim{grid-row:1}
+  .kp-dv{grid-row:2}
+  .o1{grid-column:1 / span 2; grid-row:3}
+  .o2{grid-column:1; grid-row:4}
+  .o3{grid-column:2; grid-row:4}
+  .o4{grid-column:1; grid-row:5}
+  .o5{grid-column:2; grid-row:5}
+  .o6{grid-column:1 / span 2; grid-row:6}
+  .chan__tren{grid-template-columns:repeat(3,1fr)}
+  .chan__gt{grid-column:1/-1}
+}
+@media (max-width:1180px){
+  .thanh-noi .o-tim{display:none}
+}
+@media (max-width:1024px){
+  .thanh-noi .dh,.thanh-noi .o-tim,.thanh-dinh .dh,.thanh-dinh .o-tim{display:none}
+  .nut-menu{display:grid}
+  .thanh-noi{left:var(--le); right:var(--le); translate:none; justify-content:space-between}
+  .thanh-noi .logo-thanh{margin-left:0; margin-right:auto}
+  .tin__bo-cuc{grid-template-columns:1fr}
+  .tin__trai{position:static}
+}
+@media (max-width:720px){
+  .kp__luoi{grid-template-columns:1fr; grid-template-rows:none; grid-auto-rows:clamp(178px,46vw,230px)}
+  .kp-tim,.kp-dv,.o1,.o2,.o3,.o4,.o5,.o6{grid-column:1; grid-row:auto}
+  .kp-tim{height:auto; min-height:0}
+  .chan__tren{grid-template-columns:repeat(2,1fr)}
+  .banner{height:min(100svh, 760px)}
+}
+@media (max-width:520px){
+  .chan__tren{grid-template-columns:1fr}
+  .kp-dv{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ============================================================
+   13. MENU MÀN HÌNH NHỎ
+   ============================================================ */
+.menu-mb{
+  position:fixed; inset:0; z-index:100; display:grid;
+  background:rgba(31,18,10,.5); backdrop-filter:blur(3px);
+  opacity:0; visibility:hidden; transition:opacity var(--vua), visibility var(--vua);
+}
+.menu-mb.mo{opacity:1; visibility:visible}
+.menu-mb__khay{
+  justify-self:end; width:min(400px, 90vw); height:100%; overflow-y:auto;
+  background:var(--trang); padding:20px 22px 36px;
+  transform:translateX(100%); transition:transform var(--vua);
+  display:flex; flex-direction:column; gap:6px;
+}
+.menu-mb.mo .menu-mb__khay{transform:none}
+.menu-mb__dau{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px}
+.menu-mb__dau img{height:34px; width:auto}
+.menu-mb__tim{
+  display:flex; align-items:center; gap:8px; margin-bottom:6px;
+  background:var(--nau-50); border:1px solid var(--vien); border-radius:999px; padding:0 6px 0 16px;
+}
+.menu-mb__tim input{flex:1; min-width:0; border:0; background:none; padding:11px 0; font-size:14px}
+.menu-mb__tim input:focus{outline:none}
+.menu-mb__dm{display:grid; grid-template-columns:repeat(2,1fr); gap:7px; margin:12px 0 6px}
+.menu-mb__dm a{
+  display:flex; flex-direction:column; gap:7px; padding:13px 12px;
+  border:1px solid var(--vien); border-radius:var(--bo); font-size:13.5px; font-weight:500;
+  color:var(--nau-900); line-height:1.3;
+}
+.menu-mb__dm .ic{width:25px; height:25px; color:var(--nau-700); stroke-width:1.4}
+.menu-mb a.muc-chinh{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 2px; font-size:16px; font-weight:500; color:var(--nau-900);
+  border-bottom:1px solid var(--vien);
+}
+.menu-mb .nut{margin-top:14px; justify-content:center}
+
+/* ============================================================
+   14. Sắc độ nâu riêng cho từng thẻ, để lưới không bị một màu
+   ============================================================ */
+.o1{--t1:#5C4029; --t2:#1E1109}
+.o2{--t1:#7C5432; --t2:#2A1810}
+.o3{--t1:#4A321F; --t2:#1C1008}
+.o4{--t1:#8C5C2F; --t2:#301A0D}   /* hồng ngoại: ngả nóng nhất */
+.o5{--t1:#48301F; --t2:#211308}
+.o6{--t1:#6B4B34; --t2:#251609}
+
+.k1{--t1:#6B4830; --t2:#231409}
+.k2{--t1:#4E3521; --t2:#1D1008}
+.k3{--t1:#84562D; --t2:#2C180C}
+.k4{--t1:#5A3E28; --t2:#20120A}
+
+/* ============================================================
+   15. Neo bảng menu
+   ============================================================ */
+/* Thanh nổi nằm sát mép phải: neo bảng vào cả thanh, không vào từng mục,
+   nếu không bảng rộng 880px sẽ tràn ra ngoài mép trái màn hình. */
+.thanh-noi .dh-muc{position:static}
+.thanh-noi .bang{left:auto; right:0; translate:0}
+.thanh-noi{overflow:visible}
+
+/* Thanh dính trên đầu thì neo vào từng mục như bình thường,
+   nhưng kẹp lại để không tràn khỏi khung. */
+.thanh-dinh .dh-muc{position:relative}
+.thanh-dinh .bang{max-width:min(880px, calc(100vw - 32px))}
+
+/* Ẩn thanh nổi khi thanh dính đã trượt xuống, tránh hai menu cùng hiện */
+.thanh-noi.tat{opacity:0; visibility:hidden; transition:opacity var(--vua), visibility var(--vua)}
+
+/* ============================================================
+   16. Chữ trong banner phải nằm trên lớp nền
+   Lớp nền là phần tử ĐƯỢC ĐỊNH VỊ (position:absolute) nên nó vẽ đè lên
+   h1/p vốn không định vị. Chỉ nút hiện được vì .nut có position:relative.
+   ============================================================ */
+
+/* ============================================================
+   17. Màn hình hẹp: đưa cụm nút slide lên góc trên,
+   dưới đáy đã chật vì có nút bấm và thanh menu nổi.
+   ============================================================ */
+@media (max-width:860px){
+  .banner__dk{top:clamp(14px, 3vw, 22px); bottom:auto; right:clamp(14px, 3vw, 22px)}
+}

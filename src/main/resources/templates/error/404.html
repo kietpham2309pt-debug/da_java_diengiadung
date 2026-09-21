@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Không tìm thấy trang')}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div th:replace="~{layout/fragments :: menu}"></div>
+
+<main class="than">
+    <div class="khung">
+        <div class="trang-loi">
+            <div class="trang-loi__ma">404</div>
+            <h1>Trang này chưa có</h1>
+            <p>Đường dẫn bạn mở không tồn tại, hoặc chức năng đang được nhóm xây dựng trong các tuần tới.</p>
+            <div class="hang-nut" style="justify-content:center">
+                <a th:href="@{/}" class="nut">
+                    Về trang chủ
+                    <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
+                </a>
+                <a th:href="@{/san-pham}" class="nut nut--vien">Xem sản phẩm</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
+</body>
+</html>

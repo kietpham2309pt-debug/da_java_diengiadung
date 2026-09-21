@@ -2,39 +2,51 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/fragments :: dauTrang('Đăng nhập')}"></head>
 <body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
 <div th:replace="~{layout/fragments :: menu}"></div>
 
-<main class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow-sm">
-                <div class="card-body p-4">
-                    <h1 class="h4 mb-3">Đăng nhập</h1>
-                    <div th:replace="~{layout/fragments :: thongBao}"></div>
-                    <div class="alert alert-danger" th:if="${loiDangNhap}" th:text="${loiDangNhap}"></div>
-
-                    <form th:action="@{/dang-nhap}" method="post">
-                        <div class="mb-3">
-                            <label class="form-label" for="tenDangNhap">Tên đăng nhập</label>
-                            <input class="form-control" id="tenDangNhap" name="tenDangNhap" required
-                                   th:value="${tenDangNhapCu}">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="matKhau">Mật khẩu</label>
-                            <input class="form-control" id="matKhau" name="matKhau" type="password" required>
-                        </div>
-                        <button class="btn btn-primary w-100" type="submit">Đăng nhập</button>
-                    </form>
-
-                    <p class="mt-3 mb-0 text-center">
-                        Chưa có tài khoản? <a th:href="@{/dang-ky}">Đăng ký</a>
-                    </p>
-                </div>
+<main class="than than--kem">
+    <div class="khung">
+        <div class="trang-the">
+            <div class="trang-the__dau">
+                <img th:src="@{/img/logo-nau.png}" alt="Bếp Nè">
+                <h1>Đăng nhập</h1>
+                <p>Đăng nhập để đặt hàng và theo dõi đơn của bạn.</p>
             </div>
+
+            <div class="the-trang">
+                <div th:replace="~{layout/fragments :: thongBao}"></div>
+                <div class="thong-bao thong-bao--loi" th:if="${loiDangNhap}" role="alert">
+                    <svg class="ic"><use xlink:href="#ic-canh-bao"></use></svg>
+                    <span th:text="${loiDangNhap}">Sai tên đăng nhập hoặc mật khẩu</span>
+                </div>
+
+                <form class="form-dl" th:action="@{/dang-nhap}" method="post">
+                    <div class="o-truong">
+                        <label class="nhan" for="tenDangNhap">Tên đăng nhập</label>
+                        <input class="o-nhap" id="tenDangNhap" name="tenDangNhap" required
+                               th:value="${tenDangNhapCu}" autocomplete="username">
+                    </div>
+                    <div class="o-truong">
+                        <label class="nhan" for="matKhau">Mật khẩu</label>
+                        <input class="o-nhap" id="matKhau" name="matKhau" type="password" required
+                               autocomplete="current-password">
+                    </div>
+                    <div class="hang-nut">
+                        <button class="nut" type="submit">
+                            Đăng nhập
+                            <svg class="ic"><use xlink:href="#ic-mui-ten-phai"></use></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <p class="duoi-form">Chưa có tài khoản? <a th:href="@{/dang-ky}">Đăng ký ngay</a></p>
         </div>
     </div>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
 </body>
 </html>

@@ -2,6 +2,7 @@ package vn.edu.huit.diengiadung.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
@@ -18,6 +19,11 @@ public class LoaiSanPham {
     @Size(max = 100, message = "Tên loại tối đa 100 ký tự")
     @Column(unique = true, nullable = false, length = 100)
     private String tenLoai;
+
+    @NotBlank(message = "Mã loại không được để trống")
+    @Pattern(regexp = "[a-z0-9-]+", message = "Mã loại chỉ gồm chữ thường không dấu, số và dấu gạch ngang")
+    @Column(unique = true, nullable = false, length = 50)
+    private String maLoai;
 
     @Size(max = 255, message = "Mô tả tối đa 255 ký tự")
     private String moTa;
@@ -39,6 +45,14 @@ public class LoaiSanPham {
 
     public void setTenLoai(String tenLoai) {
         this.tenLoai = tenLoai;
+    }
+
+    public String getMaLoai() {
+        return maLoai;
+    }
+
+    public void setMaLoai(String maLoai) {
+        this.maLoai = maLoai;
     }
 
     public String getMoTa() {

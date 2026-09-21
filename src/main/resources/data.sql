@@ -1,10 +1,10 @@
-INSERT IGNORE INTO loai_san_pham (id, ten_loai, mo_ta) VALUES
-(1, 'Bếp từ', 'Bếp nấu bằng từ trường, tiết kiệm điện, an toàn'),
-(2, 'Bếp điện từ', 'Kết hợp vùng nấu từ và vùng nấu hồng ngoại'),
-(3, 'Bếp hồng ngoại', 'Dùng được mọi loại nồi, làm nóng bằng bức xạ nhiệt'),
-(4, 'Máy hút mùi', 'Hút mùi và khói cho khu vực bếp'),
-(5, 'Máy rửa chén', 'Rửa và sấy chén bát tự động'),
-(6, 'Máy giặt', 'Máy giặt lồng ngang cho gia đình');
+INSERT IGNORE INTO loai_san_pham (id, ma_loai, ten_loai, mo_ta) VALUES
+(1, 'bep-tu', 'Bếp từ', 'Nấu nhanh, mặt kính nguội nhanh sau khi tắt, an toàn với trẻ nhỏ'),
+(2, 'bep-dien-tu', 'Bếp điện từ', 'Ghép vùng từ với vùng hồng ngoại, dùng được cả nồi đất và nồi nhôm'),
+(3, 'bep-hong-ngoai', 'Bếp hồng ngoại', 'Nhiệt toả đều từ vòng sợi đốt, hợp món kho và món nướng lâu'),
+(4, 'hut-mui', 'Máy hút mùi', 'Ống khói, âm tủ và đảo. Hút sạch khói dầu, chạy êm'),
+(5, 'rua-chen', 'Máy rửa chén', 'Loại độc lập và âm tủ, 8 tới 14 bộ, sấy khô bằng khoáng zeolite'),
+(6, 'may-giat', 'Máy giặt', 'Cửa trước Inverter, chu trình giặt nhanh, tiết kiệm nước');
 
 INSERT IGNORE INTO thuong_hieu (id, ten_thuong_hieu, xuat_xu) VALUES
 (1, 'Bosch', 'Đức'),

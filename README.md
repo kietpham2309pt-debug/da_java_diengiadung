@@ -40,6 +40,15 @@ Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp danh mục, thư
 
 Mật khẩu lưu trong cơ sở dữ liệu ở dạng mã hoá BCrypt. Khi triển khai thật phải đổi tài khoản này.
 
+## Giao diện
+
+Giao diện dùng lại hệ thống **Bếp Nè** (nâu `#48301F` trên nền trắng) từ project Lập trình Web của nhóm,
+chuyển từ Razor sang Thymeleaf: `static/css/site.css` (hệ thống nền) và `static/css/ung-dung.css` (thành phần cho cửa hàng và trang quản trị).
+Không dùng Bootstrap hay bất kỳ thư viện giao diện nào.
+
+**Trước khi viết HTML, đọc `QUY_TAC_GIAO_DIEN.md`**: khung trang chuẩn, danh sách fragment dùng chung,
+bộ 44 icon, tên lớp cho thẻ sản phẩm, bảng, biểu mẫu, thông báo và trạng thái rỗng.
+
 ## Cấu trúc thư mục
 
 ```

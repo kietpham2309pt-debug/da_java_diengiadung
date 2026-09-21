@@ -2,37 +2,66 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{layout/fragments :: dauTrang('Loại sản phẩm')}"></head>
 <body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
 <div th:replace="~{layout/fragments :: menu}"></div>
 
-<main class="container py-4">
-    <div class="row g-4">
-        <div class="col-lg-3">
+<main class="than than--kem">
+    <div class="khung">
+        <div class="bo-cuc-qt">
             <div th:replace="~{layout/fragments :: menuQuanTri('loai-san-pham')}"></div>
-        </div>
-        <div class="col-lg-9">
-            <h1 class="h4 mb-3" th:text="${loaiSanPham.id == null} ? 'Thêm loại sản phẩm' : 'Sửa loại sản phẩm'">
-                Thêm loại sản phẩm</h1>
 
-            <div class="alert alert-danger" th:if="${thongBaoLoi}" th:text="${thongBaoLoi}"></div>
+            <div>
+                <nav class="duong-dan" aria-label="Đường dẫn">
+                    <a th:href="@{/admin}">Quản trị</a>
+                    <span aria-hidden="true">/</span>
+                    <a th:href="@{/admin/loai-san-pham}">Loại sản phẩm</a>
+                    <span aria-hidden="true">/</span>
+                    <span aria-current="page" th:text="${loaiSanPham.id == null} ? 'Thêm mới' : 'Chỉnh sửa'">Thêm mới</span>
+                </nav>
 
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <form th:action="@{/admin/loai-san-pham/luu}" th:object="${loaiSanPham}" method="post">
+                <div class="dau-trang">
+                    <div>
+                        <h1 th:text="${loaiSanPham.id == null} ? 'Thêm loại sản phẩm' : 'Sửa loại sản phẩm'">Thêm loại sản phẩm</h1>
+                    </div>
+                </div>
+
+                <div class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                    <svg class="ic"><use xlink:href="#ic-canh-bao"></use></svg>
+                    <span th:text="${thongBaoLoi}">Có lỗi</span>
+                </div>
+
+                <div class="the-trang">
+                    <form class="form-dl" th:action="@{/admin/loai-san-pham/luu}" th:object="${loaiSanPham}" method="post">
                         <input type="hidden" th:field="*{id}">
-                        <div class="mb-3">
-                            <label class="form-label" for="tenLoai">Tên loại</label>
-                            <input class="form-control" id="tenLoai" th:field="*{tenLoai}">
-                            <div class="text-danger small" th:if="${#fields.hasErrors('tenLoai')}"
-                                 th:errors="*{tenLoai}"></div>
+
+                        <div class="o-truong">
+                            <label class="nhan" for="tenLoai">Tên loại</label>
+                            <input class="o-nhap" id="tenLoai" th:field="*{tenLoai}" placeholder="Ví dụ: Bếp từ">
+                            <span class="loi-nhap" th:if="${#fields.hasErrors('tenLoai')}" th:errors="*{tenLoai}"></span>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label" for="moTa">Mô tả</label>
-                            <textarea class="form-control" id="moTa" rows="3" th:field="*{moTa}"></textarea>
-                            <div class="text-danger small" th:if="${#fields.hasErrors('moTa')}"
-                                 th:errors="*{moTa}"></div>
+
+                        <div class="o-truong">
+                            <label class="nhan" for="maLoai">Mã loại</label>
+                            <input class="o-nhap" id="maLoai" th:field="*{maLoai}" placeholder="bep-tu">
+                            <span class="goi-y">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã này chọn icon hiển thị trên menu.
+                                Icon có sẵn: bep-tu, bep-dien-tu, bep-hong-ngoai, hut-mui, rua-chen, may-giat, combo.</span>
+                            <span class="loi-nhap" th:if="${#fields.hasErrors('maLoai')}" th:errors="*{maLoai}"></span>
                         </div>
-                        <button class="btn btn-primary" type="submit">Lưu</button>
-                        <a class="btn btn-outline-secondary" th:href="@{/admin/loai-san-pham}">Quay lại</a>
+
+                        <div class="o-truong">
+                            <label class="nhan" for="moTa">Mô tả</label>
+                            <textarea class="o-nhap" id="moTa" rows="3" th:field="*{moTa}"
+                                      placeholder="Một câu ngắn mô tả nhóm hàng này"></textarea>
+                            <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                        </div>
+
+                        <div class="hang-nut">
+                            <button class="nut" type="submit">
+                                Lưu
+                                <svg class="ic"><use xlink:href="#ic-kiem"></use></svg>
+                            </button>
+                            <a class="nut nut--vien" th:href="@{/admin/loai-san-pham}">Quay lại</a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -41,5 +70,6 @@
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuDienThoai}"></div>
 </body>
 </html>

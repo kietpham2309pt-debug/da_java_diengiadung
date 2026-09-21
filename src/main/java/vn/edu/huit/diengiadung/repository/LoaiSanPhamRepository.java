@@ -12,5 +12,7 @@ public interface LoaiSanPhamRepository extends JpaRepository<LoaiSanPham, Long> 
 
     Optional<LoaiSanPham> findByTenLoaiIgnoreCase(String tenLoai);
 
+    Optional<LoaiSanPham> findByMaLoaiIgnoreCase(String maLoai);
+
     List<LoaiSanPham> findByTenLoaiContainingIgnoreCaseOrderByTenLoaiAsc(String tuKhoa);
 }
