@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Thương hiệu', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/thuong-hieu}">Thương hiệu</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${thuongHieu.id == null} ? 'Thêm mới' : 'Chỉnh sửa'">Thêm mới</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('thuong-hieu')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${thuongHieu.id == null} ? 'Thêm hãng sản xuất' : 'Sửa hãng sản xuất'">Thêm hãng</h1>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <form th:action="@{/admin/thuong-hieu/luu}" th:object="${thuongHieu}" method="post">
+                            <input type="hidden" th:field="*{id}">
+
+                            <div class="o-nhap">
+                                <label for="tenThuongHieu">Tên thương hiệu</label>
+                                <input type="text" id="tenThuongHieu" th:field="*{tenThuongHieu}" placeholder="VD: Bosch">
+                            </div>
+
+                            <div class="o-nhap">
+                                <label for="xuatXu">Xuất xứ</label>
+                                <input type="text" id="xuatXu" th:field="*{xuatXu}" placeholder="VD: Đức">
+                            </div>
+
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" th:href="@{/admin/thuong-hieu}">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

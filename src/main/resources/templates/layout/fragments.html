@@ -15,7 +15,7 @@
                 bo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             } catch (e) { }
             if (bo) return;
-            if ([[${coMoMan}]]) {
+            if (/*[[${coMoMan}]]*/ false) {
                 g.className += ' dang-mo-man khoa-cuon';
                 return;
             }
@@ -134,9 +134,9 @@
     <a th:href="@{/admin/loai-san-pham}" th:classappend="${trang == 'loai-san-pham'} ? 'dang-chon'">Loại sản phẩm</a>
     <a th:href="@{/admin/tai-khoan}" th:classappend="${trang == 'tai-khoan'} ? 'dang-chon'">Tài khoản</a>
     <span class="qt-ben__nhan">Đang xây dựng</span>
-    <span class="qt-ben__cho">Thương hiệu <b>TV2</b></span>
-    <span class="qt-ben__cho">Nhà cung cấp <b>TV2</b></span>
-    <span class="qt-ben__cho">Phiếu nhập <b>TV2</b></span>
+    <a th:href="@{/admin/thuong-hieu}" th:classappend="${trang == 'thuong-hieu'} ? 'dang-chon'">Thương hiệu</a>
+    <a th:href="@{/admin/nha-cung-cap}" th:classappend="${trang == 'nha-cung-cap'} ? 'dang-chon'">Nhà cung cấp</a>
+    <a th:href="@{/admin/phieu-nhap}" th:classappend="${trang == 'phieu-nhap'} ? 'dang-chon'">Phiếu nhập</a>
     <span class="qt-ben__cho">Sản phẩm <b>TV3</b></span>
     <span class="qt-ben__cho">Đơn hàng <b>TV5</b></span>
     <span class="qt-ben__cho">Khách hàng <b>TV5</b></span>

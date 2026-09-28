@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Phiếu nhập', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Phiếu nhập</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('phieu-nhap')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Phiếu nhập</h1>
+                            <p>Lịch sử nhập hàng vào kho từ nhà cung cấp.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập</a>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã phiếu</th>
+                                    <th>Ngày nhập</th>
+                                    <th>Nhà cung cấp</th>
+                                    <th class="canh-phai">Tổng tiền</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="item : ${danhSach}">
+                                    <td><span class="the-nhan the-nhan--ok" th:text="'PN00' + ${item.id}"></span></td>
+                                    <td th:text="${#temporals.format(item.ngayNhap, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <td class="o-dai" th:text="${item.nhaCungCap.tenNhaCungCap}"></td>
+                                    <td class="canh-phai"><b th:text="${#numbers.formatInteger(item.tongTien, 0, 'POINT')} + ' ₫'"></b></td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{'/admin/phieu-nhap/sua/' + ${item.id}}">Xem chi tiết</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

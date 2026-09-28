@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Nhà cung cấp', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/nha-cung-cap}">Nhà cung cấp</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${nhaCungCap.id == null} ? 'Thêm mới' : 'Chỉnh sửa'">Thêm mới</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('nha-cung-cap')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${nhaCungCap.id == null} ? 'Thêm nhà cung cấp' : 'Sửa nhà cung cấp'">Thêm nhà cung cấp</h1>
+                        </div>
+                    </div>
+
+                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                        <span th:text="${thongBaoLoi}">Có lỗi</span>
+                    </p>
+
+                    <div class="khoi">
+                        <form th:action="@{/admin/nha-cung-cap/luu}" th:object="${nhaCungCap}" method="post">
+                            <input type="hidden" th:field="*{id}">
+
+                            <div class="o-nhap">
+                                <label for="tenNhaCungCap">Tên nhà cung cấp</label>
+                                <input type="text" id="tenNhaCungCap" th:field="*{tenNhaCungCap}" placeholder="VD: Công ty TNHH Bếp Xanh">
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenNhaCungCap')}" th:errors="*{tenNhaCungCap}"></span>
+                            </div>
+
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="soDienThoai">Số điện thoại</label>
+                                    <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="VD: 0901234567">
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" th:field="*{email}" placeholder="VD: contact@bepxanh.vn">
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                </div>
+                            </div>
+
+                            <div class="o-nhap">
+                                <label for="diaChi">Địa chỉ</label>
+                                <input type="text" id="diaChi" th:field="*{diaChi}" placeholder="VD: 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM">
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}"></span>
+                            </div>
+
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" th:href="@{/admin/nha-cung-cap}">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

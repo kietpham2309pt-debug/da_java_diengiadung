@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Lập phiếu nhập', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/phieu-nhap}">Phiếu nhập</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Lập phiếu</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('phieu-nhap')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Lập phiếu nhập kho</h1>
+                        </div>
+                    </div>
+
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Thông tin chung</h2>
+                        </div>
+                        <form th:action="@{/admin/phieu-nhap/luu}" th:object="${phieuNhap}" method="post">
+                            <div class="o-doi">
+                                <div class="o-nhap">
+                                    <label for="nhaCungCap">Nhà cung cấp</label>
+                                    <div class="ds__o">
+                                        <select id="nhaCungCap" th:field="*{nhaCungCap}" style="width: 100%;">
+                                            <option value="">-- Chọn nhà cung cấp --</option>
+                                            <option th:each="ncc : ${danhSachNCC}" th:value="${ncc.id}" th:text="${ncc.tenNhaCungCap}"></option>
+                                        </select>
+                                        <svg class="ic"><use xlink:href="#ic-chevron"></use></svg>
+                                    </div>
+                                </div>
+                                <div class="o-nhap">
+                                    <label>Ngày nhập</label>
+                                    <input type="text" value="Hệ thống tự động tạo khi lưu" disabled>
+                                </div>
+                            </div>
+
+                            <div class="o-nhap" style="margin-top: 16px;">
+                                <label for="ghiChu">Ghi chú</label>
+                                <textarea id="ghiChu" rows="2" th:field="*{ghiChu}" placeholder="Ghi chú thêm về lô hàng này..."></textarea>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    <div class="khoi">
+                        <div class="khoi__dau">
+                            <h2>Chi tiết sản phẩm nhập</h2>
+                            <button type="button" class="nut nut--nho">Thêm sản phẩm</button>
+                        </div>
+
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th class="canh-giua">Số lượng</th>
+                                    <th class="canh-giua">Giá nhập (₫)</th>
+                                    <th class="canh-phai">Thành tiền</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody id="danhSachChiTiet">
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div style="margin-top: 24px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--vien); padding-top: 20px;">
+                            <div style="font-size: 16px;">
+                                Tổng tiền phiếu nhập: <b id="tongTienPhieu" style="font-size: 24px; color: var(--dong); margin-left: 8px;">0 ₫</b>
+                            </div>
+                            <div class="hang-nut" style="margin-top: 0;">
+                                <button class="nut nut--dac" type="submit">Lưu phiếu nhập</button>
+                                <a class="nut" th:href="@{/admin/phieu-nhap}">Quay lại</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
