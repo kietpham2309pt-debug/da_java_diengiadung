@@ -33,8 +33,11 @@
 .thanh-loc{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:20px}
 .thanh-loc form{display:flex; flex-wrap:wrap; gap:10px; align-items:center; flex:1 1 260px; min-width:0}
 .thanh-loc input[type="search"],
-.thanh-loc input[type="text"]{flex:1 1 160px; min-width:0; max-width:420px; padding:11px 14px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px}
-.thanh-loc input:focus{outline:none; border-color:var(--vien-sang)}
+.thanh-loc input[type="text"],
+.thanh-loc input[type="password"]{flex:1 1 160px; min-width:0; max-width:420px; padding:11px 14px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px}
+.thanh-loc select{flex:0 1 220px; min-width:0; padding:11px 36px 11px 14px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px; color-scheme:dark; appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--chu-mo) 50%),linear-gradient(135deg,var(--chu-mo) 50%,transparent 50%); background-position:calc(100% - 20px) 20px,calc(100% - 14px) 20px; background-size:6px 6px; background-repeat:no-repeat}
+.thanh-loc input:hover,.thanh-loc select:hover{border-color:var(--vien-sang)}
+.thanh-loc input:focus,.thanh-loc select:focus{outline:none; border-color:var(--dong)}
 
 .cuon-ngang{overflow-x:auto}
 .cuon-ngang .bang-dl{min-width:620px}

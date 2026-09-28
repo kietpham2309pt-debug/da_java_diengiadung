@@ -82,7 +82,7 @@ Mỗi thành viên làm tiếp phần của mình theo đúng khuôn của `Loai
 - **TV2**: thương hiệu, nhà cung cấp, phiếu nhập và cập nhật tồn kho, cảnh báo sắp hết hàng.
 - **TV3**: quản lý sản phẩm có upload ảnh; trang chủ, lọc, sắp xếp, phân trang, chi tiết sản phẩm.
 - **TV4**: giỏ hàng lưu trong session, đặt hàng, lịch sử đơn, huỷ đơn, hồ sơ khách hàng.
-- **TV5**: danh sách và chi tiết đơn hàng, cập nhật trạng thái, huỷ đơn kèm hoàn tồn kho, quản lý khách hàng, thống kê.
+- **TV5**: đã có danh sách đơn hàng và lọc theo trạng thái (PR #1). Còn lại: chi tiết đơn, cập nhật trạng thái, huỷ đơn kèm hoàn tồn kho, quản lý khách hàng, thống kê.
 
 ## Quy ước làm việc
 
