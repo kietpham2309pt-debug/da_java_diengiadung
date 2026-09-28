@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Đơn hàng', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Đơn hàng</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('don-hang')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đơn hàng</h1>
+                            <p>Quản lý đơn hàng và theo dõi trạng thái xử lý.</p>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/don-hang}" method="get">
+                            <select name="trangThai">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="CHO_XAC_NHAN"
+                                        th:selected="${trangThai == 'CHO_XAC_NHAN'}">
+                                    Chờ xác nhận
+                                </option>
+                                <option value="DA_XAC_NHAN"
+                                        th:selected="${trangThai == 'DA_XAC_NHAN'}">
+                                    Đã xác nhận
+                                </option>
+                                <option value="DANG_GIAO"
+                                        th:selected="${trangThai == 'DANG_GIAO'}">
+                                    Đang giao
+                                </option>
+                                <option value="HOAN_THANH"
+                                        th:selected="${trangThai == 'HOAN_THANH'}">
+                                    Hoàn thành
+                                </option>
+                                <option value="DA_HUY"
+                                        th:selected="${trangThai == 'DA_HUY'}">
+                                    Đã huỷ
+                                </option>
+                            </select>
+
+                            <button class="nut nut--nho" type="submit">Lọc</button>
+
+                            <a th:if="${trangThai != null and !trangThai.isBlank()}"
+                               th:href="@{/admin/don-hang}"
+                               class="nut nut--nho">
+                                Bỏ lọc
+                            </a>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Ngày đặt</th>
+                                    <th>Người nhận</th>
+                                    <th>Số điện thoại</th>
+                                    <th class="canh-phai">Tổng tiền</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="donHang : ${danhSach}">
+                                    <td th:text="'#' + ${donHang.id}">#1</td>
+
+                                    <td th:text="${#temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')}">
+                                        27/09/2026 10:30
+                                    </td>
+
+                                    <td th:text="${donHang.tenNguoiNhan}">
+                                        Nguyễn Văn A
+                                    </td>
+
+                                    <td th:text="${donHang.soDienThoaiNhan}">
+                                        0900000000
+                                    </td>
+
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatDecimal(donHang.tongTien, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                        1,000,000 đ
+                                    </td>
+
+                                    <td>
+                                        <span class="the-nhan"
+                                              th:classappend="${donHang.trangThai == 'HOAN_THANH'} ? ' the-nhan--ok' :
+                                                              (${donHang.trangThai == 'DA_HUY'} ? ' the-nhan--do' :
+                                                              (${donHang.trangThai == 'CHO_XAC_NHAN'} ? ' the-nhan--vang' : ''))"
+                                              th:text="${donHang.tenTrangThai}">
+                                            Chờ xác nhận
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho"
+                                               th:href="@{'/admin/don-hang/' + ${donHang.id}}">
+                                                Chi tiết
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Chưa có đơn hàng nào.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
