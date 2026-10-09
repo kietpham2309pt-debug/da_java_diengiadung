@@ -1,5 +1,6 @@
 package vn.edu.huit.diengiadung.repository;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
@@ -45,19 +46,23 @@ public final class DieuKienSanPham {
                 : goc.get("thuongHieu").get("id").in(danhSachIdHang);
     }
 
-    /** Mỗi từ trong từ khoá phải xuất hiện ở tên, mã sản phẩm hoặc tên thương hiệu. */
+    /**
+     * Mỗi từ trong từ khoá phải xuất hiện ở tên, mã sản phẩm hoặc tên thương hiệu.
+     * Collation của MySQL đã bỏ qua dấu (ê, ư, ơ...) nhưng có loại coi "đ" khác "d",
+     * nên đổi "đ" thành "d" ở cả hai phía để gõ "bep dien tu" vẫn ra "Bếp điện từ".
+     */
     public static Specification<SanPham> chuaTuKhoa(String tuKhoa) {
         return (goc, truyVan, boDung) -> {
             if (tuKhoa == null || tuKhoa.isBlank()) {
                 return boDung.conjunction();
             }
             Join<SanPham, ThuongHieu> thuongHieu = goc.join("thuongHieu", JoinType.LEFT);
-            Expression<String> ten = boDung.lower(goc.get("tenSanPham"));
+            Expression<String> ten = doiChuDThanhD(boDung, boDung.lower(goc.get("tenSanPham")));
             Expression<String> ma = boDung.lower(goc.get("maSanPham"));
-            Expression<String> tenHang = boDung.lower(thuongHieu.get("tenThuongHieu"));
+            Expression<String> tenHang = doiChuDThanhD(boDung, boDung.lower(thuongHieu.get("tenThuongHieu")));
 
             List<Predicate> dieuKienTungTu = new ArrayList<>();
-            for (String tu : tuKhoa.trim().toLowerCase().split("\\s+")) {
+            for (String tu : tuKhoa.trim().toLowerCase().replace('đ', 'd').split("\\s+")) {
                 String mau = "%" + boKyTuDacBiet(tu) + "%";
                 dieuKienTungTu.add(boDung.or(
                         boDung.like(ten, mau, KY_TU_THOAT),
@@ -88,6 +93,10 @@ public final class DieuKienSanPham {
             }
             return boDung.or(dieuKienTungMuc.toArray(new Predicate[0]));
         };
+    }
+
+    private static Expression<String> doiChuDThanhD(CriteriaBuilder boDung, Expression<String> chuoi) {
+        return boDung.function("replace", String.class, chuoi, boDung.literal("đ"), boDung.literal("d"));
     }
 
     // Khách gõ % hoặc _ thì tìm đúng ký tự đó, không để LIKE hiểu thành ký tự đại diện.
