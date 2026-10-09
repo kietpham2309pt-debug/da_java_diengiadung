@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Thẻ một sản phẩm, dùng chung cho trang chủ, trang danh sách và khối sản phẩm cùng loại. -->
+<a th:fragment="theSanPham(sp)" class="sp" th:href="@{'/san-pham/' + ${sp.id}}">
+    <span class="sp__anh">
+        <img th:src="@{${sp.duongDanAnh}}" th:alt="${sp.tenSanPham}" loading="lazy">
+        <span class="sp__giam" th:if="${sp.phanTramGiam > 0}" th:text="'-' + ${sp.phanTramGiam} + '%'">-20%</span>
+        <span class="sp__het" th:unless="${sp.conHang}">Tạm hết hàng</span>
+    </span>
+    <span class="sp__hieu" th:text="${sp.thuongHieu != null} ? ${sp.thuongHieu.tenThuongHieu} : ' '">Bosch</span>
+    <span class="sp__ten" th:text="${sp.tenSanPham}">Tên sản phẩm</span>
+    <span class="sp__gia">
+        <b th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' ₫'">0 ₫</b>
+        <del th:if="${sp.phanTramGiam > 0}" th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' ₫'">0 ₫</del>
+    </span>
+</a>
+
+</body>
+</html>
