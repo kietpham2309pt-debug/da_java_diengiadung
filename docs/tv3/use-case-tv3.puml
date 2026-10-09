@@ -1,0 +1,62 @@
+@startuml
+!pragma layout smetana
+left to right direction
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam packageStyle rectangle
+
+actor "Khách hàng" as KhachHang
+actor "Khách" as Khach
+
+rectangle "Sản phẩm và trưng bày (TV3)" {
+  rectangle "Phía cửa hàng" {
+    usecase "Xem trang chủ" as UC1
+    usecase "Xem sản phẩm\ntheo loại hoặc thương hiệu" as UC2
+    usecase "Tìm kiếm sản phẩm" as UC3
+    usecase "Lọc, sắp xếp\nvà phân trang" as UC4
+    usecase "Xem chi tiết sản phẩm" as UC5
+    usecase "Xem sản phẩm cùng loại" as UC6
+  }
+
+  rectangle "Phía quản trị" {
+    usecase "Kiểm tra quyền quản trị\n(module TV1)" as UC13
+    usecase "Tải ảnh sản phẩm" as UC12
+    usecase "Xem và tìm sản phẩm" as UC7
+    usecase "Thêm sản phẩm" as UC8
+    usecase "Sửa sản phẩm" as UC9
+    usecase "Xoá sản phẩm" as UC10
+    usecase "Ngừng bán\nhoặc mở bán lại" as UC11
+  }
+}
+
+actor "Quản trị viên" as QuanTri
+
+KhachHang --|> Khach
+
+Khach --> UC1
+Khach --> UC2
+Khach --> UC3
+Khach --> UC5
+
+UC2 <.. UC4 : <<extend>>
+UC3 <.. UC4 : <<extend>>
+UC5 ..> UC6 : <<include>>
+
+UC13 <.. UC7 : <<include>>
+UC13 <.. UC8 : <<include>>
+UC13 <.. UC9 : <<include>>
+UC13 <.. UC10 : <<include>>
+UC13 <.. UC11 : <<include>>
+UC12 ..> UC8 : <<extend>>
+UC12 ..> UC9 : <<extend>>
+
+UC7 <-- QuanTri
+UC8 <-- QuanTri
+UC9 <-- QuanTri
+UC10 <-- QuanTri
+UC11 <-- QuanTri
+@enduml
