@@ -62,3 +62,22 @@
 .ma-mo{font-size:12.5px; letter-spacing:.04em; color:var(--chu-mo)}
 .canh-giua{text-align:center}
 .canh-phai{text-align:right}
+
+/* TV3 - Sản phẩm và trưng bày */
+.sp__het{position:absolute; left:10px; bottom:10px; padding:4px 10px; border:1px solid var(--vien-sang); background:rgba(19,19,19,.85); font-size:11.5px; letter-spacing:.06em; color:var(--chu-nhat)}
+.ct__con--het b{background:var(--do)}
+.loc__muc.dang-chon{color:var(--dong)}
+.loc__muc .ic-dm{width:18px; height:18px; flex:none}
+.dong-phu{display:block; margin-top:4px}
+
+.anh-hien-tai{display:flex; align-items:center; gap:16px; margin-bottom:12px}
+.anh-hien-tai img{flex:none; width:96px; height:96px; object-fit:cover; border:1px solid var(--vien); background:var(--nen-luoi)}
+.anh-hien-tai .o-tich{margin-top:10px}
+.o-nhap input[type="file"]{width:100%; padding:11px 13px; border:1px dashed var(--vien-sang); background:var(--nen); color:var(--chu-nhat); font:inherit; font-size:14px; cursor:pointer}
+.o-nhap input[type="file"]:hover{border-color:var(--dong)}
+.o-nhap input[type="file"]::file-selector-button{margin-right:14px; padding:8px 16px; border:1px solid var(--dong); background:transparent; color:var(--dong); font:inherit; font-size:13px; cursor:pointer}
+.bang-sp .bang-dl__anh .sp__anh{width:56px}
+.bang-sp td.o-ten{white-space:normal; min-width:200px}
+.bang-sp .o-ten a{color:var(--chu)}
+.bang-sp .o-ten a:hover{color:var(--dong)}
+.o-trang-thai{display:flex; flex-direction:column; align-items:flex-start; gap:8px}
