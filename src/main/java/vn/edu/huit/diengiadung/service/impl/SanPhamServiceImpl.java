@@ -36,12 +36,12 @@ public class SanPhamServiceImpl implements SanPhamService {
     private static final long DUNG_LUONG_ANH_TOI_DA = 5L * 1024 * 1024;
     private static final List<String> DUOI_ANH_HOP_LE = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif");
 
-    private final SanPhamRepository sanPhamRepository;
+    private final SanPhamRepository duLieuSanPham;
     private final Path thuMucAnh;
 
-    public SanPhamServiceImpl(SanPhamRepository sanPhamRepository,
+    public SanPhamServiceImpl(SanPhamRepository duLieuSanPham,
                               @Value("${duongdan.anh}") String duongDanThuMucAnh) {
-        this.sanPhamRepository = sanPhamRepository;
+        this.duLieuSanPham = duLieuSanPham;
         this.thuMucAnh = Paths.get(duongDanThuMucAnh).toAbsolutePath().normalize();
     }
 
@@ -58,17 +58,17 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public List<SanPham> laySanPhamMoi(int soLuong) {
-        return sanPhamRepository.laySanPhamMoiNhat(PageRequest.of(0, soLuong));
+        return duLieuSanPham.laySanPhamMoiNhat(PageRequest.of(0, soLuong));
     }
 
     @Override
     public List<SanPham> laySanPhamGiamGia(int soLuong) {
-        return sanPhamRepository.laySanPhamGiamNhieuNhat(PageRequest.of(0, soLuong));
+        return duLieuSanPham.laySanPhamGiamNhieuNhat(PageRequest.of(0, soLuong));
     }
 
     @Override
     public SanPham laySanPhamDangBan(Long id) {
-        return sanPhamRepository.findById(id)
+        return duLieuSanPham.findById(id)
                 .filter(SanPham::isDangBan)
                 .orElseThrow(() -> new LoiNghiepVu("Sản phẩm không tồn tại hoặc đã ngừng kinh doanh"));
     }
@@ -78,7 +78,7 @@ public class SanPhamServiceImpl implements SanPhamService {
         if (sanPham.getLoaiSanPham() == null) {
             return new ArrayList<>();
         }
-        return sanPhamRepository.laySanPhamCungLoai(sanPham.getLoaiSanPham().getId(), sanPham.getId(),
+        return duLieuSanPham.laySanPhamCungLoai(sanPham.getLoaiSanPham().getId(), sanPham.getId(),
                 PageRequest.of(0, soLuong));
     }
 
@@ -102,7 +102,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
     @Override
     public SanPham layTheoId(Long id) {
-        return sanPhamRepository.findById(id)
+        return duLieuSanPham.findById(id)
                 .orElseThrow(() -> new LoiNghiepVu("Không tìm thấy sản phẩm có mã " + id));
     }
 
@@ -133,7 +133,7 @@ public class SanPhamServiceImpl implements SanPhamService {
 
         SanPham daLuu;
         try {
-            daLuu = sanPhamRepository.saveAndFlush(sanPham);
+            daLuu = duLieuSanPham.saveAndFlush(sanPham);
         } catch (RuntimeException loi) {
             if (coTepMoi) {
                 xoaTepAnh(anhMoi);
@@ -152,20 +152,20 @@ public class SanPhamServiceImpl implements SanPhamService {
     public void xoa(Long id) {
         SanPham sanPham = layTheoId(id);
 
-        long soDongDonHang = sanPhamRepository.demSoDongDonHang(id);
+        long soDongDonHang = duLieuSanPham.demSoDongDonHang(id);
         if (soDongDonHang > 0) {
             throw new LoiNghiepVu("Không xoá được vì sản phẩm đã nằm trong " + soDongDonHang
                     + " dòng đơn hàng. Hãy chuyển sang ngừng bán để giữ lịch sử đơn");
         }
-        long soDongPhieuNhap = sanPhamRepository.demSoDongPhieuNhap(id);
+        long soDongPhieuNhap = duLieuSanPham.demSoDongPhieuNhap(id);
         if (soDongPhieuNhap > 0) {
             throw new LoiNghiepVu("Không xoá được vì sản phẩm đã nằm trong " + soDongPhieuNhap
                     + " dòng phiếu nhập. Hãy chuyển sang ngừng bán để giữ lịch sử nhập kho");
         }
 
         String anhCanXoa = sanPham.getHinhAnh();
-        sanPhamRepository.delete(sanPham);
-        sanPhamRepository.flush();
+        duLieuSanPham.delete(sanPham);
+        duLieuSanPham.flush();
         xoaTepAnh(anhCanXoa);
     }
 
@@ -174,15 +174,15 @@ public class SanPhamServiceImpl implements SanPhamService {
     public void doiTrangThaiBan(Long id) {
         SanPham sanPham = layTheoId(id);
         sanPham.setDangBan(!sanPham.isDangBan());
-        sanPhamRepository.save(sanPham);
+        duLieuSanPham.save(sanPham);
     }
 
     private KetQuaPhanTrang<SanPham> phanTrang(Specification<SanPham> dieuKien, int trang, int kichThuocTrang,
                                                Sort cachSapXep) {
-        Page<SanPham> ketQua = sanPhamRepository.findAll(dieuKien, PageRequest.of(trang - 1, kichThuocTrang, cachSapXep));
+        Page<SanPham> ketQua = duLieuSanPham.findAll(dieuKien, PageRequest.of(trang - 1, kichThuocTrang, cachSapXep));
         if (ketQua.isEmpty() && trang > ketQua.getTotalPages() && ketQua.getTotalPages() > 0) {
             int trangCuoi = ketQua.getTotalPages() - 1;
-            ketQua = sanPhamRepository.findAll(dieuKien, PageRequest.of(trangCuoi, kichThuocTrang, cachSapXep));
+            ketQua = duLieuSanPham.findAll(dieuKien, PageRequest.of(trangCuoi, kichThuocTrang, cachSapXep));
         }
         return new KetQuaPhanTrang<>(ketQua);
     }
@@ -206,7 +206,7 @@ public class SanPhamServiceImpl implements SanPhamService {
     }
 
     private void kiemTraTrungMa(SanPham sanPham) {
-        Optional<SanPham> trungMa = sanPhamRepository.timTheoMaSanPham(sanPham.getMaSanPham());
+        Optional<SanPham> trungMa = duLieuSanPham.timTheoMaSanPham(sanPham.getMaSanPham());
         if (trungMa.isPresent() && !trungMa.get().getId().equals(sanPham.getId())) {
             throw new LoiNghiepVu("Mã sản phẩm \"" + sanPham.getMaSanPham() + "\" đã được dùng cho sản phẩm khác");
         }

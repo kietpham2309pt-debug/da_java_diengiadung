@@ -20,7 +20,7 @@
 ## 3. Câu hỏi thầy hoặc nhóm có thể hỏi
 
 **Phân trang làm thế nào?**
-Service tạo `PageRequest.of(trang - 1, 9, cachSapXep)` rồi gọi `sanPhamRepository.findAll(dieuKien, pageRequest)`.
+Service tạo `PageRequest.of(trang - 1, 9, cachSapXep)` rồi gọi `duLieuSanPham.findAll(dieuKien, pageRequest)`.
 Spring Data JPA sinh câu SQL lấy 9 dòng bằng `LIMIT ... OFFSET` và thêm một câu `COUNT` khi cần biết tổng số. Kết quả
 `Page<SanPham>` được gói vào `KetQuaPhanTrang` để giao diện dùng số trang bắt đầu từ 1.
 

@@ -12,24 +12,24 @@ public class TrangChuController {
 
     private static final int SO_SAN_PHAM_MOI_KHOI = 6;
 
-    private final SanPhamService sanPhamService;
-    private final ThuongHieuRepository thuongHieuRepository;
-    private final LoaiSanPhamService loaiSanPhamService;
+    private final SanPhamService dichVuSanPham;
+    private final ThuongHieuRepository duLieuThuongHieu;
+    private final LoaiSanPhamService dichVuLoaiSanPham;
 
-    public TrangChuController(SanPhamService sanPhamService,
-                              ThuongHieuRepository thuongHieuRepository,
-                              LoaiSanPhamService loaiSanPhamService) {
-        this.sanPhamService = sanPhamService;
-        this.thuongHieuRepository = thuongHieuRepository;
-        this.loaiSanPhamService = loaiSanPhamService;
+    public TrangChuController(SanPhamService dichVuSanPham,
+                              ThuongHieuRepository duLieuThuongHieu,
+                              LoaiSanPhamService dichVuLoaiSanPham) {
+        this.dichVuSanPham = dichVuSanPham;
+        this.duLieuThuongHieu = duLieuThuongHieu;
+        this.dichVuLoaiSanPham = dichVuLoaiSanPham;
     }
 
     @GetMapping("/")
     public String trangChu(Model moHinh) {
-        moHinh.addAttribute("danhSachLoai", loaiSanPhamService.layTatCa());
-        moHinh.addAttribute("danhSachThuongHieu", thuongHieuRepository.findAllByOrderByTenThuongHieuAsc());
-        moHinh.addAttribute("sanPhamMoi", sanPhamService.laySanPhamMoi(SO_SAN_PHAM_MOI_KHOI));
-        moHinh.addAttribute("sanPhamGiamGia", sanPhamService.laySanPhamGiamGia(SO_SAN_PHAM_MOI_KHOI));
+        moHinh.addAttribute("danhSachLoai", dichVuLoaiSanPham.layTatCa());
+        moHinh.addAttribute("danhSachThuongHieu", duLieuThuongHieu.findAllByOrderByTenThuongHieuAsc());
+        moHinh.addAttribute("sanPhamMoi", dichVuSanPham.laySanPhamMoi(SO_SAN_PHAM_MOI_KHOI));
+        moHinh.addAttribute("sanPhamGiamGia", dichVuSanPham.laySanPhamGiamGia(SO_SAN_PHAM_MOI_KHOI));
         return "index";
     }
 }

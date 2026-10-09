@@ -20,16 +20,16 @@ import java.nio.charset.StandardCharsets;
 @RequestMapping("/admin/san-pham")
 public class AdminSanPhamController {
 
-    private final SanPhamService sanPhamService;
-    private final LoaiSanPhamService loaiSanPhamService;
-    private final ThuongHieuRepository thuongHieuRepository;
+    private final SanPhamService dichVuSanPham;
+    private final LoaiSanPhamService dichVuLoaiSanPham;
+    private final ThuongHieuRepository duLieuThuongHieu;
 
-    public AdminSanPhamController(SanPhamService sanPhamService,
-                                  LoaiSanPhamService loaiSanPhamService,
-                                  ThuongHieuRepository thuongHieuRepository) {
-        this.sanPhamService = sanPhamService;
-        this.loaiSanPhamService = loaiSanPhamService;
-        this.thuongHieuRepository = thuongHieuRepository;
+    public AdminSanPhamController(SanPhamService dichVuSanPham,
+                                  LoaiSanPhamService dichVuLoaiSanPham,
+                                  ThuongHieuRepository duLieuThuongHieu) {
+        this.dichVuSanPham = dichVuSanPham;
+        this.dichVuLoaiSanPham = dichVuLoaiSanPham;
+        this.duLieuThuongHieu = duLieuThuongHieu;
     }
 
     @GetMapping
@@ -39,7 +39,7 @@ public class AdminSanPhamController {
                            @RequestParam(required = false) String trangThai,
                            @RequestParam(defaultValue = "1") int trang,
                            Model moHinh) {
-        moHinh.addAttribute("ketQua", sanPhamService.timKiemQuanTri(tuKhoa, loai, hang, trangThai, trang));
+        moHinh.addAttribute("ketQua", dichVuSanPham.timKiemQuanTri(tuKhoa, loai, hang, trangThai, trang));
         moHinh.addAttribute("tuKhoa", tuKhoa);
         moHinh.addAttribute("loaiDangChon", loai);
         moHinh.addAttribute("hangDangChon", hang);
@@ -61,7 +61,7 @@ public class AdminSanPhamController {
     @GetMapping("/sua/{id}")
     public String formSua(@PathVariable Long id, Model moHinh, RedirectAttributes thongBao) {
         try {
-            moHinh.addAttribute("sanPham", sanPhamService.layTheoId(id));
+            moHinh.addAttribute("sanPham", dichVuSanPham.layTheoId(id));
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
             return "redirect:/admin/san-pham";
@@ -84,7 +84,7 @@ public class AdminSanPhamController {
         boolean themMoi = sanPham.getId() == null;
         SanPham daLuu;
         try {
-            daLuu = sanPhamService.luu(sanPham, tepAnh, xoaAnh);
+            daLuu = dichVuSanPham.luu(sanPham, tepAnh, xoaAnh);
         } catch (LoiNghiepVu loi) {
             moHinh.addAttribute("thongBaoLoi", loi.getMessage());
             themDanhSachDeChon(moHinh);
@@ -98,7 +98,7 @@ public class AdminSanPhamController {
     @PostMapping("/xoa/{id}")
     public String xoa(@PathVariable Long id, RedirectAttributes thongBao) {
         try {
-            sanPhamService.xoa(id);
+            dichVuSanPham.xoa(id);
             thongBao.addFlashAttribute("thongBao", "Đã xoá sản phẩm");
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
@@ -109,7 +109,7 @@ public class AdminSanPhamController {
     @PostMapping("/doi-trang-thai/{id}")
     public String doiTrangThai(@PathVariable Long id, RedirectAttributes thongBao) {
         try {
-            sanPhamService.doiTrangThaiBan(id);
+            dichVuSanPham.doiTrangThaiBan(id);
             thongBao.addFlashAttribute("thongBao", "Đã đổi trạng thái bán của sản phẩm");
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
@@ -118,8 +118,8 @@ public class AdminSanPhamController {
     }
 
     private void themDanhSachDeChon(Model moHinh) {
-        moHinh.addAttribute("danhSachLoai", loaiSanPhamService.layTatCa());
-        moHinh.addAttribute("danhSachThuongHieu", thuongHieuRepository.findAllByOrderByTenThuongHieuAsc());
+        moHinh.addAttribute("danhSachLoai", dichVuLoaiSanPham.layTatCa());
+        moHinh.addAttribute("danhSachThuongHieu", duLieuThuongHieu.findAllByOrderByTenThuongHieuAsc());
     }
 
     /** Chuỗi tham số lọc đang dùng, để nút phân trang giữ nguyên bộ lọc. */

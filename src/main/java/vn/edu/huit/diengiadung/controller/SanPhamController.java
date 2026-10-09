@@ -24,23 +24,23 @@ public class SanPhamController {
 
     private static final int SO_SAN_PHAM_CUNG_LOAI = 6;
 
-    private final SanPhamService sanPhamService;
-    private final LoaiSanPhamService loaiSanPhamService;
-    private final ThuongHieuRepository thuongHieuRepository;
+    private final SanPhamService dichVuSanPham;
+    private final LoaiSanPhamService dichVuLoaiSanPham;
+    private final ThuongHieuRepository duLieuThuongHieu;
 
-    public SanPhamController(SanPhamService sanPhamService,
-                             LoaiSanPhamService loaiSanPhamService,
-                             ThuongHieuRepository thuongHieuRepository) {
-        this.sanPhamService = sanPhamService;
-        this.loaiSanPhamService = loaiSanPhamService;
-        this.thuongHieuRepository = thuongHieuRepository;
+    public SanPhamController(SanPhamService dichVuSanPham,
+                             LoaiSanPhamService dichVuLoaiSanPham,
+                             ThuongHieuRepository duLieuThuongHieu) {
+        this.dichVuSanPham = dichVuSanPham;
+        this.dichVuLoaiSanPham = dichVuLoaiSanPham;
+        this.duLieuThuongHieu = duLieuThuongHieu;
     }
 
     @GetMapping("/san-pham")
     public String danhSach(@ModelAttribute("boLoc") BoLocSanPham boLoc,
                            HttpServletRequest yeuCau,
                            Model moHinh) {
-        moHinh.addAttribute("danhSachLoai", loaiSanPhamService.layTatCa());
+        moHinh.addAttribute("danhSachLoai", dichVuLoaiSanPham.layTatCa());
 
         String chuoiThamSo = yeuCau.getQueryString();
         boolean chonDanhMuc = chuoiThamSo == null || chuoiThamSo.isBlank();
@@ -55,10 +55,10 @@ public class SanPhamController {
             loaiHienTai = timLoai(boLoc.getLoai());
         }
 
-        moHinh.addAttribute("ketQua", sanPhamService.timKiemPhiaKhach(boLoc));
+        moHinh.addAttribute("ketQua", dichVuSanPham.timKiemPhiaKhach(boLoc));
         moHinh.addAttribute("loaiHienTai", loaiHienTai);
         moHinh.addAttribute("tieuDe", taoTieuDe(boLoc, loaiHienTai));
-        moHinh.addAttribute("danhSachThuongHieu", thuongHieuRepository.findAllByOrderByTenThuongHieuAsc());
+        moHinh.addAttribute("danhSachThuongHieu", duLieuThuongHieu.findAllByOrderByTenThuongHieuAsc());
         moHinh.addAttribute("danhSachMucGia", MucGia.values());
         moHinh.addAttribute("danhSachKieuSapXep", KieuSapXep.values());
         moHinh.addAttribute("tuKhoa", boLoc.getTuKhoaDaGon());
@@ -68,7 +68,7 @@ public class SanPhamController {
     /** Trả về riêng khối kết quả để site.js thay tại chỗ khi khách tick bộ lọc, đổi sắp xếp hoặc sang trang. */
     @GetMapping("/san-pham/ket-qua")
     public String ketQuaLoc(@ModelAttribute("boLoc") BoLocSanPham boLoc, Model moHinh) {
-        moHinh.addAttribute("ketQua", sanPhamService.timKiemPhiaKhach(boLoc));
+        moHinh.addAttribute("ketQua", dichVuSanPham.timKiemPhiaKhach(boLoc));
         return "san-pham :: ketQua";
     }
 
@@ -76,18 +76,18 @@ public class SanPhamController {
     public String chiTiet(@PathVariable Long id, Model moHinh) {
         SanPham sanPham;
         try {
-            sanPham = sanPhamService.laySanPhamDangBan(id);
+            sanPham = dichVuSanPham.laySanPhamDangBan(id);
         } catch (LoiNghiepVu loi) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, loi.getMessage());
         }
         moHinh.addAttribute("sanPham", sanPham);
-        moHinh.addAttribute("danhSachCungLoai", sanPhamService.laySanPhamCungLoai(sanPham, SO_SAN_PHAM_CUNG_LOAI));
+        moHinh.addAttribute("danhSachCungLoai", dichVuSanPham.laySanPhamCungLoai(sanPham, SO_SAN_PHAM_CUNG_LOAI));
         return "chi-tiet-san-pham";
     }
 
     private LoaiSanPham timLoai(Long idLoai) {
         try {
-            return loaiSanPhamService.layTheoId(idLoai);
+            return dichVuLoaiSanPham.layTheoId(idLoai);
         } catch (LoiNghiepVu loi) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, loi.getMessage());
         }
@@ -101,7 +101,7 @@ public class SanPhamController {
             return "Kết quả tìm kiếm";
         }
         if (boLoc.getHang().size() == 1) {
-            ThuongHieu thuongHieu = thuongHieuRepository.findById(boLoc.getHang().get(0)).orElse(null);
+            ThuongHieu thuongHieu = duLieuThuongHieu.findById(boLoc.getHang().get(0)).orElse(null);
             if (thuongHieu != null) {
                 return "Sản phẩm " + thuongHieu.getTenThuongHieu();
             }
