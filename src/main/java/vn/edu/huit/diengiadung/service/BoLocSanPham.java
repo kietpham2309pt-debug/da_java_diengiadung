@@ -5,10 +5,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Gom các tham số trên đường dẫn /san-pham: loại, thương hiệu, mức giá, từ khoá, kiểu sắp xếp và trang.
- * Spring tự gán từng tham số vào thuộc tính cùng tên, ví dụ ?hang=1&hang=2 thành danh sách [1, 2].
- */
 public class BoLocSanPham {
 
     private Long loai;
@@ -115,7 +111,6 @@ public class BoLocSanPham {
         return !hang.isEmpty() || !getDanhSachMucGia().isEmpty();
     }
 
-    /** Đường dẫn tới một trang kết quả, giữ nguyên mọi bộ lọc đang chọn. */
     public String duongDanTrang(int soTrang) {
         List<String> thamSo = new ArrayList<>();
         if (loai != null) {

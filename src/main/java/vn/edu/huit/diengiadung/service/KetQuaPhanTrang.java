@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Một trang kết quả, đánh số trang từ 1 cho dễ hiển thị. */
 public class KetQuaPhanTrang<T> {
 
     private static final int SO_NUT_TRANG_TOI_DA = 5;
@@ -50,7 +49,6 @@ public class KetQuaPhanTrang<T> {
         return trangHienTai < soTrang;
     }
 
-    /** Các số trang hiện trên thanh phân trang, tối đa 5 nút quanh trang đang xem. */
     public List<Integer> getDanhSachSoTrang() {
         int batDau = Math.max(1, trangHienTai - SO_NUT_TRANG_TOI_DA / 2);
         int ketThuc = Math.min(soTrang, batDau + SO_NUT_TRANG_TOI_DA - 1);

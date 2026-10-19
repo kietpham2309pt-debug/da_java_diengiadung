@@ -2,7 +2,6 @@
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!-- Thẻ một sản phẩm, dùng chung cho trang chủ, trang danh sách và khối sản phẩm cùng loại. -->
 <a th:fragment="theSanPham(sp)" class="sp" th:href="@{'/san-pham/' + ${sp.id}}">
     <span class="sp__anh">
         <img th:src="@{${sp.duongDanAnh}}" th:alt="${sp.tenSanPham}" loading="lazy">

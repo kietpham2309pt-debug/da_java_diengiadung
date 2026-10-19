@@ -122,7 +122,6 @@ public class AdminSanPhamController {
         moHinh.addAttribute("danhSachThuongHieu", duLieuThuongHieu.findAllByOrderByTenThuongHieuAsc());
     }
 
-    /** Chuỗi tham số lọc đang dùng, để nút phân trang giữ nguyên bộ lọc. */
     private String taoThamSoLoc(String tuKhoa, Long loai, Long hang, String trangThai) {
         StringBuilder chuoi = new StringBuilder();
         if (tuKhoa != null && !tuKhoa.isBlank()) {

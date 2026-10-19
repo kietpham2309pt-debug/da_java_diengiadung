@@ -37,8 +37,6 @@ public class SanPham {
     @Min(value = 0, message = "Giá khuyến mãi không được âm")
     private Long giaKhuyenMai;
 
-    // Giá khách thật sự trả, tính ngay trong câu SQL để lọc theo khoảng giá và sắp xếp theo giá.
-    // Cùng quy tắc với getGiaHienTai(): có giá khuyến mãi thì lấy giá khuyến mãi.
     @Formula("case when gia_khuyen_mai is not null and gia_khuyen_mai > 0 then gia_khuyen_mai else gia_ban end")
     private Long giaBanThucTe;
 
@@ -242,10 +240,6 @@ public class SanPham {
         return danhSachDoan;
     }
 
-    /**
-     * Thông số nhập theo từng dòng (hoặc ngăn bằng dấu chấm phẩy), dạng "Tên: Giá trị".
-     * Dòng có dấu hai chấm vào bảng thông số, dòng không có thì xem là một tính năng nổi bật.
-     */
     public List<ThongSo> getDanhSachThongSo() {
         List<ThongSo> danhSach = new ArrayList<>();
         for (String dong : tachDongThongSo()) {
@@ -303,7 +297,6 @@ public class SanPham {
 
     public static class TinhNang {
 
-        // Từ khoá trong tên tính năng và icon tương ứng trong layout/bo-icon.html.
         private static final String[][] BANG_BIEU_TUONG = {
                 {"khoá", "ic-tn-khoa"}, {"khóa", "ic-tn-khoa"},
                 {"hẹn giờ", "ic-dong-ho"},

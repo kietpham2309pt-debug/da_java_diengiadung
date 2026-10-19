@@ -13,10 +13,6 @@ import vn.edu.huit.diengiadung.service.MucGia;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Các điều kiện lọc sản phẩm, ghép lại bằng and() để ra câu truy vấn động.
- * Điều kiện nào không được chọn thì trả về "luôn đúng" để không ảnh hưởng kết quả.
- */
 public final class DieuKienSanPham {
 
     private static final char KY_TU_THOAT = '!';
@@ -46,11 +42,6 @@ public final class DieuKienSanPham {
                 : goc.get("thuongHieu").get("id").in(danhSachIdHang);
     }
 
-    /**
-     * Mỗi từ trong từ khoá phải xuất hiện ở tên, mã sản phẩm hoặc tên thương hiệu.
-     * Collation của MySQL đã bỏ qua dấu (ê, ư, ơ...) nhưng có loại coi "đ" khác "d",
-     * nên đổi "đ" thành "d" ở cả hai phía để gõ "bep dien tu" vẫn ra "Bếp điện từ".
-     */
     public static Specification<SanPham> chuaTuKhoa(String tuKhoa) {
         return (goc, truyVan, boDung) -> {
             if (tuKhoa == null || tuKhoa.isBlank()) {
@@ -73,7 +64,6 @@ public final class DieuKienSanPham {
         };
     }
 
-    /** Chọn nhiều mức giá thì lấy sản phẩm thuộc bất kỳ mức nào trong số đó. */
     public static Specification<SanPham> trongCacMucGia(List<MucGia> danhSachMuc) {
         return (goc, truyVan, boDung) -> {
             if (danhSachMuc == null || danhSachMuc.isEmpty()) {
@@ -99,8 +89,6 @@ public final class DieuKienSanPham {
         return boDung.function("replace", String.class, chuoi, boDung.literal("đ"), boDung.literal("d"));
     }
 
-    // Khách gõ % hoặc _ thì tìm đúng ký tự đó, không để LIKE hiểu thành ký tự đại diện.
-    // Không dùng dấu \ làm ký tự thoát vì MySQL coi \ là ký tự thoát trong chuỗi.
     private static String boKyTuDacBiet(String tu) {
         return tu.replace("!", "!!").replace("%", "!%").replace("_", "!_");
     }

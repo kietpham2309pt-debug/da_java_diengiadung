@@ -8,10 +8,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URI;
 
-/**
- * Tệp vượt spring.servlet.multipart.max-file-size bị chặn trước khi vào controller,
- * nên phải bắt ở đây rồi quay về đúng form kèm thông báo dễ hiểu.
- */
 @ControllerAdvice
 public class XuLyLoiTaiAnh {
 

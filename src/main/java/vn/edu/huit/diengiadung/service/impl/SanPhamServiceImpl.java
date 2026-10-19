@@ -235,7 +235,6 @@ public class SanPhamServiceImpl implements SanPhamService {
         return tenTep;
     }
 
-    /** Chỉ xoá ảnh do quản trị viên upload, không đụng tới ảnh có sẵn trong static/img. */
     private void xoaTepAnh(String tenTep) {
         if (tenTep == null || tenTep.isBlank() || tenTep.startsWith("/")) {
             return;
@@ -247,7 +246,6 @@ public class SanPhamServiceImpl implements SanPhamService {
         try {
             Files.deleteIfExists(tep);
         } catch (IOException loi) {
-            // Ảnh cũ còn sót lại trên đĩa không ảnh hưởng dữ liệu, bỏ qua.
         }
     }
 

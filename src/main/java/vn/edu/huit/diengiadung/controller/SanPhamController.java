@@ -65,7 +65,6 @@ public class SanPhamController {
         return "san-pham";
     }
 
-    /** Trả về riêng khối kết quả để site.js thay tại chỗ khi khách tick bộ lọc, đổi sắp xếp hoặc sang trang. */
     @GetMapping("/san-pham/ket-qua")
     public String ketQuaLoc(@ModelAttribute("boLoc") BoLocSanPham boLoc, Model moHinh) {
         moHinh.addAttribute("ketQua", dichVuSanPham.timKiemPhiaKhach(boLoc));

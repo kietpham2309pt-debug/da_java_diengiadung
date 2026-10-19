@@ -27,12 +27,10 @@ public enum MucGia {
         return ten;
     }
 
-    /** Giá thấp nhất của mức, tính cả bằng. Null nghĩa là không chặn dưới. */
     public Long getGiaTu() {
         return giaTu;
     }
 
-    /** Giá phải nhỏ hơn số này. Null nghĩa là không chặn trên. */
     public Long getGiaDuoi() {
         return giaDuoi;
     }
