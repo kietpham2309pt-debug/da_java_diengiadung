@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang(${sanPham.tenSanPham}, false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang ct">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/san-pham}">Sản phẩm</a>
+                <th:block th:if="${sanPham.loaiSanPham != null}">
+                    <span aria-hidden="true">&middot;</span>
+                    <a th:href="@{/san-pham(loai=${sanPham.loaiSanPham.id})}"
+                       th:text="${sanPham.loaiSanPham.tenLoai}">Bếp điện từ</a>
+                </th:block>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${sanPham.tenSanPham}">Tên sản phẩm</span>
+            </nav>
+
+            <div class="ct__tren">
+                <div class="gal hien-dan">
+                    <div class="gal__to">
+                        <img id="anh-to" th:src="@{${sanPham.duongDanAnh}}" th:alt="${sanPham.tenSanPham}">
+                        <span class="sp__giam" th:if="${sanPham.phanTramGiam > 0}"
+                              th:text="'-' + ${sanPham.phanTramGiam} + '%'">-20%</span>
+                    </div>
+
+                    <div class="gal__ds" role="group" aria-label="Chọn ảnh">
+                        <button type="button" class="gal__nho dang-chon" aria-label="Ảnh sản phẩm"
+                                th:attr="data-anh=@{${sanPham.duongDanAnh}}">
+                            <img th:src="@{${sanPham.duongDanAnh}}" alt="">
+                        </button>
+                        <th:block th:if="${sanPham.loaiSanPham != null}">
+                            <button type="button" class="gal__nho" aria-label="Ảnh nhóm hàng"
+                                    th:if="${sanPham.coAnhRieng()}"
+                                    th:attr="data-anh=@{${sanPham.loaiSanPham.anhDanhMuc}}">
+                                <img th:src="@{${sanPham.loaiSanPham.anhDanhMuc}}" alt="">
+                            </button>
+                            <button type="button" class="gal__nho" aria-label="Ảnh lắp đặt trong căn bếp"
+                                    th:attr="data-anh=@{${sanPham.loaiSanPham.anhBanner}}">
+                                <img th:src="@{${sanPham.loaiSanPham.anhBanner}}" alt="">
+                            </button>
+                        </th:block>
+                    </div>
+                </div>
+
+                <div class="ct__mua hien-dan">
+                    <span class="ct__nhan" th:if="${sanPham.phanTramGiam > 0}">Đang giảm giá</span>
+
+                    <p class="ct__hieu" th:if="${sanPham.thuongHieu != null}" th:text="${sanPham.thuongHieu.tenThuongHieu}">Bosch</p>
+                    <h1 class="ct__ten" th:text="${sanPham.tenSanPham}">Tên sản phẩm</h1>
+                    <p class="ma-mo" th:text="'Mã sản phẩm: ' + ${sanPham.maSanPham}">Mã sản phẩm</p>
+
+                    <div class="ct__gia">
+                        <b th:text="${#numbers.formatInteger(sanPham.giaHienTai, 0, 'POINT')} + ' ₫'">0 ₫</b>
+                        <th:block th:if="${sanPham.phanTramGiam > 0}">
+                            <del th:text="${#numbers.formatInteger(sanPham.giaBan, 0, 'POINT')} + ' ₫'">0 ₫</del>
+                            <span class="ct__bot"
+                                  th:text="'Tiết kiệm ' + ${#numbers.formatInteger(sanPham.soTienTietKiem, 0, 'POINT')} + ' ₫'">Tiết kiệm</span>
+                        </th:block>
+                    </div>
+
+                    <p class="ct__con" th:classappend="${!sanPham.conHang} ? 'ct__con--het'">
+                        Tình trạng:
+                        <b th:if="${!sanPham.conHang}">Tạm hết hàng</b>
+                        <b th:if="${sanPham.sapHetHang}" th:text="'Chỉ còn ' + ${sanPham.soLuongTon} + ' sản phẩm'">Chỉ còn 3 sản phẩm</b>
+                        <b th:if="${sanPham.conHang and !sanPham.sapHetHang}">Còn hàng</b>
+                    </p>
+
+                    <ul class="ct__noi-bat hien-dan-nhom" th:if="${sanPham.congSuat != null or not #lists.isEmpty(sanPham.danhSachThongSo)}">
+                        <li th:if="${sanPham.congSuat != null}" th:text="'Công suất hoặc dung tích: ' + ${sanPham.congSuat}">Công suất</li>
+                        <li th:each="ts, vt : ${sanPham.danhSachThongSo}" th:if="${vt.index < 3}"
+                            th:text="${ts.ten} + ': ' + ${ts.giaTri}">Thông số</li>
+                    </ul>
+
+                    <form class="ct__dat" method="post" th:action="@{/gio-hang/them}">
+                        <input type="hidden" name="id" th:value="${sanPham.id}">
+
+                        <div class="dem" role="group" aria-label="Số lượng">
+                            <button type="button" class="dem__nut" data-dem="-1" aria-label="Bớt một">&minus;</button>
+                            <input type="number" id="so-luong" name="soLuong" value="1" min="1" inputmode="numeric"
+                                   aria-label="Số lượng"
+                                   th:attr="max=${sanPham.soLuongTon < 20} ? ${sanPham.soLuongTon} : 20"
+                                   th:disabled="${!sanPham.conHang}">
+                            <button type="button" class="dem__nut" data-dem="1" aria-label="Thêm một">+</button>
+                        </div>
+
+                        <button type="submit" class="nut nut--dac ct__them" th:disabled="${!sanPham.conHang}"
+                                th:text="${sanPham.conHang} ? 'Thêm vào giỏ hàng' : 'Tạm hết hàng'">Thêm vào giỏ hàng</button>
+
+                        <a class="nut ct__goi" href="tel:0339999999">Gọi tư vấn 0339 999 999</a>
+                    </form>
+
+                    <ul class="cam-ket hien-dan-nhom">
+                        <li>
+                            <svg class="ic"><use xlink:href="#ic-bao-hanh"></use></svg>
+                            <span th:text="${sanPham.baoHanhThang > 0} ? 'Bảo hành chính hãng ' + ${sanPham.baoHanhThang} + ' tháng' : 'Đổi trả trong 7 ngày nếu lỗi do nhà sản xuất'">Bảo hành chính hãng 24 tháng</span>
+                        </li>
+                        <li>
+                            <svg class="ic"><use xlink:href="#ic-lap-dat"></use></svg>
+                            <span>Lắp đặt miễn phí tại nhà</span>
+                        </li>
+                        <li>
+                            <svg class="ic"><use xlink:href="#ic-giao-hang"></use></svg>
+                            <span>Giao hàng toàn quốc</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien tab">
+        <div class="khung">
+            <div class="tab__nav hien-dan" role="tablist" aria-label="Nội dung sản phẩm">
+                <button type="button" class="tab__nut dang-chon" role="tab"
+                        aria-selected="true" aria-controls="tab-mo-ta">Mô tả sản phẩm</button>
+                <button type="button" class="tab__nut" role="tab" th:unless="${#lists.isEmpty(sanPham.danhSachTinhNang)}"
+                        aria-selected="false" aria-controls="tab-tinh-nang">Tính năng</button>
+                <button type="button" class="tab__nut" role="tab"
+                        aria-selected="false" aria-controls="tab-thong-so">Thông số kỹ thuật</button>
+            </div>
+
+            <div class="tab__o hien hien-dan" id="tab-mo-ta" role="tabpanel" tabindex="0">
+                <h2>Mô tả sản phẩm</h2>
+                <p th:each="doan : ${sanPham.danhSachDoanMoTa}" th:text="${doan}">Đoạn mô tả</p>
+                <p th:if="${#lists.isEmpty(sanPham.danhSachDoanMoTa)}">Sản phẩm này chưa có mô tả chi tiết.
+                    Bạn gọi 0339 999 999 để nhân viên tư vấn kỹ hơn nhé.</p>
+            </div>
+
+            <div class="tab__o" id="tab-tinh-nang" role="tabpanel" tabindex="0"
+                 th:unless="${#lists.isEmpty(sanPham.danhSachTinhNang)}">
+                <h2>Tính năng</h2>
+                <ul class="luoi-tn hien-dan-nhom">
+                    <li th:each="tn : ${sanPham.danhSachTinhNang}">
+                        <svg class="ic" aria-hidden="true"><use th:href="'#' + ${tn.bieuTuong}"></use></svg>
+                        <span th:text="${tn.ten}">Khoá trẻ em</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab__o" id="tab-thong-so" role="tabpanel" tabindex="0">
+                <h2>Thông số kỹ thuật</h2>
+                <table class="bang-ts hien-dan">
+                    <tbody>
+                    <tr>
+                        <th scope="row">Mã sản phẩm</th>
+                        <td th:text="${sanPham.maSanPham}">BDT-BOS-001</td>
+                    </tr>
+                    <tr th:if="${sanPham.thuongHieu != null}">
+                        <th scope="row">Thương hiệu</th>
+                        <td th:text="${sanPham.thuongHieu.tenThuongHieu} + (${sanPham.thuongHieu.xuatXu != null} ? ' (' + ${sanPham.thuongHieu.xuatXu} + ')' : '')">Bosch (Đức)</td>
+                    </tr>
+                    <tr th:if="${sanPham.loaiSanPham != null}">
+                        <th scope="row">Nhóm hàng</th>
+                        <td th:text="${sanPham.loaiSanPham.tenLoai}">Bếp điện từ</td>
+                    </tr>
+                    <tr th:if="${sanPham.congSuat != null}">
+                        <th scope="row">Công suất hoặc dung tích</th>
+                        <td th:text="${sanPham.congSuat}">7000W</td>
+                    </tr>
+                    <tr th:each="ts : ${sanPham.danhSachThongSo}">
+                        <th scope="row" th:text="${ts.ten}">Tên thông số</th>
+                        <td th:text="${ts.giaTri}">Giá trị</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Bảo hành</th>
+                        <td th:text="${sanPham.baoHanhThang > 0} ? ${sanPham.baoHanhThang} + ' tháng chính hãng' : 'Không bảo hành'">24 tháng chính hãng</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien">
+        <div class="khung">
+            <h2 class="tieu-de-muc hien-dan">Sản phẩm cùng loại</h2>
+
+            <div class="luoi-sp hien-dan-nhom" th:unless="${#lists.isEmpty(danhSachCungLoai)}">
+                <th:block th:each="sp : ${danhSachCungLoai}">
+                    <a th:replace="~{layout/the-san-pham :: theSanPham(${sp})}"></a>
+                </th:block>
+            </div>
+
+            <div class="trong" th:if="${#lists.isEmpty(danhSachCungLoai)}">
+                <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                <p>Nhóm hàng này hiện chỉ có một sản phẩm.</p>
+                <a class="nut" th:href="@{/san-pham}">Xem tất cả danh mục</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

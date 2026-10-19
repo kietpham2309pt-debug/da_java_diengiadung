@@ -49,9 +49,9 @@
 
     <section class="muc" th:if="${chonDanhMuc}">
         <div class="khung">
-            <h1 class="dau-sp__td hien-dan">Thiết bị bếp</h1>
+            <h1 class="tieu-de-muc hien-dan">Thiết bị bếp</h1>
 
-            <div class="luoi-dm hien-dan-nhom">
+            <div class="luoi-dm hien-dan-nhom" th:if="${not #lists.isEmpty(danhSachLoai)}">
                 <a th:each="loai : ${danhSachLoai}" class="dm" th:href="@{/san-pham(loai=${loai.id})}">
                     <img class="dm__anh" th:src="@{${loai.anhDanhMuc}}" th:alt="${loai.tenLoai}" loading="lazy">
                     <span class="dm__phu" aria-hidden="true"></span>
@@ -66,14 +66,23 @@
                 <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                 <p>Chưa có danh mục nào trong cơ sở dữ liệu.</p>
             </div>
+
+            <div class="muc__chan">
+                <a class="nut nut--dac" th:href="@{/san-pham(sapXep='moi-nhat')}">
+                    Xem tất cả sản phẩm
+                    <svg class="ic ic--nho"><use xlink:href="#ic-mui-ten-phai"></use></svg>
+                </a>
+            </div>
         </div>
     </section>
 
     <section class="muc muc--sat-banner" th:unless="${chonDanhMuc}">
         <div class="khung">
-            <form class="ds" method="get" th:action="@{/san-pham}">
+            <h1 class="an-nhin" th:if="${loaiHienTai == null}" th:text="${tieuDe}">Tất cả sản phẩm</h1>
+
+            <form class="ds" method="get" th:action="@{/san-pham}" th:attr="data-lay=@{/san-pham/ket-qua}">
                 <input type="hidden" name="loai" th:if="${loaiHienTai != null}" th:value="${loaiHienTai.id}">
-                <input type="hidden" name="tuKhoa" th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:value="${tuKhoa}">
+                <input type="hidden" name="tuKhoa" th:if="${boLoc.tuKhoaDaGon != null}" th:value="${boLoc.tuKhoaDaGon}">
 
                 <div class="ds__thanh hien-dan">
                     <p class="ds__nhan">
@@ -83,20 +92,18 @@
 
                     <div class="ds__tt">
                         <p class="ds__dem">
-                            <th:block th:if="${tuKhoa != null and !tuKhoa.isBlank()}">
-                                Kết quả cho <b th:text="${tuKhoa}">từ khoá</b> &mdash;
+                            <th:block th:if="${boLoc.tuKhoaDaGon != null}">
+                                Kết quả cho &ldquo;<b th:text="${boLoc.tuKhoaDaGon}">từ khoá</b>&rdquo;,
                             </th:block>
-                            (<span th:text="${#lists.size(danhSachSanPham)}">0</span> sản phẩm)
+                            (<span id="dem-so" th:text="${ketQua.tongSo}">0</span> sản phẩm)
                         </p>
 
                         <div class="ds__sap">
                             <label for="sapXep">Sắp xếp theo:</label>
                             <span class="ds__o">
-                                <select id="sapXep" name="sapXep" data-tu-gui>
-                                    <option value="moi-nhat" th:selected="${sapXepDangChon == 'moi-nhat'}">Mới nhất</option>
-                                    <option value="gia-tang" th:selected="${sapXepDangChon == 'gia-tang'}">Giá tăng dần</option>
-                                    <option value="gia-giam" th:selected="${sapXepDangChon == 'gia-giam'}">Giá giảm dần</option>
-                                    <option value="ten" th:selected="${sapXepDangChon == 'ten'}">Tên A đến Z</option>
+                                <select id="sapXep" name="sapXep">
+                                    <option th:each="kieu : ${danhSachKieuSapXep}" th:value="${kieu.ma}"
+                                            th:selected="${boLoc.sapXep == kieu.ma}" th:text="${kieu.ten}">Mới nhất</option>
                                 </select>
                                 <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"></use></svg>
                             </span>
@@ -108,6 +115,23 @@
                     <div class="loc hien-dan">
                         <details class="loc__nhom" open>
                             <summary>
+                                Danh mục
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"></use></svg>
+                            </summary>
+                            <ul class="loc__ds">
+                                <li th:each="loai : ${danhSachLoai}">
+                                    <a class="loc__muc" th:href="@{/san-pham(loai=${loai.id})}"
+                                       th:classappend="${loaiHienTai != null and loaiHienTai.id == loai.id} ? 'dang-chon'"
+                                       th:attr="aria-current=${loaiHienTai != null and loaiHienTai.id == loai.id} ? 'page' : null">
+                                        <svg class="ic ic-dm" aria-hidden="true"><use th:href="'#ic-' + ${loai.maLoai}"></use></svg>
+                                        <span class="loc__ten" th:text="${loai.tenLoai}">Bếp điện từ</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </details>
+
+                        <details class="loc__nhom" open>
+                            <summary>
                                 Thương hiệu
                                 <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"></use></svg>
                             </summary>
@@ -115,9 +139,26 @@
                                 <li th:each="hang : ${danhSachThuongHieu}">
                                     <label class="loc__muc">
                                         <input type="checkbox" name="hang" th:value="${hang.id}"
-                                               th:checked="${hangDangChon.contains(hang.id)}" data-tu-gui>
+                                               th:checked="${boLoc.coChonHang(hang.id)}">
                                         <span class="loc__o" aria-hidden="true"></span>
                                         <span class="loc__ten" th:text="${hang.tenThuongHieu}">Bosch</span>
+                                    </label>
+                                </li>
+                            </ul>
+                        </details>
+
+                        <details class="loc__nhom" open>
+                            <summary>
+                                Mức giá
+                                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-chevron"></use></svg>
+                            </summary>
+                            <ul class="loc__ds">
+                                <li th:each="muc : ${danhSachMucGia}">
+                                    <label class="loc__muc">
+                                        <input type="checkbox" name="mucGia" th:value="${muc.ma}"
+                                               th:checked="${boLoc.coChonMucGia(muc.ma)}">
+                                        <span class="loc__o" aria-hidden="true"></span>
+                                        <span class="loc__ten" th:text="${muc.ten}">Dưới 5 triệu</span>
                                     </label>
                                 </li>
                             </ul>
@@ -132,25 +173,25 @@
                         </p>
                     </div>
 
-                    <div class="ds__phai" id="kq">
-                        <div class="luoi-sp hien-dan-nhom" th:if="${not #lists.isEmpty(danhSachSanPham)}">
-                            <a th:each="sp : ${danhSachSanPham}" class="sp" th:href="@{'/san-pham/' + ${sp.id}}">
-                                <span class="sp__anh">
-                                    <img th:src="@{${sp.duongDanAnh}}" th:alt="${sp.tenSanPham}" loading="lazy">
-                                    <span class="sp__giam" th:if="${sp.phanTramGiam > 0}"
-                                          th:text="'-' + ${sp.phanTramGiam} + '%'">-20%</span>
-                                </span>
-                                <span class="sp__hieu" th:text="${sp.thuongHieu != null} ? ${sp.thuongHieu.tenThuongHieu} : ' '">Bosch</span>
-                                <span class="sp__ten" th:text="${sp.tenSanPham}">Tên sản phẩm</span>
-                                <span class="sp__gia">
-                                    <b th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' ₫'">0 ₫</b>
-                                    <del th:if="${sp.giaKhuyenMai != null}"
-                                         th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' ₫'">0 ₫</del>
-                                </span>
-                            </a>
+                    <div th:fragment="ketQua" class="ds__phai" id="kq" th:attr="data-so=${ketQua.tongSo}">
+                        <div class="luoi-sp hien-dan-nhom" th:unless="${ketQua.trong}">
+                            <th:block th:each="sp : ${ketQua.danhSach}">
+                                <a th:replace="~{layout/the-san-pham :: theSanPham(${sp})}"></a>
+                            </th:block>
                         </div>
 
-                        <div class="trong" th:if="${#lists.isEmpty(danhSachSanPham)}">
+                        <nav class="trang hien-dan" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
+                            <a class="trang__nut" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
+                               th:href="@{${boLoc.duongDanTrang(ketQua.trangHienTai - 1)}}">&lsaquo;</a>
+                            <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut"
+                               th:classappend="${so == ketQua.trangHienTai} ? 'dang-chon'"
+                               th:attr="aria-current=${so == ketQua.trangHienTai} ? 'page' : null"
+                               th:href="@{${boLoc.duongDanTrang(so)}}" th:text="${so}">1</a>
+                            <a class="trang__nut" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
+                               th:href="@{${boLoc.duongDanTrang(ketQua.trangHienTai + 1)}}">&rsaquo;</a>
+                        </nav>
+
+                        <div class="trong" th:if="${ketQua.trong}">
                             <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                             <p>Không tìm thấy sản phẩm nào khớp với lựa chọn của bạn.</p>
                             <a class="nut" th:href="@{/san-pham}">Xem tất cả danh mục</a>

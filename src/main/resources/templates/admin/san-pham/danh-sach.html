@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Quản lý sản phẩm', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Sản phẩm</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('san-pham')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Sản phẩm</h1>
+                            <p>Hàng hoá đang có trên cửa hàng, kèm giá, tồn kho và trạng thái bán.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" th:href="@{/admin/san-pham/them}">Thêm sản phẩm</a>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/san-pham}" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên, mã hoặc thương hiệu"
+                                   aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <select name="loai" aria-label="Loại sản phẩm">
+                                <option value="">Tất cả loại</option>
+                                <option th:each="loai : ${danhSachLoai}" th:value="${loai.id}" th:text="${loai.tenLoai}"
+                                        th:selected="${loaiDangChon == loai.id}">Bếp điện từ</option>
+                            </select>
+                            <select name="hang" aria-label="Thương hiệu">
+                                <option value="">Tất cả thương hiệu</option>
+                                <option th:each="hang : ${danhSachThuongHieu}" th:value="${hang.id}"
+                                        th:text="${hang.tenThuongHieu}" th:selected="${hangDangChon == hang.id}">Bosch</option>
+                            </select>
+                            <select name="trangThai" aria-label="Trạng thái bán">
+                                <option value="">Mọi trạng thái</option>
+                                <option value="dang-ban" th:selected="${trangThaiDangChon == 'dang-ban'}">Đang bán</option>
+                                <option value="ngung-ban" th:selected="${trangThaiDangChon == 'ngung-ban'}">Ngừng bán</option>
+                            </select>
+                            <button class="nut nut--nho" type="submit">Lọc</button>
+                            <a th:if="${!#strings.isEmpty(thamSoLoc)}" th:href="@{/admin/san-pham}"
+                               class="nut nut--nho">Bỏ lọc</a>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:unless="${ketQua.trong}">
+                        <div class="khoi__dau">
+                            <h2 th:text="'Tìm thấy ' + ${ketQua.tongSo} + ' sản phẩm'">Tìm thấy 25 sản phẩm</h2>
+                            <span class="the-nhan the-nhan--vang">Tồn kho từ 5 trở xuống tô vàng</span>
+                        </div>
+
+                        <div class="cuon-ngang">
+                            <table class="bang-dl bang-sp">
+                                <thead>
+                                <tr>
+                                    <th>Ảnh</th>
+                                    <th>Sản phẩm</th>
+                                    <th class="canh-phai">Giá bán</th>
+                                    <th class="canh-giua">Tồn</th>
+                                    <th>Trạng thái</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="sp : ${ketQua.danhSach}">
+                                    <td class="bang-dl__anh">
+                                        <span class="sp__anh"><img th:src="@{${sp.duongDanAnh}}" alt="" loading="lazy"></span>
+                                    </td>
+                                    <td class="o-ten" data-nhan="Sản phẩm">
+                                        <a th:href="@{'/san-pham/' + ${sp.id}}" th:text="${sp.tenSanPham}"
+                                           target="_blank" rel="noopener">Tên sản phẩm</a>
+                                        <span class="ma-mo dong-phu"
+                                              th:text="${sp.maSanPham}
+                                                + (${sp.thuongHieu != null} ? ' · ' + ${sp.thuongHieu.tenThuongHieu} : '')
+                                                + (${sp.loaiSanPham != null} ? ' · ' + ${sp.loaiSanPham.tenLoai} : '')">BDT-BOS-001 · Bosch · Bếp điện từ</span>
+                                    </td>
+                                    <td class="canh-phai" data-nhan="Giá bán">
+                                        <span th:text="${#numbers.formatInteger(sp.giaHienTai, 0, 'POINT')} + ' ₫'">0 ₫</span>
+                                        <del class="ma-mo dong-phu" th:if="${sp.phanTramGiam > 0}"
+                                             th:text="${#numbers.formatInteger(sp.giaBan, 0, 'POINT')} + ' ₫'">0 ₫</del>
+                                    </td>
+                                    <td class="canh-giua" data-nhan="Tồn">
+                                        <span class="the-nhan" th:text="${sp.soLuongTon}"
+                                              th:classappend="${sp.soLuongTon == 0} ? 'the-nhan--do' : (${sp.soLuongTon <= 5} ? 'the-nhan--vang' : '')">0</span>
+                                    </td>
+                                    <td data-nhan="Trạng thái">
+                                        <div class="o-trang-thai">
+                                            <span class="the-nhan the-nhan--ok" th:if="${sp.dangBan}">Đang bán</span>
+                                            <span class="the-nhan the-nhan--tat" th:unless="${sp.dangBan}">Ngừng bán</span>
+                                            <form th:action="@{'/admin/san-pham/doi-trang-thai/' + ${sp.id}}" method="post">
+                                                <button class="nut nut--nho" type="submit"
+                                                        th:text="${sp.dangBan} ? 'Ngừng bán' : 'Mở bán lại'">Ngừng bán</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{'/admin/san-pham/sua/' + ${sp.id}}">Sửa</a>
+                                            <form th:action="@{'/admin/san-pham/xoa/' + ${sp.id}}" method="post"
+                                                  onsubmit="return confirm('Bạn chắc chắn muốn xoá sản phẩm này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <nav class="trang" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
+                            <a class="trang__nut" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
+                               th:href="@{'/admin/san-pham?' + ${thamSoLoc} + 'trang=' + ${ketQua.trangHienTai - 1}}">&lsaquo;</a>
+                            <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut"
+                               th:classappend="${so == ketQua.trangHienTai} ? 'dang-chon'"
+                               th:attr="aria-current=${so == ketQua.trangHienTai} ? 'page' : null"
+                               th:href="@{'/admin/san-pham?' + ${thamSoLoc} + 'trang=' + ${so}}" th:text="${so}">1</a>
+                            <a class="trang__nut" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
+                               th:href="@{'/admin/san-pham?' + ${thamSoLoc} + 'trang=' + ${ketQua.trangHienTai + 1}}">&rsaquo;</a>
+                        </nav>
+                    </div>
+
+                    <div class="trong" th:if="${ketQua.trong}">
+                        <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                        <p th:if="${!#strings.isEmpty(thamSoLoc)}">Không có sản phẩm nào khớp với bộ lọc đang chọn.</p>
+                        <p th:if="${#strings.isEmpty(thamSoLoc)}">Chưa có sản phẩm nào.</p>
+                        <a class="nut nut--dac" th:href="@{/admin/san-pham/them}">Thêm sản phẩm</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
