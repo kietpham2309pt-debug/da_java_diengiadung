@@ -33,8 +33,11 @@
 .thanh-loc{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:20px}
 .thanh-loc form{display:flex; flex-wrap:wrap; gap:10px; align-items:center; flex:1 1 260px; min-width:0}
 .thanh-loc input[type="search"],
-.thanh-loc input[type="text"]{flex:1 1 160px; min-width:0; max-width:420px; padding:11px 14px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px}
-.thanh-loc input:focus{outline:none; border-color:var(--vien-sang)}
+.thanh-loc input[type="text"],
+.thanh-loc input[type="password"]{flex:1 1 160px; min-width:0; max-width:420px; padding:11px 14px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px}
+.thanh-loc select{flex:0 1 220px; min-width:0; padding:11px 36px 11px 14px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px; color-scheme:dark; appearance:none; background-image:linear-gradient(45deg,transparent 50%,var(--chu-mo) 50%),linear-gradient(135deg,var(--chu-mo) 50%,transparent 50%); background-position:calc(100% - 20px) 20px,calc(100% - 14px) 20px; background-size:6px 6px; background-repeat:no-repeat}
+.thanh-loc input:hover,.thanh-loc select:hover{border-color:var(--vien-sang)}
+.thanh-loc input:focus,.thanh-loc select:focus{outline:none; border-color:var(--dong)}
 
 .cuon-ngang{overflow-x:auto}
 .cuon-ngang .bang-dl{min-width:620px}
@@ -59,3 +62,21 @@
 .ma-mo{font-size:12.5px; letter-spacing:.04em; color:var(--chu-mo)}
 .canh-giua{text-align:center}
 .canh-phai{text-align:right}
+
+.sp__het{position:absolute; left:10px; bottom:10px; padding:4px 10px; border:1px solid var(--vien-sang); background:rgba(19,19,19,.85); font-size:11.5px; letter-spacing:.06em; color:var(--chu-nhat)}
+.ct__con--het b{background:var(--do)}
+.loc__muc.dang-chon{color:var(--dong)}
+.loc__muc .ic-dm{width:18px; height:18px; flex:none}
+.dong-phu{display:block; margin-top:4px}
+
+.anh-hien-tai{display:flex; align-items:center; gap:16px; margin-bottom:12px}
+.anh-hien-tai img{flex:none; width:96px; height:96px; object-fit:cover; border:1px solid var(--vien); background:var(--nen-luoi)}
+.anh-hien-tai .o-tich{margin-top:10px}
+.o-nhap input[type="file"]{width:100%; padding:11px 13px; border:1px dashed var(--vien-sang); background:var(--nen); color:var(--chu-nhat); font:inherit; font-size:14px; cursor:pointer}
+.o-nhap input[type="file"]:hover{border-color:var(--dong)}
+.o-nhap input[type="file"]::file-selector-button{margin-right:14px; padding:8px 16px; border:1px solid var(--dong); background:transparent; color:var(--dong); font:inherit; font-size:13px; cursor:pointer}
+.bang-sp .bang-dl__anh .sp__anh{width:56px}
+.bang-sp td.o-ten{white-space:normal; min-width:200px}
+.bang-sp .o-ten a{color:var(--chu)}
+.bang-sp .o-ten a:hover{color:var(--dong)}
+.o-trang-thai{display:flex; flex-direction:column; align-items:flex-start; gap:8px}

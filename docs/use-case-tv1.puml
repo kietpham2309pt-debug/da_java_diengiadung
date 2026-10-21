@@ -1,0 +1,42 @@
+@startuml
+!pragma layout smetana
+left to right direction
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam packageStyle rectangle
+
+actor "Khách" as Khach
+actor "Khách hàng" as KhachHang
+actor "Quản trị viên" as QuanTri
+
+rectangle "Tài khoản và phân quyền (TV1)" {
+  usecase "Đăng ký tài khoản" as UC1
+  usecase "Đăng nhập" as UC2
+  usecase "Đăng xuất" as UC3
+  usecase "Kiểm tra quyền quản trị" as UC4
+  usecase "Xem và tìm tài khoản" as UC5
+  usecase "Khoá hoặc mở khoá tài khoản" as UC6
+  usecase "Đặt lại mật khẩu" as UC7
+}
+
+Khach --> UC1
+Khach --> UC2
+
+KhachHang --> UC3
+
+QuanTri --> UC3
+QuanTri --> UC5
+QuanTri --> UC6
+QuanTri --> UC7
+
+KhachHang --|> Khach
+QuanTri --|> Khach
+
+UC5 ..> UC4 : <<include>>
+UC6 ..> UC4 : <<include>>
+UC7 ..> UC4 : <<include>>
+@enduml

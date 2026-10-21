@@ -58,6 +58,57 @@
         </div>
     </section>
 
+    <section class="muc muc--vien">
+        <div class="khung">
+            <div class="dau-sp">
+                <span class="nhan">Ưu đãi trong tuần</span>
+                <h2 class="dau-sp__td hien-dan">Đang giảm giá</h2>
+                <p class="dau-sp__mt">Những thiết bị đang có mức giảm sâu nhất, giá đã gồm VAT
+                    và lắp đặt miễn phí tại nhà.</p>
+            </div>
+
+            <div class="luoi-sp hien-dan-nhom" th:unless="${#lists.isEmpty(sanPhamGiamGia)}">
+                <th:block th:each="sp : ${sanPhamGiamGia}">
+                    <a th:replace="~{layout/the-san-pham :: theSanPham(${sp})}"></a>
+                </th:block>
+            </div>
+
+            <div class="trong" th:if="${#lists.isEmpty(sanPhamGiamGia)}">
+                <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                <p>Hiện chưa có sản phẩm nào đang giảm giá.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien">
+        <div class="khung">
+            <div class="dau-sp">
+                <span class="nhan">Hàng mới về</span>
+                <h2 class="dau-sp__td hien-dan">Sản phẩm mới</h2>
+                <p class="dau-sp__mt">Các mẫu vừa lên kệ ở Bep Nè, đủ hàng chính hãng và bảo hành
+                    theo đúng sổ của hãng.</p>
+            </div>
+
+            <div class="luoi-sp hien-dan-nhom" th:unless="${#lists.isEmpty(sanPhamMoi)}">
+                <th:block th:each="sp : ${sanPhamMoi}">
+                    <a th:replace="~{layout/the-san-pham :: theSanPham(${sp})}"></a>
+                </th:block>
+            </div>
+
+            <div class="trong" th:if="${#lists.isEmpty(sanPhamMoi)}">
+                <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                <p>Cửa hàng chưa có sản phẩm nào đang bán.</p>
+            </div>
+
+            <div class="muc__chan">
+                <a class="nut nut--dac" th:href="@{/san-pham(sapXep='moi-nhat')}">
+                    Xem tất cả sản phẩm
+                    <svg class="ic ic--nho"><use xlink:href="#ic-mui-ten-phai"></use></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <section class="muc muc--dl">
         <div class="khung">
             <div class="dau-sp dau-sp--giua">
@@ -72,9 +123,11 @@
                 <div class="dai-lo__luot" th:each="luot : ${#numbers.sequence(0, 1)}"
                      th:attr="aria-hidden=${luot == 1} ? 'true' : 'false'">
                     <th:block th:each="lap : ${#numbers.sequence(0, 1)}">
-                        <span class="dai-lo__o" th:each="hang : ${danhSachThuongHieu}">
+                        <a class="dai-lo__o" th:each="hang : ${danhSachThuongHieu}"
+                           th:href="@{/san-pham(hang=${hang.id})}"
+                           th:attr="tabindex=${luot == 1} ? '-1' : null, aria-label='Xem sản phẩm ' + ${hang.tenThuongHieu}">
                             <span class="dai-lo__chu" th:text="${hang.tenThuongHieu}">Bosch</span>
-                        </span>
+                        </a>
                     </th:block>
                 </div>
             </div>
