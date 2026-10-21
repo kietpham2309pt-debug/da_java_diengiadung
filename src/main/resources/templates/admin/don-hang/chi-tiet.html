@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Chi tiết đơn hàng', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/don-hang}">Đơn hàng</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Chi tiết</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('don-hang')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>
+                                Chi tiết đơn hàng
+                                <span th:text="'#' + ${donHang.id}">#1</span>
+                            </h1>
+                            <p>Xem thông tin nhận hàng, sản phẩm và xử lý đơn hàng.</p>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="khoi">
+                        <h2>Thông tin đơn hàng</h2>
+
+                        <p>
+                            <strong>Mã đơn:</strong>
+                            <span th:text="'#' + ${donHang.id}">#1</span>
+                        </p>
+
+                        <p>
+                            <strong>Ngày đặt:</strong>
+                            <span th:text="${donHang.ngayDat != null
+                                ? #temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')
+                                : 'Chưa có thông tin'}">21/10/2026 10:30</span>
+                        </p>
+
+                        <p>
+                            <strong>Trạng thái:</strong>
+                            <span class="the-nhan"
+                                  th:classappend="${donHang.trangThai == 'HOAN_THANH'} ? ' the-nhan--ok' :
+                                    (${donHang.trangThai == 'DA_HUY'} ? ' the-nhan--do' :
+                                    (${donHang.trangThai == 'CHO_XAC_NHAN'} ? ' the-nhan--vang' : ''))"
+                                  th:text="${donHang.tenTrangThai}">
+                                Chờ xác nhận
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="khoi">
+                        <h2>Thông tin người nhận</h2>
+
+                        <p>
+                            <strong>Họ tên:</strong>
+                            <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span>
+                        </p>
+
+                        <p>
+                            <strong>Số điện thoại:</strong>
+                            <span th:text="${donHang.soDienThoaiNhan}">0900000000</span>
+                        </p>
+
+                        <p>
+                            <strong>Địa chỉ giao hàng:</strong>
+                            <span th:text="${donHang.diaChiGiao}">Địa chỉ nhận hàng</span>
+                        </p>
+
+                        <p>
+                            <strong>Ghi chú:</strong>
+                            <span th:text="${donHang.ghiChu != null and !donHang.ghiChu.isBlank()
+                                ? donHang.ghiChu : 'Không có'}">Không có</span>
+                        </p>
+                    </div>
+
+                    <div class="khoi">
+                        <h2>Sản phẩm trong đơn</h2>
+
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th class="canh-phai">Đơn giá</th>
+                                    <th class="canh-phai">Số lượng</th>
+                                    <th class="canh-phai">Thành tiền</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="chiTiet : ${donHang.danhSachChiTiet}">
+                                    <td th:text="${chiTiet.sanPham != null
+                                        ? chiTiet.sanPham.tenSanPham
+                                        : 'Sản phẩm không còn tồn tại'}">
+                                        Tên sản phẩm
+                                    </td>
+
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatDecimal(
+                                            chiTiet.donGia != null ? chiTiet.donGia : 0,
+                                            0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                        1.000.000 đ
+                                    </td>
+
+                                    <td class="canh-phai"
+                                        th:text="${chiTiet.soLuong}">1</td>
+
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatDecimal(
+                                            chiTiet.thanhTien, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                        1.000.000 đ
+                                    </td>
+                                </tr>
+
+                                <tr th:if="${#lists.isEmpty(donHang.danhSachChiTiet)}">
+                                    <td colspan="4">Đơn hàng chưa có chi tiết sản phẩm.</td>
+                                </tr>
+                                </tbody>
+
+                                <tfoot>
+                                <tr>
+                                    <th colspan="3">Tổng tiền đơn hàng</th>
+                                    <th class="canh-phai"
+                                        th:text="${#numbers.formatDecimal(
+                                            donHang.tongTien != null ? donHang.tongTien : 0,
+                                            0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                        1.000.000 đ
+                                    </th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <h2>Xử lý đơn hàng</h2>
+                        <form th:if="${donHang.trangThai == 'CHO_XAC_NHAN'}"
+                              th:action="@{/admin/don-hang/{id}/cap-nhat-trang-thai(id=${donHang.id})}"
+                              method="post">
+                            <input type="hidden" name="trangThai" value="DA_XAC_NHAN">
+                            <button class="nut" type="submit">
+                                Xác nhận đơn hàng
+                            </button>
+                        </form>
+
+                        <form th:if="${donHang.trangThai == 'DA_XAC_NHAN'}"
+                              th:action="@{/admin/don-hang/{id}/cap-nhat-trang-thai(id=${donHang.id})}"
+                              method="post">
+                            <input type="hidden" name="trangThai" value="DANG_GIAO">
+                            <button class="nut" type="submit">
+                                Chuyển sang đang giao
+                            </button>
+                        </form>
+
+                        <form th:if="${donHang.trangThai == 'DANG_GIAO'}"
+                              th:action="@{/admin/don-hang/{id}/cap-nhat-trang-thai(id=${donHang.id})}"
+                              method="post">
+                            <input type="hidden" name="trangThai" value="HOAN_THANH">
+                            <button class="nut" type="submit">
+                                Xác nhận hoàn thành
+                            </button>
+                        </form>
+                        <form th:if="${donHang.trangThai == 'CHO_XAC_NHAN'
+                                    or donHang.trangThai == 'DA_XAC_NHAN'}"
+                              th:action="@{/admin/don-hang/{id}/huy(id=${donHang.id})}"
+                              method="post"
+                              onsubmit="return confirm('Em có chắc muốn hủy đơn hàng này không? Tồn kho sẽ được hoàn lại.');">
+                            <button class="nut nut--nho" type="submit">
+                                Hủy đơn hàng
+                            </button>
+                        </form>
+
+                        <p th:if="${donHang.trangThai == 'HOAN_THANH'}">
+                            Đơn hàng đã hoàn thành, không thể cập nhật thêm.
+                        </p>
+
+                        <p th:if="${donHang.trangThai == 'DA_HUY'}">
+                            Đơn hàng đã hủy, không thể hủy lần nữa.
+                        </p>
+                    </div>
+
+                    <p>
+                        <a class="nut nut--nho" th:href="@{/admin/don-hang}">
+                            Quay lại danh sách
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
