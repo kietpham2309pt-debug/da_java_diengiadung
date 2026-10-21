@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Thống kê', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<style>
+    .tk-bo-loc {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: end;
+        gap: 12px;
+        margin: 20px 0;
+    }
+
+    .tk-truong {
+        display: grid;
+        gap: 6px;
+    }
+
+    .tk-truong label {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .tk-truong select {
+        min-width: 130px;
+        padding: 10px 12px;
+        border: 1px solid #d8d8d8;
+        border-radius: 8px;
+        background: #fff;
+        font: inherit;
+    }
+
+    .tk-tong-quan {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+    }
+
+    .tk-the {
+        padding: 22px;
+        border: 1px solid #e5e5e5;
+        border-radius: 14px;
+        background: #fff;
+    }
+
+    .tk-the p {
+        margin: 0 0 10px;
+        color: #666;
+    }
+
+    .tk-the strong {
+        display: block;
+        font-size: clamp(22px, 3vw, 30px);
+        overflow-wrap: anywhere;
+    }
+
+    .tk-tieu-de {
+        margin: 28px 0 14px;
+    }
+
+    .tk-phu {
+        color: #666;
+        font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+        .tk-tong-quan {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Thống kê</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('thong-ke')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Thống kê</h1>
+                            <p>Doanh thu và sản phẩm bán chạy theo tháng.</p>
+                        </div>
+                    </div>
+
+                    <form class="tk-bo-loc" th:action="@{/admin/thong-ke}" method="get">
+                        <div class="tk-truong">
+                            <label for="thang">Tháng</label>
+                            <select id="thang" name="thang">
+                                <option th:each="i : ${#numbers.sequence(1, 12)}"
+                                        th:value="${i}"
+                                        th:text="${i}"
+                                        th:selected="${i == thang}">
+                                    1
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="tk-truong">
+                            <label for="nam">Năm</label>
+                            <select id="nam" name="nam">
+                                <option th:each="i : ${#numbers.sequence(namBatDau, namKetThuc)}"
+                                        th:value="${i}"
+                                        th:text="${i}"
+                                        th:selected="${i == nam}">
+                                    2026
+                                </option>
+                            </select>
+                        </div>
+
+                        <button class="nut nut--nho" type="submit">Xem thống kê</button>
+                    </form>
+
+                    <div class="tk-tong-quan">
+                        <div class="tk-the">
+                            <p>Doanh thu tháng
+                                <span th:text="${thang}">1</span>/
+                                <span th:text="${nam}">2026</span>
+                            </p>
+                            <strong th:text="${#numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                0 đ
+                            </strong>
+                        </div>
+
+                        <div class="tk-the">
+                            <p>Số đơn hoàn thành</p>
+                            <strong th:text="${soDonHoanThanh}">0</strong>
+                        </div>
+                    </div>
+
+                    <h2 class="tk-tieu-de">Top 10 sản phẩm bán chạy</h2>
+                    <p class="tk-phu">
+                        Xếp theo số lượng bán trong các đơn hoàn thành của tháng đã chọn.
+                    </p>
+
+                    <div class="khoi" th:if="${not #lists.isEmpty(sanPhamBanChay)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Mã sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th class="canh-phai">Số lượng bán</th>
+                                    <th class="canh-phai">Doanh thu</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="sp, stt : ${sanPhamBanChay}">
+                                    <td th:text="${stt.count}">1</td>
+                                    <td th:text="${sp.maSanPham}">SP001</td>
+                                    <td th:text="${sp.tenSanPham}">Tên sản phẩm</td>
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatInteger(sp.soLuongBan, 1, 'COMMA')}">
+                                        10
+                                    </td>
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatDecimal(sp.doanhThu, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                        1,000,000 đ
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="trong" th:if="${#lists.isEmpty(sanPhamBanChay)}">
+                        <p>Chưa có sản phẩm bán hoàn thành trong tháng này.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

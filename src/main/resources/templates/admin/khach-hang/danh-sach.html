@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Quản lý khách hàng', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Khách hàng</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('khach-hang')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Quản lý khách hàng</h1>
+                            <p>Danh sách và thông tin liên hệ của khách hàng.</p>
+                        </div>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/khach-hang}" method="get">
+                            <input type="search"
+                                   name="tuKhoa"
+                                   placeholder="Tìm tên, số điện thoại hoặc email"
+                                   aria-label="Tìm kiếm khách hàng"
+                                   th:value="${tuKhoa}">
+                            <button class="nut nut--nho" type="submit">Tìm kiếm</button>
+                            <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}"
+                               th:href="@{/admin/khach-hang}"
+                               class="nut nut--nho">Bỏ lọc</a>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã khách hàng</th>
+                                    <th>Họ tên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="kh : ${danhSach}">
+                                    <td th:text="${kh.id}">1</td>
+                                    <td th:text="${kh.hoTen}">Nguyễn Văn A</td>
+                                    <td th:text="${kh.soDienThoai != null and !kh.soDienThoai.isBlank() ? kh.soDienThoai : 'Chưa cập nhật'}">0900000000</td>
+                                    <td th:text="${kh.email != null and !kh.email.isBlank() ? kh.email : 'Chưa cập nhật'}">email@example.com</td>
+                                    <td th:text="${kh.diaChi != null and !kh.diaChi.isBlank() ? kh.diaChi : 'Chưa cập nhật'}">TP. Hồ Chí Minh</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Không tìm thấy khách hàng phù hợp.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

@@ -11,4 +11,7 @@ public interface DonHangService {
     List<DonHang> timTheoTrangThai(String trangThai);
 
     DonHang layTheoId(Long id);
+
+    void capNhatTrangThai(Long id, String trangThaiMoi);
+    void huyDonHang(Long id);
 }
