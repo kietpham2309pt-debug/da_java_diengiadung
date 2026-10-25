@@ -35,7 +35,7 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/thuong-hieu}" method="get">
-                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hãng..." aria-label="Từ khoá">
+                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo tên hãng..." aria-label="Từ khoá">
                             <button class="nut nut--nho" type="submit">Tìm</button>
                         </form>
                     </div>

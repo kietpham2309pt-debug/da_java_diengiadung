@@ -8,4 +8,7 @@ import java.util.List;
 public interface ThuongHieuRepository extends JpaRepository<ThuongHieu, Long> {
 
     List<ThuongHieu> findAllByOrderByTenThuongHieuAsc();
+
+
+    List<ThuongHieu> findByTenThuongHieuContainingIgnoreCaseOrderByTenThuongHieuAsc(String tuKhoa);
 }

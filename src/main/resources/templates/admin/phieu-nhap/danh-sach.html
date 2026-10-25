@@ -10,6 +10,8 @@
     <section class="muc muc--dau-trang">
         <div class="khung">
             <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
                 <a th:href="@{/admin}">Quản trị</a>
                 <span aria-hidden="true">&middot;</span>
                 <span aria-current="page">Phiếu nhập</span>
@@ -29,6 +31,8 @@
                         </div>
                     </div>
 
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
                         <div class="cuon-ngang">
                             <table class="bang-dl">
@@ -44,18 +48,26 @@
                                 <tbody>
                                 <tr th:each="item : ${danhSach}">
                                     <td><span class="the-nhan the-nhan--ok" th:text="'PN00' + ${item.id}"></span></td>
-                                    <td th:text="${#temporals.format(item.ngayNhap, 'dd/MM/yyyy HH:mm')}"></td>
-                                    <td class="o-dai" th:text="${item.nhaCungCap.tenNhaCungCap}"></td>
-                                    <td class="canh-phai"><b th:text="${#numbers.formatInteger(item.tongTien, 0, 'POINT')} + ' ₫'"></b></td>
+                                    <td th:text="${item.ngayNhap != null ? #strings.replace(#strings.substring(item.ngayNhap.toString(), 0, 16), 'T', ' ') : ''}"></td>
+                                    <td class="o-dai" th:text="${item.nhaCungCap != null ? item.nhaCungCap.tenNhaCungCap : 'Chưa xác định'}"></td>
+                                    <td class="canh-phai">
+                                        <b th:text="${#numbers.formatInteger(item.tongTien != null ? item.tongTien : 0, 1, 'POINT')} + ' ₫'"></b>
+                                    </td>
                                     <td>
                                         <div class="hang-thao-tac">
-                                            <a class="nut nut--nho" th:href="@{'/admin/phieu-nhap/sua/' + ${item.id}}">Xem chi tiết</a>
+                                            <a class="nut nut--nho" th:href="@{'/admin/phieu-nhap/xem/' + ${item.id}}">Xem chi tiết</a>
                                         </div>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                        <p>Chưa có phiếu nhập kho nào.</p>
+                        <a class="nut nut--dac" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập đầu tiên</a>
                     </div>
                 </div>
             </div>

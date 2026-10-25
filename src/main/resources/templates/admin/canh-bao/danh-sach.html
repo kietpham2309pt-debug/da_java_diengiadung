@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Cảnh báo tồn kho', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Cảnh báo tồn kho</span>
+            </nav>
+
+            <div class="qt">
+
+                <div th:replace="~{layout/fragments :: menuQuanTri('tong-quan')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 style="color: var(--do);">Sản phẩm sắp hết hàng</h1>
+                            <p>Danh sách các mặt hàng có số lượng tồn kho dưới 10 sản phẩm, cần ưu tiên lập phiếu nhập.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập ngay</a>
+                        </div>
+                    </div>
+
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã SP</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Thương hiệu</th>
+                                    <th class="canh-giua">Tồn kho</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="sp : ${danhSach}">
+                                    <td><span class="the-nhan" th:text="${sp.maSanPham}"></span></td>
+                                    <td class="o-dai">
+                                        <b th:text="${sp.tenSanPham}"></b>
+                                    </td>
+                                    <td th:text="${sp.thuongHieu.tenThuongHieu}"></td>
+                                    <td class="canh-giua">
+                                        <span style="color: var(--do); font-size: 18px; font-weight: bold;" th:text="${sp.soLuongTon}"></span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <svg class="ic ic--to" style="color: var(--xanh);"><use xlink:href="#ic-bao-hanh"></use></svg>
+                        <p>Tuyệt vời! Hiện tại không có sản phẩm nào sắp hết hàng.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.huit.diengiadung.entity.NhaCungCap;
 import vn.edu.huit.diengiadung.repository.NhaCungCapRepository;
+import vn.edu.huit.diengiadung.repository.PhieuNhapRepository;
+import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.NhaCungCapService;
 
 import java.util.List;
@@ -13,10 +15,11 @@ import java.util.List;
 public class NhaCungCapServiceImpl implements NhaCungCapService {
 
     private final NhaCungCapRepository nhaCungCapRepository;
+    private final PhieuNhapRepository phieuNhapRepository;
 
-    @Autowired
-    public NhaCungCapServiceImpl(NhaCungCapRepository nhaCungCapRepository) {
+    public NhaCungCapServiceImpl(NhaCungCapRepository nhaCungCapRepository, PhieuNhapRepository phieuNhapRepository) {
         this.nhaCungCapRepository = nhaCungCapRepository;
+        this.phieuNhapRepository = phieuNhapRepository;
     }
 
     @Override
@@ -46,6 +49,14 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     @Override
     @Transactional
     public void xoa(Long id) {
-        nhaCungCapRepository.deleteById(id);
+        NhaCungCap nhaCungCap = layTheoId(id);
+
+
+        long soPhieuNhap = phieuNhapRepository.countByNhaCungCapId(id);
+        if (soPhieuNhap > 0) {
+            throw new LoiNghiepVu("Không thể xoá! Nhà cung cấp này đã có " + soPhieuNhap + " phiếu nhập kho.");
+        }
+
+        nhaCungCapRepository.delete(nhaCungCap);
     }
 }

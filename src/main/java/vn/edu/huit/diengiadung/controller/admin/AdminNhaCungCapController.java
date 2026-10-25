@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.entity.NhaCungCap;
+import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.NhaCungCapService;
 
 import java.util.List;
@@ -58,12 +59,12 @@ public class AdminNhaCungCapController {
     }
 
     @PostMapping("/xoa/{id}")
-    public String xoa(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String xoa(@PathVariable Long id, RedirectAttributes thongBao) {
         try {
             nhaCungCapService.xoa(id);
-            redirectAttributes.addFlashAttribute("thongBao", "Đã xoá nhà cung cấp.");
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("thongBaoLoi", "Không thể xoá vì nhà cung cấp này đã có giao dịch phiếu nhập.");
+            thongBao.addFlashAttribute("thongBao", "Đã xoá nhà cung cấp thành công.");
+        } catch (LoiNghiepVu loi) {
+            thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
         }
         return "redirect:/admin/nha-cung-cap";
     }
