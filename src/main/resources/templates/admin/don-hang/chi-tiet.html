@@ -111,19 +111,16 @@
                                     </td>
 
                                     <td class="canh-phai"
-                                        th:text="${#numbers.formatDecimal(
-                                            chiTiet.donGia != null ? chiTiet.donGia : 0,
-                                            0, 'COMMA', 0, 'POINT')} + ' đ'">
-                                        1.000.000 đ
+                                        th:text="${#numbers.formatInteger(chiTiet.donGia != null ? chiTiet.donGia : 0, 1, 'POINT')} + ' ₫'">
+                                        1.000.000 ₫
                                     </td>
 
                                     <td class="canh-phai"
                                         th:text="${chiTiet.soLuong}">1</td>
 
                                     <td class="canh-phai"
-                                        th:text="${#numbers.formatDecimal(
-                                            chiTiet.thanhTien, 0, 'COMMA', 0, 'POINT')} + ' đ'">
-                                        1.000.000 đ
+                                        th:text="${#numbers.formatInteger(chiTiet.thanhTien, 1, 'POINT')} + ' ₫'">
+                                        1.000.000 ₫
                                     </td>
                                 </tr>
 
@@ -136,10 +133,8 @@
                                 <tr>
                                     <th colspan="3">Tổng tiền đơn hàng</th>
                                     <th class="canh-phai"
-                                        th:text="${#numbers.formatDecimal(
-                                            donHang.tongTien != null ? donHang.tongTien : 0,
-                                            0, 'COMMA', 0, 'POINT')} + ' đ'">
-                                        1.000.000 đ
+                                        th:text="${#numbers.formatInteger(donHang.tongTien != null ? donHang.tongTien : 0, 1, 'POINT')} + ' ₫'">
+                                        1.000.000 ₫
                                     </th>
                                 </tr>
                                 </tfoot>
@@ -179,7 +174,7 @@
                                     or donHang.trangThai == 'DA_XAC_NHAN'}"
                               th:action="@{/admin/don-hang/{id}/huy(id=${donHang.id})}"
                               method="post"
-                              onsubmit="return confirm('Em có chắc muốn hủy đơn hàng này không? Tồn kho sẽ được hoàn lại.');">
+                              onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này không? Tồn kho sẽ được hoàn lại.');">
                             <button class="nut nut--nho" type="submit">
                                 Hủy đơn hàng
                             </button>

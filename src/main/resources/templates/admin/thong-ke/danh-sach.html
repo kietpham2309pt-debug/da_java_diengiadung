@@ -6,74 +6,6 @@
 <div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
 <div th:replace="~{layout/fragments :: thanh}"></div>
 
-<style>
-    .tk-bo-loc {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: end;
-        gap: 12px;
-        margin: 20px 0;
-    }
-
-    .tk-truong {
-        display: grid;
-        gap: 6px;
-    }
-
-    .tk-truong label {
-        font-size: 14px;
-        font-weight: 600;
-    }
-
-    .tk-truong select {
-        min-width: 130px;
-        padding: 10px 12px;
-        border: 1px solid #d8d8d8;
-        border-radius: 8px;
-        background: #fff;
-        font: inherit;
-    }
-
-    .tk-tong-quan {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin: 20px 0;
-    }
-
-    .tk-the {
-        padding: 22px;
-        border: 1px solid #e5e5e5;
-        border-radius: 14px;
-        background: #fff;
-    }
-
-    .tk-the p {
-        margin: 0 0 10px;
-        color: #666;
-    }
-
-    .tk-the strong {
-        display: block;
-        font-size: clamp(22px, 3vw, 30px);
-        overflow-wrap: anywhere;
-    }
-
-    .tk-tieu-de {
-        margin: 28px 0 14px;
-    }
-
-    .tk-phu {
-        color: #666;
-        font-size: 14px;
-    }
-
-    @media (max-width: 640px) {
-        .tk-tong-quan {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
 
 <main>
     <section class="muc muc--dau-trang">
@@ -97,58 +29,40 @@
                         </div>
                     </div>
 
-                    <form class="tk-bo-loc" th:action="@{/admin/thong-ke}" method="get">
-                        <div class="tk-truong">
-                            <label for="thang">Tháng</label>
-                            <select id="thang" name="thang">
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/thong-ke}" method="get">
+                            <select name="thang" aria-label="Chọn tháng">
                                 <option th:each="i : ${#numbers.sequence(1, 12)}"
                                         th:value="${i}"
-                                        th:text="${i}"
-                                        th:selected="${i == thang}">
-                                    1
-                                </option>
+                                        th:text="'Tháng ' + ${i}"
+                                        th:selected="${i == thang}">Tháng 1</option>
                             </select>
-                        </div>
-
-                        <div class="tk-truong">
-                            <label for="nam">Năm</label>
-                            <select id="nam" name="nam">
+                            <select name="nam" aria-label="Chọn năm">
                                 <option th:each="i : ${#numbers.sequence(namBatDau, namKetThuc)}"
                                         th:value="${i}"
-                                        th:text="${i}"
-                                        th:selected="${i == nam}">
-                                    2026
-                                </option>
+                                        th:text="'Năm ' + ${i}"
+                                        th:selected="${i == nam}">Năm 2026</option>
                             </select>
+                            <button class="nut nut--nho" type="submit">Xem thống kê</button>
+                        </form>
+                    </div>
+
+                    <div class="o-so-ds">
+                        <div class="o-so o-so--nhac">
+                            <div class="o-so__nhan" th:text="'Doanh thu tháng ' + ${thang} + '/' + ${nam}">Doanh thu tháng</div>
+                            <div class="o-so__gt" th:text="${#numbers.formatInteger(doanhThu, 1, 'POINT')} + ' ₫'">0 ₫</div>
                         </div>
-
-                        <button class="nut nut--nho" type="submit">Xem thống kê</button>
-                    </form>
-
-                    <div class="tk-tong-quan">
-                        <div class="tk-the">
-                            <p>Doanh thu tháng
-                                <span th:text="${thang}">1</span>/
-                                <span th:text="${nam}">2026</span>
-                            </p>
-                            <strong th:text="${#numbers.formatDecimal(doanhThu, 0, 'COMMA', 0, 'POINT')} + ' đ'">
-                                0 đ
-                            </strong>
-                        </div>
-
-                        <div class="tk-the">
-                            <p>Số đơn hoàn thành</p>
-                            <strong th:text="${soDonHoanThanh}">0</strong>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Số đơn hoàn thành</div>
+                            <div class="o-so__gt" th:text="${soDonHoanThanh}">0</div>
                         </div>
                     </div>
 
-                    <h2 class="tk-tieu-de">Top 10 sản phẩm bán chạy</h2>
-                    <p class="tk-phu">
-                        Xếp theo số lượng bán trong các đơn hoàn thành của tháng đã chọn.
-                    </p>
+                    <div class="khoi">
+                        <h2>Top 10 sản phẩm bán chạy</h2>
+                        <p>Xếp theo số lượng bán trong các đơn hoàn thành của tháng đã chọn.</p>
 
-                    <div class="khoi" th:if="${not #lists.isEmpty(sanPhamBanChay)}">
-                        <div class="cuon-ngang">
+                        <div class="cuon-ngang" th:if="${not #lists.isEmpty(sanPhamBanChay)}">
                             <table class="bang-dl">
                                 <thead>
                                 <tr>
@@ -166,21 +80,22 @@
                                     <td th:text="${sp.maSanPham}">SP001</td>
                                     <td th:text="${sp.tenSanPham}">Tên sản phẩm</td>
                                     <td class="canh-phai"
-                                        th:text="${#numbers.formatInteger(sp.soLuongBan, 1, 'COMMA')}">
+                                        th:text="${#numbers.formatInteger(sp.soLuongBan, 1, 'POINT')}">
                                         10
                                     </td>
                                     <td class="canh-phai"
-                                        th:text="${#numbers.formatDecimal(sp.doanhThu, 0, 'COMMA', 0, 'POINT')} + ' đ'">
-                                        1,000,000 đ
+                                        th:text="${#numbers.formatInteger(sp.doanhThu, 1, 'POINT')} + ' ₫'">
+                                        1.000.000 ₫
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
 
-                    <div class="trong" th:if="${#lists.isEmpty(sanPhamBanChay)}">
-                        <p>Chưa có sản phẩm bán hoàn thành trong tháng này.</p>
+                        <div class="trong" th:if="${#lists.isEmpty(sanPhamBanChay)}">
+                            <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                            <p>Chưa có sản phẩm bán hoàn thành trong tháng này.</p>
+                        </div>
                     </div>
                 </div>
             </div>

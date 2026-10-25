@@ -98,7 +98,7 @@
                                     </td>
 
                                     <td class="canh-phai"
-                                        th:text="${#numbers.formatDecimal(donHang.tongTien, 0, 'COMMA', 0, 'POINT')} + ' đ'">
+                                        th:text="${#numbers.formatInteger(donHang.tongTien, 1, 'POINT')} + ' ₫'">
                                         1,000,000 đ
                                     </td>
 
