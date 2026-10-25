@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Đơn hàng của tôi', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Đơn hàng của tôi', 'Theo dõi các đơn bạn đã đặt', 'banner-tai-khoan.jpg', 'Đơn hàng của tôi')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+            <div class="hang-nut">
+                <a class="nut" th:href="@{/ho-so}">Hồ sơ của tôi</a>
+                <a class="nut" th:href="@{/gio-hang}">Giỏ hàng</a>
+            </div>
+
+            <div class="trong" th:if="${#lists.isEmpty(danhSachDon)}">
+                <svg class="ic ic--to"><use xlink:href="#ic-gio-hang"></use></svg>
+                <p>Bạn chưa có đơn hàng nào.</p>
+                <a class="nut nut--dac" th:href="@{/san-pham}">Bắt đầu mua hàng</a>
+            </div>
+
+            <div class="cuon-ngang" th:unless="${#lists.isEmpty(danhSachDon)}">
+                <table class="bang-dl">
+                    <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Ngày đặt</th>
+                        <th class="canh-giua">Tổng tiền</th>
+                        <th class="canh-giua">Trạng thái</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="donHang : ${danhSachDon}">
+                        <td th:text="'#' + ${donHang.id}">#1</td>
+                        <td th:text="${#temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')}">21/10/2026 10:30</td>
+                        <td class="canh-giua" th:text="${#numbers.formatInteger(donHang.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</td>
+                        <td class="canh-giua">
+                            <span class="the-nhan"
+                                  th:classappend="${donHang.trangThai == 'HOAN_THANH'} ? ' the-nhan--ok' :
+                                    (${donHang.trangThai == 'DA_HUY'} ? ' the-nhan--do' :
+                                    (${donHang.trangThai == 'CHO_XAC_NHAN'} ? ' the-nhan--vang' : ''))"
+                                  th:text="${donHang.tenTrangThai}">Chờ xác nhận</span>
+                        </td>
+                        <td class="canh-giua">
+                            <a class="nut nut--nho" th:href="@{/don-hang/{id}(id=${donHang.id})}">Xem</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

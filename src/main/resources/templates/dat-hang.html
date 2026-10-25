@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Đặt hàng', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Đặt hàng', 'Nhập thông tin nhận hàng để hoàn tất đơn', 'banner-gio-hang.jpg', 'Đặt hàng')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+            <div class="khoi">
+                <h2>Đơn hàng của bạn</h2>
+                <div class="cuon-ngang">
+                    <table class="bang-dl">
+                        <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th class="canh-giua">Số lượng</th>
+                            <th class="canh-giua">Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="dong : ${chiTiet.danhSachDong}">
+                            <td class="o-dai" th:text="${dong.sanPham.tenSanPham}">Tên sản phẩm</td>
+                            <td class="canh-giua" th:text="${dong.soLuong}">1</td>
+                            <td class="canh-giua" th:text="${#numbers.formatInteger(dong.thanhTien, 0, 'POINT')} + ' ₫'">0 ₫</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>
+                    Tổng cộng:
+                    <b th:text="${#numbers.formatInteger(chiTiet.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</b>
+                </p>
+                <p><a th:href="@{/gio-hang}">Sửa giỏ hàng</a></p>
+            </div>
+
+            <div class="khoi">
+                <h2>Thông tin nhận hàng</h2>
+                <form th:action="@{/dat-hang}" th:object="${thongTin}" method="post">
+                    <div class="o-nhap">
+                        <label for="tenNguoiNhan">Họ tên người nhận</label>
+                        <input type="text" id="tenNguoiNhan" th:field="*{tenNguoiNhan}" autocomplete="name">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('tenNguoiNhan')}" th:errors="*{tenNguoiNhan}"></span>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="soDienThoaiNhan">Số điện thoại</label>
+                        <input type="tel" id="soDienThoaiNhan" th:field="*{soDienThoaiNhan}" autocomplete="tel">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoaiNhan')}" th:errors="*{soDienThoaiNhan}"></span>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="diaChiGiao">Địa chỉ giao hàng</label>
+                        <input type="text" id="diaChiGiao" th:field="*{diaChiGiao}" autocomplete="street-address">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('diaChiGiao')}" th:errors="*{diaChiGiao}"></span>
+                    </div>
+
+                    <div class="o-nhap">
+                        <label for="ghiChu">Ghi chú</label>
+                        <input type="text" id="ghiChu" th:field="*{ghiChu}">
+                        <span class="goi-y">Không bắt buộc.</span>
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('ghiChu')}" th:errors="*{ghiChu}"></span>
+                    </div>
+
+                    <div class="hang-nut">
+                        <button class="nut nut--dac" type="submit">Xác nhận đặt hàng</button>
+                        <a class="nut" th:href="@{/gio-hang}">Quay lại giỏ hàng</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
