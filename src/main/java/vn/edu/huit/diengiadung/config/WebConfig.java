@@ -30,6 +30,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String duongDan = Paths.get(thuMucAnh).toAbsolutePath().toUri().toString();
+        if (!duongDan.endsWith("/")) {
+            duongDan += "/";
+        }
         registry.addResourceHandler("/uploads/**").addResourceLocations(duongDan);
     }
 }
