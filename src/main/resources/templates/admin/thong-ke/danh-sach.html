@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Thống kê', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Thống kê</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('thong-ke')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Thống kê</h1>
+                            <p>Doanh thu và sản phẩm bán chạy theo tháng.</p>
+                        </div>
+                    </div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/thong-ke}" method="get">
+                            <select name="thang" aria-label="Chọn tháng">
+                                <option th:each="i : ${#numbers.sequence(1, 12)}"
+                                        th:value="${i}"
+                                        th:text="'Tháng ' + ${i}"
+                                        th:selected="${i == thang}">Tháng 1</option>
+                            </select>
+                            <select name="nam" aria-label="Chọn năm">
+                                <option th:each="i : ${#numbers.sequence(namBatDau, namKetThuc)}"
+                                        th:value="${i}"
+                                        th:text="'Năm ' + ${i}"
+                                        th:selected="${i == nam}">Năm 2026</option>
+                            </select>
+                            <button class="nut nut--nho" type="submit">Xem thống kê</button>
+                        </form>
+                    </div>
+
+                    <div class="o-so-ds">
+                        <div class="o-so o-so--nhac">
+                            <div class="o-so__nhan" th:text="'Doanh thu tháng ' + ${thang} + '/' + ${nam}">Doanh thu tháng</div>
+                            <div class="o-so__gt" th:text="${#numbers.formatInteger(doanhThu, 1, 'POINT')} + ' ₫'">0 ₫</div>
+                        </div>
+                        <div class="o-so">
+                            <div class="o-so__nhan">Số đơn hoàn thành</div>
+                            <div class="o-so__gt" th:text="${soDonHoanThanh}">0</div>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <h2>Top 10 sản phẩm bán chạy</h2>
+                        <p>Xếp theo số lượng bán trong các đơn hoàn thành của tháng đã chọn.</p>
+
+                        <div class="cuon-ngang" th:if="${not #lists.isEmpty(sanPhamBanChay)}">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Hạng</th>
+                                    <th>Mã sản phẩm</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th class="canh-phai">Số lượng bán</th>
+                                    <th class="canh-phai">Doanh thu</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr th:each="sp, stt : ${sanPhamBanChay}">
+                                    <td th:text="${stt.count}">1</td>
+                                    <td th:text="${sp.maSanPham}">SP001</td>
+                                    <td th:text="${sp.tenSanPham}">Tên sản phẩm</td>
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatInteger(sp.soLuongBan, 1, 'POINT')}">
+                                        10
+                                    </td>
+                                    <td class="canh-phai"
+                                        th:text="${#numbers.formatInteger(sp.doanhThu, 1, 'POINT')} + ' ₫'">
+                                        1.000.000 ₫
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="trong" th:if="${#lists.isEmpty(sanPhamBanChay)}">
+                            <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                            <p>Chưa có sản phẩm bán hoàn thành trong tháng này.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
