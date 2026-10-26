@@ -29,7 +29,9 @@ mvnw spring-boot:run
 
 4. Mở trình duyệt: <http://localhost:8080>
 
-Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp và 25 sản phẩm mẫu.
+Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp và 36 sản phẩm mẫu
+(35 đang bán, 1 ngừng bán; có sản phẩm hết hàng và sắp hết hàng để thử giao diện).
+Ảnh sản phẩm do quản trị viên upload được lưu ở thư mục `uploads/` cạnh project, thư mục này không đưa lên git.
 
 ## Tài khoản có sẵn
 
@@ -81,8 +83,9 @@ Mỗi thành viên làm tiếp phần của mình theo đúng khuôn của `Loai
 
 - **TV2**: thương hiệu, nhà cung cấp, phiếu nhập và cập nhật tồn kho, cảnh báo sắp hết hàng.
 - **TV3**: quản lý sản phẩm có upload ảnh; trang chủ, lọc, sắp xếp, phân trang, chi tiết sản phẩm.
+  Đã làm ở nhánh `tv3-san-pham`, mô tả trong `docs/tv3/`.
 - **TV4**: giỏ hàng lưu trong session, đặt hàng, lịch sử đơn, huỷ đơn, hồ sơ khách hàng.
-- **TV5**: danh sách và chi tiết đơn hàng, cập nhật trạng thái, huỷ đơn kèm hoàn tồn kho, quản lý khách hàng, thống kê.
+- **TV5**: đã có danh sách đơn hàng và lọc theo trạng thái (PR #1). Còn lại: chi tiết đơn, cập nhật trạng thái, huỷ đơn kèm hoàn tồn kho, quản lý khách hàng, thống kê.
 
 ## Quy ước làm việc
 
