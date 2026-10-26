@@ -10,6 +10,8 @@
     <section class="muc muc--dau-trang">
         <div class="khung">
             <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
                 <a th:href="@{/admin}">Quản trị</a>
                 <span aria-hidden="true">&middot;</span>
                 <a th:href="@{/admin/phieu-nhap}">Phiếu nhập</a>
@@ -80,12 +82,12 @@
                                 </table>
                             </div>
 
-                            <div style="margin-top: 24px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--vien); padding-top: 20px;">
-                                <div style="font-size: 16px;">
-                                    Tổng tiền phiếu nhập: <b id="tongTienPhieu" style="font-size: 24px; color: var(--dong); margin-left: 8px;">0 ₫</b>
+                            <div class="tong-phieu">
+                                <div>
+                                    Tổng tiền phiếu nhập: <b id="tongTienPhieu" class="tong-phieu__so">0 ₫</b>
                                     <input type="hidden" id="tongTienHidden" th:field="*{tongTien}" value="0">
                                 </div>
-                                <div class="hang-nut" style="margin-top: 0;">
+                                <div class="hang-nut">
                                     <button class="nut nut--dac" type="button" onclick="kiemTraVaSubmit()">Lưu phiếu nhập</button>
                                     <a class="nut" th:href="@{/admin/phieu-nhap}">Quay lại</a>
                                 </div>

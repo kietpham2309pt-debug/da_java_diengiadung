@@ -50,6 +50,9 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     @Transactional
     public void xoa(Long id) {
         NhaCungCap nhaCungCap = layTheoId(id);
+        if (nhaCungCap == null) {
+            throw new LoiNghiepVu("Không tìm thấy nhà cung cấp có mã " + id);
+        }
 
 
         long soPhieuNhap = phieuNhapRepository.countByNhaCungCapId(id);

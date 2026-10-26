@@ -10,6 +10,8 @@
     <section class="muc muc--dau-trang">
         <div class="khung">
             <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
                 <a th:href="@{/admin}">Quản trị</a>
                 <span aria-hidden="true">&middot;</span>
                 <span aria-current="page">Cảnh báo tồn kho</span>
@@ -17,12 +19,12 @@
 
             <div class="qt">
 
-                <div th:replace="~{layout/fragments :: menuQuanTri('tong-quan')}"></div>
+                <div th:replace="~{layout/fragments :: menuQuanTri('canh-bao')}"></div>
 
                 <div>
                     <div class="qt-dau">
                         <div>
-                            <h1 style="color: var(--do);">Sản phẩm sắp hết hàng</h1>
+                            <h1>Sản phẩm sắp hết hàng</h1>
                             <p>Danh sách các mặt hàng có số lượng tồn kho dưới 10 sản phẩm, cần ưu tiên lập phiếu nhập.</p>
                         </div>
                         <div class="qt-dau__nut">

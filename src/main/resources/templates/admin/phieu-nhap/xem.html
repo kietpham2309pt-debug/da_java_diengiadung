@@ -33,10 +33,10 @@
             <div class="khoi__dau">
               <h2>Thông tin chung</h2>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="hai-cot">
               <div>
                 <p><strong>Nhà cung cấp:</strong> <span th:text="${phieuNhap.nhaCungCap != null ? phieuNhap.nhaCungCap.tenNhaCungCap : 'Chưa xác định'}"></span></p>
-                <p><strong>Ngày nhập:</strong> <span th:text="${phieuNhap.ngayNhap != null ? #strings.replace(#strings.substring(phieuNhap.ngayNhap.toString(), 0, 16), 'T', ' ') : ''}"></span></p>
+                <p><strong>Ngày nhập:</strong> <span th:text="${phieuNhap.ngayNhap != null ? #temporals.format(phieuNhap.ngayNhap, 'dd/MM/yyyy HH:mm') : ''}"></span></p>
               </div>
               <div>
                 <p><strong>Ghi chú:</strong> <span th:text="${phieuNhap.ghiChu != null and !phieuNhap.ghiChu.isBlank() ? phieuNhap.ghiChu : 'Không có ghi chú'}"></span></p>
@@ -70,8 +70,8 @@
                 </tbody>
               </table>
             </div>
-            <div style="margin-top: 24px; text-align: right; border-top: 1px solid var(--vien); padding-top: 20px;">
-              <p style="font-size: 16px;">Tổng tiền phiếu nhập: <b style="font-size: 24px; color: var(--dong); margin-left: 8px;" th:text="${#numbers.formatInteger(phieuNhap.tongTien != null ? phieuNhap.tongTien : 0, 1, 'POINT')} + ' ₫'"></b></p>
+            <div class="tong-phieu tong-phieu--phai">
+              <p>Tổng tiền phiếu nhập: <b class="tong-phieu__so" th:text="${#numbers.formatInteger(phieuNhap.tongTien != null ? phieuNhap.tongTien : 0, 1, 'POINT')} + ' ₫'"></b></p>
             </div>
             <div class="hang-nut">
               <a class="nut" th:href="@{/admin/phieu-nhap}">Quay lại</a>

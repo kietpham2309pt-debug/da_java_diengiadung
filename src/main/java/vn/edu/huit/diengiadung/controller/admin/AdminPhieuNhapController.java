@@ -3,6 +3,7 @@ package vn.edu.huit.diengiadung.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.entity.NhaCungCap;
@@ -68,7 +69,11 @@ public class AdminPhieuNhapController {
     }
 
     @PostMapping("/luu")
-    public String luuPhieuNhap(@ModelAttribute("phieuNhap") PhieuNhap phieuNhap, RedirectAttributes redirectAttributes) {
+    public String luuPhieuNhap(@ModelAttribute("phieuNhap") PhieuNhap phieuNhap, BindingResult ketQua, RedirectAttributes redirectAttributes) {
+        if (ketQua.hasErrors()) {
+            redirectAttributes.addFlashAttribute("thongBaoLoi", "Số lượng và giá nhập phải là số nguyên.");
+            return "redirect:/admin/phieu-nhap/them";
+        }
         try {
 
             phieuNhapService.luuQuyTrinhNhapHang(phieuNhap);
