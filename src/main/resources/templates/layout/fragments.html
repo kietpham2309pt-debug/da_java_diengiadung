@@ -69,6 +69,10 @@
             <a class="dh-nut" th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}">Đăng nhập</a>
             <a class="dh-nut" th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}"
                th:href="@{/admin}">Quản trị</a>
+            <a class="dh-nut" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/don-hang}">Đơn hàng</a>
+            <a class="dh-nut" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/ho-so}">Hồ sơ</a>
             <a class="dh-nut" th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}"
                th:text="'Đăng xuất (' + ${taiKhoanHienTai.hoTen} + ')'">Đăng xuất</a>
         </nav>
@@ -210,6 +214,10 @@
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}">Đăng nhập</a>
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}"
                th:href="@{/admin}">Trang quản trị</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/don-hang}">Đơn hàng của tôi</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/ho-so}">Hồ sơ</a>
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}">Đăng xuất</a>
         </div>
     </div>

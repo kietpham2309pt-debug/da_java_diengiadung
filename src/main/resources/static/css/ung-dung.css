@@ -54,6 +54,8 @@
 .nut--do:hover{background:rgba(217,83,79,.12)}
 
 .hang-thao-tac{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end}
+.hang-thao-tac input[type="number"]{width:76px; padding:9px 10px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px; color-scheme:dark}
+.hang-thao-tac input[type="number"]:focus{outline:none; border-color:var(--dong)}
 .hang-nut{display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:clamp(20px,2.4vw,26px)}
 .loi-nhap{display:block; margin-top:6px; font-size:12.5px; color:var(--do)}
 .goi-y{display:block; margin-top:6px; font-size:12.5px; color:var(--chu-mo)}

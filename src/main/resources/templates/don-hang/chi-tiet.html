@@ -67,8 +67,9 @@
             <div class="hang-nut">
                 <a class="nut" th:href="@{/don-hang}">Quay lại danh sách</a>
                 <form th:if="${donHang.trangThai == 'CHO_XAC_NHAN'}"
-                      th:action="@{/don-hang/{id}/huy(id=${donHang.id})}" method="post">
-                    <button class="nut nut--dac" type="submit">Huỷ đơn</button>
+                      th:action="@{/don-hang/{id}/huy(id=${donHang.id})}" method="post"
+                      onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này không?');">
+                    <button class="nut" type="submit">Huỷ đơn</button>
                 </form>
             </div>
         </div>
