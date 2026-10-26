@@ -61,3 +61,30 @@ INSERT IGNORE INTO san_pham
 (34, 'LVS-BOS-002', 'Lò vi sóng kết hợp nướng Bosch BEL554MS0', 18900000, NULL, 6, NULL, '25 lít', 36, 'Lò vi sóng âm tủ kèm nướng, mặt thép không gỉ', 'Dung tích: 25 lít; Công suất vi sóng: 900W; Kiểu lắp: Âm tủ; Nướng thanh nhiệt 1200W; Rã đông tự động', 1, 6, 1),
 (35, 'LVS-KAF-002', 'Lò vi sóng âm tủ Kaff KF-MW25B', 8900000, 7490000, 8, NULL, '25 lít', 24, 'Lò vi sóng âm tủ mặt kính đen', 'Dung tích: 25 lít; Công suất vi sóng: 900W; Kiểu lắp: Âm tủ; Mặt kính đen; Khoá trẻ em', 1, 6, 2),
 (36, 'LVS-CHE-002', 'Lò vi sóng có nướng Chef''s EH-MW801B', 3290000, 2590000, 0, NULL, '20 lít', 12, 'Mẫu cũ đã ngừng kinh doanh, giữ lại để tra cứu đơn hàng', 'Dung tích: 20 lít; Công suất vi sóng: 700W; Nướng thanh nhiệt; Rã đông theo thời gian', 0, 6, 4);
+
+-- Thêm 5 khách hàng
+INSERT IGNORE INTO khach_hang (id, ho_ten, so_dien_thoai, email, dia_chi) VALUES
+(1, 'Nguyễn Văn An', '0901234567', 'an.nguyen@gmail.com', '123 Lê Lợi, Q1, TP.HCM'),
+(2, 'Trần Thị Bình', '0912345678', 'binh.tran@gmail.com', '456 Nguyễn Huệ, Q1, TP.HCM'),
+(3, 'Lê Hoàng Cường', '0923456789', 'cuong.le@gmail.com', '789 Trần Hưng Đạo, Q5, TP.HCM'),
+(4, 'Phạm Thị Dung', '0934567890', 'dung.pham@gmail.com', '101 Võ Văn Ngân, Thủ Đức, TP.HCM'),
+(5, 'Hoàng Anh Tuấn', '0945678901', 'tuan.hoang@gmail.com', '202 Phan Đăng Lưu, Phú Nhuận, TP.HCM');
+
+-- Thêm 10 đơn hàng với các trạng thái chữ tương ứng trong Entity
+INSERT IGNORE INTO don_hang (id, khach_hang_id, ngay_dat, tong_tien, trang_thai, ten_nguoi_nhan, so_dien_thoai_nhan, dia_chi_giao, ghi_chu) VALUES
+(1, 1, '2026-10-20 08:30:00', 22900000, 'HOAN_THANH', 'Nguyễn Văn An', '0901234567', '123 Lê Lợi, Q1, TP.HCM', 'Giao giờ hành chính'),
+(2, 1, '2026-10-24 14:15:00', 11900000, 'CHO_XAC_NHAN', 'Nguyễn Văn An', '0901234567', '123 Lê Lợi, Q1, TP.HCM', ''),
+(3, 2, '2026-10-21 09:00:00', 6990000, 'HOAN_THANH', 'Trần Thị Bình', '0912345678', '456 Nguyễn Huệ, Q1, TP.HCM', 'Gọi trước khi giao'),
+(4, 2, '2026-10-25 10:30:00', 27900000, 'DANG_GIAO', 'Trần Thị Bình', '0912345678', '456 Nguyễn Huệ, Q1, TP.HCM', ''),
+(5, 3, '2026-10-22 11:45:00', 8990000, 'DA_HUY', 'Lê Hoàng Cường', '0923456789', '789 Trần Hưng Đạo, Q5, TP.HCM', 'Khách đổi ý'),
+(6, 3, '2026-10-26 15:20:00', 13900000, 'CHO_XAC_NHAN', 'Lê Hoàng Cường', '0923456789', '789 Trần Hưng Đạo, Q5, TP.HCM', ''),
+(7, 4, '2026-10-18 16:10:00', 21900000, 'HOAN_THANH', 'Phạm Thị Dung', '0934567890', '101 Võ Văn Ngân, Thủ Đức, TP.HCM', ''),
+(8, 4, '2026-10-26 08:05:00', 5990000, 'CHO_XAC_NHAN', 'Phạm Thị Dung', '0934567890', '101 Võ Văn Ngân, Thủ Đức, TP.HCM', ''),
+(9, 5, '2026-10-23 19:30:00', 16900000, 'DANG_GIAO', 'Hoàng Anh Tuấn', '0945678901', '202 Phan Đăng Lưu, Phú Nhuận, TP.HCM', 'Giao tối'),
+(10, 5, '2026-10-25 20:45:00', 4990000, 'DA_HUY', 'Hoàng Anh Tuấn', '0945678901', '202 Phan Đăng Lưu, Phú Nhuận, TP.HCM', 'Sai địa chỉ');
+
+-- Thêm chi tiết cho 10 đơn hàng
+INSERT IGNORE INTO chi_tiet_don_hang (don_hang_id, san_pham_id, so_luong, don_gia) VALUES
+(1, 1, 1, 22900000), (2, 2, 1, 11900000), (3, 7, 1, 6990000), (4, 9, 1, 27900000),
+(5, 4, 1, 8990000), (6, 3, 1, 13900000), (7, 14, 1, 21900000), (8, 12, 1, 5990000),
+(9, 18, 1, 16900000), (10, 13, 1, 4990000);
