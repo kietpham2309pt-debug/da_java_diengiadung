@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Chi tiết đơn hàng', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Chi tiết đơn hàng', 'Thông tin nhận hàng và sản phẩm trong đơn', 'banner-tai-khoan.jpg', 'Chi tiết đơn hàng')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+            <div class="khoi">
+                <h2 th:text="'Đơn hàng #' + ${donHang.id}">Đơn hàng #1</h2>
+                <p>
+                    <strong>Ngày đặt:</strong>
+                    <span th:text="${#temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')}">21/10/2026 10:30</span>
+                </p>
+                <p>
+                    <strong>Trạng thái:</strong>
+                    <span class="the-nhan"
+                          th:classappend="${donHang.trangThai == 'HOAN_THANH'} ? ' the-nhan--ok' :
+                            (${donHang.trangThai == 'DA_HUY'} ? ' the-nhan--do' :
+                            (${donHang.trangThai == 'CHO_XAC_NHAN'} ? ' the-nhan--vang' : ''))"
+                          th:text="${donHang.tenTrangThai}">Chờ xác nhận</span>
+                </p>
+                <p><strong>Người nhận:</strong> <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span></p>
+                <p><strong>Số điện thoại:</strong> <span th:text="${donHang.soDienThoaiNhan}">0900000000</span></p>
+                <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${donHang.diaChiGiao}">Địa chỉ</span></p>
+                <p>
+                    <strong>Ghi chú:</strong>
+                    <span th:text="${donHang.ghiChu != null and !donHang.ghiChu.isBlank() ? donHang.ghiChu : 'Không có'}">Không có</span>
+                </p>
+            </div>
+
+            <div class="khoi">
+                <h2>Sản phẩm trong đơn</h2>
+                <div class="cuon-ngang">
+                    <table class="bang-dl">
+                        <thead>
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th class="canh-giua">Đơn giá</th>
+                            <th class="canh-giua">Số lượng</th>
+                            <th class="canh-giua">Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="chiTiet : ${donHang.danhSachChiTiet}">
+                            <td class="o-dai" th:text="${chiTiet.sanPham != null ? chiTiet.sanPham.tenSanPham : 'Sản phẩm không còn tồn tại'}">Tên sản phẩm</td>
+                            <td class="canh-giua" th:text="${#numbers.formatInteger(chiTiet.donGia, 0, 'POINT')} + ' ₫'">0 ₫</td>
+                            <td class="canh-giua" th:text="${chiTiet.soLuong}">1</td>
+                            <td class="canh-giua" th:text="${#numbers.formatInteger(chiTiet.thanhTien, 0, 'POINT')} + ' ₫'">0 ₫</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p>
+                    Tổng cộng:
+                    <b th:text="${#numbers.formatInteger(donHang.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</b>
+                </p>
+            </div>
+
+            <div class="hang-nut">
+                <a class="nut" th:href="@{/don-hang}">Quay lại danh sách</a>
+                <form th:if="${donHang.trangThai == 'CHO_XAC_NHAN'}"
+                      th:action="@{/don-hang/{id}/huy(id=${donHang.id})}" method="post"
+                      onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này không?');">
+                    <button class="nut" type="submit">Huỷ đơn</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>
