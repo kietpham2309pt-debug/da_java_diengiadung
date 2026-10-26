@@ -1,0 +1,54 @@
+@startuml
+left to right direction
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam packageStyle rectangle
+
+actor "Khách hàng" as KhachHang
+
+rectangle "Giỏ hàng, đặt hàng, lịch sử đơn và hồ sơ (TV4)" {
+  rectangle "Giỏ hàng" {
+    usecase "Thêm sản phẩm\nvào giỏ" as UC1
+    usecase "Xem giỏ hàng" as UC2
+    usecase "Cập nhật số lượng\nhoặc xoá sản phẩm" as UC3
+  }
+  rectangle "Đặt hàng" {
+    usecase "Đặt hàng" as UC4
+    usecase "Kiểm tra tồn kho" as UC5
+    usecase "Trừ tồn kho" as UC6
+  }
+  rectangle "Đơn hàng của tôi" {
+    usecase "Xem lịch sử đơn" as UC7
+    usecase "Xem chi tiết đơn" as UC8
+    usecase "Huỷ đơn hàng" as UC9
+    usecase "Hoàn tồn kho\n(module TV5)" as UC10
+  }
+  rectangle "Hồ sơ" {
+    usecase "Xem và sửa\nhồ sơ khách hàng" as UC11
+  }
+  usecase "Kiểm tra đăng nhập\n(module TV1)" as UC12
+}
+
+KhachHang --> UC1
+KhachHang --> UC2
+KhachHang --> UC3
+KhachHang --> UC4
+KhachHang --> UC7
+KhachHang --> UC8
+KhachHang --> UC9
+KhachHang --> UC11
+
+UC3 ..> UC2 : <<extend>>
+UC4 ..> UC5 : <<include>>
+UC4 ..> UC6 : <<include>>
+UC8 ..> UC7 : <<extend>>
+UC9 ..> UC10 : <<include>>
+UC12 ..> UC4 : <<include>>
+UC12 ..> UC7 : <<include>>
+UC12 ..> UC9 : <<include>>
+UC12 ..> UC11 : <<include>>
+@enduml

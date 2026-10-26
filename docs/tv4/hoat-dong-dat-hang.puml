@@ -1,0 +1,50 @@
+@startuml
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+
+|Khách hàng|
+start
+:Mở giỏ hàng;
+:Bấm Đặt hàng;
+|Hệ thống|
+if (Đã đăng nhập?) then (chưa)
+  :Chuyển về trang đăng nhập;
+  stop
+endif
+if (Giỏ hàng có sản phẩm?) then (trống)
+  :Báo giỏ hàng trống,\nquay về giỏ hàng;
+  stop
+endif
+:Hiển thị đơn hàng và form\nthông tin nhận hàng\n(điền sẵn từ hồ sơ);
+|Khách hàng|
+:Nhập hoặc sửa tên, số điện thoại,\nđịa chỉ, ghi chú;
+:Bấm Xác nhận đặt hàng;
+|Hệ thống|
+if (Thông tin hợp lệ?) then (sai)
+  :Hiển thị lỗi từng ô,\ngiữ nguyên dữ liệu đã nhập;
+  |Khách hàng|
+  :Sửa lại thông tin;
+  |Hệ thống|
+endif
+:Bắt đầu giao dịch;
+repeat
+  :Lấy sản phẩm trong giỏ;
+  if (Còn bán và đủ tồn kho?) then (không)
+    :Huỷ giao dịch (rollback);
+    :Báo lỗi, quay về giỏ hàng;
+    stop
+  endif
+  :Trừ tồn kho;
+  :Thêm dòng chi tiết đơn\n(lưu đơn giá lúc đặt);
+repeat while (Còn sản phẩm khác?) is (còn)
+->hết;
+:Tính tổng tiền, lưu đơn\ntrạng thái Chờ xác nhận;
+:Kết thúc giao dịch (commit);
+:Xoá giỏ hàng;
+:Chuyển sang trang chi tiết đơn\nvà báo đặt hàng thành công;
+|Khách hàng|
+stop
+@enduml
