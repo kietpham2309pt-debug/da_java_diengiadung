@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Chi tiết phiếu nhập', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+  <section class="muc muc--dau-trang">
+    <div class="khung">
+      <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+        <a th:href="@{/}">Trang chủ</a>
+        <span aria-hidden="true">&middot;</span>
+        <a th:href="@{/admin}">Quản trị</a>
+        <span aria-hidden="true">&middot;</span>
+        <a th:href="@{/admin/phieu-nhap}">Phiếu nhập</a>
+        <span aria-hidden="true">&middot;</span>
+        <span aria-current="page" th:text="'PN00' + ${phieuNhap.id}">Chi tiết phiếu</span>
+      </nav>
+
+      <div class="qt">
+        <div th:replace="~{layout/fragments :: menuQuanTri('phieu-nhap')}"></div>
+
+        <div>
+          <div class="qt-dau">
+            <div>
+              <h1 th:text="'Chi tiết phiếu nhập PN00' + ${phieuNhap.id}">Chi tiết phiếu nhập</h1>
+            </div>
+          </div>
+
+          <div class="khoi">
+            <div class="khoi__dau">
+              <h2>Thông tin chung</h2>
+            </div>
+            <div class="hai-cot">
+              <div>
+                <p><strong>Nhà cung cấp:</strong> <span th:text="${phieuNhap.nhaCungCap != null ? phieuNhap.nhaCungCap.tenNhaCungCap : 'Chưa xác định'}"></span></p>
+                <p><strong>Ngày nhập:</strong> <span th:text="${phieuNhap.ngayNhap != null ? #temporals.format(phieuNhap.ngayNhap, 'dd/MM/yyyy HH:mm') : ''}"></span></p>
+              </div>
+              <div>
+                <p><strong>Ghi chú:</strong> <span th:text="${phieuNhap.ghiChu != null and !phieuNhap.ghiChu.isBlank() ? phieuNhap.ghiChu : 'Không có ghi chú'}"></span></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="khoi">
+            <div class="khoi__dau">
+              <h2>Chi tiết sản phẩm</h2>
+            </div>
+            <div class="cuon-ngang">
+              <table class="bang-dl">
+                <thead>
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th class="canh-giua">Số lượng</th>
+                  <th class="canh-phai">Giá nhập</th>
+                  <th class="canh-phai">Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="chiTiet : ${phieuNhap.danhSachChiTiet}">
+                  <td th:text="${chiTiet.sanPham != null ? chiTiet.sanPham.tenSanPham : ''}"></td>
+                  <td class="canh-giua" th:text="${chiTiet.soLuong}"></td>
+                  <td class="canh-phai" th:text="${#numbers.formatInteger(chiTiet.giaNhap != null ? chiTiet.giaNhap : 0, 1, 'POINT')} + ' ₫'"></td>
+                  <td class="canh-phai">
+                    <b th:text="${#numbers.formatInteger(chiTiet.thanhTien, 1, 'POINT')} + ' ₫'"></b>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="tong-phieu tong-phieu--phai">
+              <p>Tổng tiền phiếu nhập: <b class="tong-phieu__so" th:text="${#numbers.formatInteger(phieuNhap.tongTien != null ? phieuNhap.tongTien : 0, 1, 'POINT')} + ' ₫'"></b></p>
+            </div>
+            <div class="hang-nut">
+              <a class="nut" th:href="@{/admin/phieu-nhap}">Quay lại</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

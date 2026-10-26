@@ -8,4 +8,5 @@ import java.util.List;
 public interface NhaCungCapRepository extends JpaRepository<NhaCungCap, Long> {
 
     List<NhaCungCap> findAllByOrderByTenNhaCungCapAsc();
+    List<NhaCungCap> findByTenNhaCungCapContainingIgnoreCaseOrSoDienThoaiContaining(String ten, String sdt);
 }

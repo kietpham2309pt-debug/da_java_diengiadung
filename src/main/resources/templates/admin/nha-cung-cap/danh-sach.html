@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Nhà cung cấp', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Nhà cung cấp</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('nha-cung-cap')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Nhà cung cấp</h1>
+                            <p>Quản lý danh sách các đối tác cung cấp hàng hoá.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" th:href="@{/admin/nha-cung-cap/them}">Thêm đối tác</a>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/nha-cung-cap}" method="get">
+                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc SĐT" aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/nha-cung-cap}" class="nut nut--nho">Bỏ lọc</a>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Tên nhà cung cấp</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="ncc : ${danhSach}">
+                                    <td th:text="${ncc.tenNhaCungCap}"></td>
+                                    <td th:text="${ncc.soDienThoai}"></td>
+                                    <td th:text="${ncc.email}"></td>
+                                    <td class="o-dai" th:text="${ncc.diaChi}"></td>
+                                    <td>
+                                        <div class="hang-thao-tac">
+                                            <a class="nut nut--nho" th:href="@{'/admin/nha-cung-cap/sua/' + ${ncc.id}}">Sửa</a>
+                                            <form th:action="@{'/admin/nha-cung-cap/xoa/' + ${ncc.id}}" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xoá nhà cung cấp này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                        <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
+                        <p>Chưa có dữ liệu nhà cung cấp nào.</p>
+                        <a class="nut nut--dac" th:href="@{/admin/nha-cung-cap/them}">Thêm nhà cung cấp đầu tiên</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

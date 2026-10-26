@@ -54,6 +54,12 @@
 .nut--do:hover{background:rgba(217,83,79,.12)}
 
 .hang-thao-tac{display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end}
+.tong-phieu{display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:16px; margin-top:24px; padding-top:20px; border-top:1px solid var(--vien)}
+.tong-phieu--phai{justify-content:flex-end}
+.tong-phieu .hang-nut{margin-top:0}
+.tong-phieu__so{margin-left:8px; font-size:24px; color:var(--dong)}
+.hai-cot{display:grid; gap:16px}
+@media (min-width:720px){.hai-cot{grid-template-columns:1fr 1fr}}
 .hang-thao-tac input[type="number"]{width:76px; padding:9px 10px; border:1px solid var(--vien); background:var(--nen); color:var(--chu); font:inherit; font-size:14.5px; color-scheme:dark}
 .hang-thao-tac input[type="number"]:focus{outline:none; border-color:var(--dong)}
 .hang-nut{display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:clamp(20px,2.4vw,26px)}

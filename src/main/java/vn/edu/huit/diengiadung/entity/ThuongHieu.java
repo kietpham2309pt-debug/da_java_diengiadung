@@ -17,6 +17,7 @@ public class ThuongHieu {
     @Column(unique = true, nullable = false, length = 100)
     private String tenThuongHieu;
 
+    @NotBlank(message = "Xuất xứ không được để trống")
     private String xuatXu;
 
     @OneToMany(mappedBy = "thuongHieu")
