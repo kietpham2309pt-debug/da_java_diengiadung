@@ -1,0 +1,39 @@
+@startuml
+!pragma layout smetana
+left to right direction
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam dpi 170
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+skinparam packageStyle rectangle
+
+actor "Quản trị viên" as QuanTri
+
+rectangle "Quản lý Đối tác và Nhập kho (TV2)" {
+  usecase "Quản lý Thương hiệu" as UC1
+  usecase "Quản lý Nhà cung cấp" as UC2
+  usecase "Xem danh sách Phiếu nhập" as UC3
+  usecase "Xem chi tiết Phiếu nhập" as UC4
+  usecase "Lập phiếu nhập hàng" as UC5
+  usecase "Cộng dồn tồn kho" as UC6
+  usecase "Xem cảnh báo sắp hết hàng" as UC7
+  usecase "Kiểm tra quyền quản trị\n(module TV1)" as UC8
+}
+
+QuanTri --> UC1
+QuanTri --> UC2
+QuanTri --> UC3
+QuanTri --> UC4
+QuanTri --> UC5
+QuanTri --> UC7
+
+UC5 ..> UC6 : <<include>>
+UC8 ..> UC1 : <<include>>
+UC8 ..> UC2 : <<include>>
+UC8 ..> UC3 : <<include>>
+UC8 ..> UC4 : <<include>>
+UC8 ..> UC5 : <<include>>
+UC8 ..> UC7 : <<include>>
+@enduml
