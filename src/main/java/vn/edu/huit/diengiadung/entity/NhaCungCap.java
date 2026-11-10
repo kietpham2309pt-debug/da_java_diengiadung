@@ -1,7 +1,9 @@
 package vn.edu.huit.diengiadung.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +19,12 @@ public class NhaCungCap {
     @Column(nullable = false, length = 150)
     private String tenNhaCungCap;
 
+    @Pattern(regexp = "^$|^0\\d{9,10}$", message = "Số điện thoại gồm 10 hoặc 11 chữ số, bắt đầu bằng 0")
     private String soDienThoai;
 
     private String diaChi;
 
+    @Email(message = "Email không hợp lệ")
     private String email;
 
     @OneToMany(mappedBy = "nhaCungCap")

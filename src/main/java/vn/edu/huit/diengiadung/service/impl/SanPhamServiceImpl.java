@@ -221,6 +221,28 @@ public class SanPhamServiceImpl implements SanPhamService {
         if (tepAnh.getSize() > DUNG_LUONG_ANH_TOI_DA) {
             throw new LoiNghiepVu("Ảnh sản phẩm tối đa 5 MB, hãy chọn ảnh nhỏ hơn");
         }
+        if (!laNoiDungAnh(tepAnh)) {
+            throw new LoiNghiepVu("Tệp đã chọn không phải ảnh thật, hãy chọn lại ảnh JPG, PNG, WEBP hoặc GIF");
+        }
+    }
+
+    private static boolean laNoiDungAnh(MultipartFile tepAnh) {
+        byte[] dau = new byte[12];
+        int soByte;
+        try (InputStream luongDoc = tepAnh.getInputStream()) {
+            soByte = luongDoc.readNBytes(dau, 0, dau.length);
+        } catch (IOException loi) {
+            return false;
+        }
+        if (soByte < 4) {
+            return false;
+        }
+        boolean laJpg = (dau[0] & 0xFF) == 0xFF && (dau[1] & 0xFF) == 0xD8 && (dau[2] & 0xFF) == 0xFF;
+        boolean laPng = (dau[0] & 0xFF) == 0x89 && dau[1] == 'P' && dau[2] == 'N' && dau[3] == 'G';
+        boolean laGif = dau[0] == 'G' && dau[1] == 'I' && dau[2] == 'F' && dau[3] == '8';
+        boolean laWebp = soByte >= 12 && dau[0] == 'R' && dau[1] == 'I' && dau[2] == 'F' && dau[3] == 'F'
+                && dau[8] == 'W' && dau[9] == 'E' && dau[10] == 'B' && dau[11] == 'P';
+        return laJpg || laPng || laGif || laWebp;
     }
 
     private String luuTepAnh(MultipartFile tepAnh) {
