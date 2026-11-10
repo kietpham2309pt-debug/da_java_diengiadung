@@ -1,0 +1,37 @@
+@startuml
+!pragma layout smetana
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName "Times New Roman"
+skinparam defaultFontSize 16
+
+|Quản trị viên|
+start
+:Mở chức năng Lập phiếu nhập;
+:Chọn Nhà cung cấp và ghi chú;
+repeat
+  :Bấm "Thêm sản phẩm";
+  :Chọn Sản phẩm từ danh sách;
+  :Nhập Số lượng và Giá nhập;
+  |Hệ thống|
+  :Tính thành tiền và tổng tiền (JS);
+  |Quản trị viên|
+repeat while (Cần nhập thêm SP?) is (Có)
+->Không;
+:Nhấn "Lưu phiếu nhập";
+|Hệ thống|
+:Kiểm tra tính hợp lệ dữ liệu;
+if (Dữ liệu hợp lệ?) then (Không)
+  :Hiển thị thông báo lỗi;
+  |Quản trị viên|
+  :Bổ sung thông tin;
+  detach
+else (Có)
+  |Hệ thống|
+  :Lưu bảng Phiếu Nhập;
+  :Lưu các Chi Tiết Phiếu Nhập;
+  :Cộng dồn số lượng tồn kho (Sản phẩm);
+  :Thông báo thành công & Chuyển trang;
+endif
+stop
+@enduml
