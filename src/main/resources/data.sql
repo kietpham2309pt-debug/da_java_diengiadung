@@ -60,7 +60,11 @@ INSERT IGNORE INTO san_pham
 (33, 'LN-KAF-002', 'Lò nướng để bàn Kaff KF-OT45', 3490000, 2790000, 20, NULL, '45 lít', 12, 'Lò nướng để bàn 45 lít cho gia đình 3 tới 4 người', 'Dung tích: 45 lít; Kiểu lắp: Để bàn; Nhiệt độ tối đa: 230 độ C; Hẹn giờ 60 phút; Xiên nướng gà', 1, 5, 2),
 (34, 'LVS-BOS-002', 'Lò vi sóng kết hợp nướng Bosch BEL554MS0', 18900000, NULL, 6, NULL, '25 lít', 36, 'Lò vi sóng âm tủ kèm nướng, mặt thép không gỉ', 'Dung tích: 25 lít; Công suất vi sóng: 900W; Kiểu lắp: Âm tủ; Nướng thanh nhiệt 1200W; Rã đông tự động', 1, 6, 1),
 (35, 'LVS-KAF-002', 'Lò vi sóng âm tủ Kaff KF-MW25B', 8900000, 7490000, 8, NULL, '25 lít', 24, 'Lò vi sóng âm tủ mặt kính đen', 'Dung tích: 25 lít; Công suất vi sóng: 900W; Kiểu lắp: Âm tủ; Mặt kính đen; Khoá trẻ em', 1, 6, 2),
-(36, 'LVS-CHE-002', 'Lò vi sóng có nướng Chef''s EH-MW801B', 3290000, 2590000, 0, NULL, '20 lít', 12, 'Mẫu cũ đã ngừng kinh doanh, giữ lại để tra cứu đơn hàng', 'Dung tích: 20 lít; Công suất vi sóng: 700W; Nướng thanh nhiệt; Rã đông theo thời gian', 0, 6, 4);
+(36, 'LVS-CHE-002', 'Lò vi sóng có nướng Chef''s EH-MW801B', 3290000, 2590000, 0, NULL, '20 lít', 12, 'Mẫu cũ đã ngừng kinh doanh, giữ lại để tra cứu đơn hàng', 'Dung tích: 20 lít; Công suất vi sóng: 700W; Nướng thanh nhiệt; Rã đông theo thời gian', 0, 6, 4),
+(37, 'BHN-BOS-001', 'Bếp hồng ngoại đôi Bosch PKF375FP1E', 15900000, 12900000, 6, NULL, '3500W', 36, 'Hai vùng hồng ngoại mặt kính, nấu được mọi loại nồi', 'Kích thước khoét đá: 560 x 490 mm; Mặt kính: Schott Ceran; Số mức công suất: 17; Báo nhiệt dư; Khoá an toàn trẻ em', 1, 2, 1),
+(38, 'HM-KOC-002', 'Máy hút mùi âm tủ Kocher K-6870', 6900000, 5490000, 12, NULL, '800 m3/h', 24, 'Hút mùi âm tủ 70 cm, vận hành êm cho căn hộ', 'Lưu lượng hút: 800 m3/h; Độ ồn: 50 dB; Chiều rộng: 70 cm; Kiểu lắp: Âm tủ; Lọc mỡ inox rửa được', 1, 3, 3),
+(39, 'MRC-KAF-002', 'Máy rửa chén độc lập Kaff KF-W8001EU', 16900000, 13900000, 4, NULL, '12 bộ', 24, 'Rửa 12 bộ chén, sấy khô bằng hơi nóng', 'Sức chứa: 12 bộ; Số chương trình rửa: 6; Độ ồn: 47 dB; Kiểu lắp: Độc lập; Sấy khô bằng hơi nóng', 1, 4, 2),
+(40, 'LN-CHE-002', 'Lò nướng âm tủ Chef''s EH-BO1300S', 11900000, 9490000, 9, NULL, '65 lít', 24, 'Lò nướng âm tủ 65 lít, nướng đối lưu 3D', 'Dung tích: 65 lít; Số chế độ nướng: 9; Nướng đối lưu 3D; Cửa kính 3 lớp; Hẹn giờ điện tử', 1, 5, 4);
 
 INSERT IGNORE INTO khach_hang (id, ho_ten, so_dien_thoai, email, dia_chi) VALUES
 (101, 'Nguyễn Văn An', '0901234567', 'an.nguyen@gmail.com', '123 Lê Lợi, Q1, TP.HCM'),
