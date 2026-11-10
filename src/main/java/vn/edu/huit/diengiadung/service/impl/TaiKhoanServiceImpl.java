@@ -10,6 +10,7 @@ import vn.edu.huit.diengiadung.repository.TaiKhoanRepository;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.TaiKhoanService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,8 +34,10 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         if (taiKhoanRepository.existsByTenDangNhap(taiKhoan.getTenDangNhap())) {
             throw new LoiNghiepVu("Tên đăng nhập đã có người dùng");
         }
+        taiKhoan.setId(null);
         taiKhoan.setMatKhau(maHoaMatKhau.encode(taiKhoan.getMatKhau()));
         taiKhoan.setVaiTro("KHACHHANG");
+        taiKhoan.setNgayTao(LocalDateTime.now());
         taiKhoan.setHoatDong(true);
         TaiKhoan daLuu = taiKhoanRepository.save(taiKhoan);
 
