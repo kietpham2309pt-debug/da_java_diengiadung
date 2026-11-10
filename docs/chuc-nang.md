@@ -29,3 +29,12 @@
 - Xem lịch sử đơn hàng và chi tiết từng đơn, mỗi khách chỉ xem được đơn của mình.
 - Huỷ đơn khi đơn còn ở trạng thái Chờ xác nhận, tồn kho được hoàn lại.
 - Xem và cập nhật hồ sơ khách hàng (họ tên, email, số điện thoại, địa chỉ).
+
+## TV2 – Thương hiệu, nhà cung cấp, nhập kho
+
+- Quản trị viên xem, tìm theo tên, thêm, sửa, xoá thương hiệu. Không cho trùng tên, không cho xoá thương hiệu còn sản phẩm.
+- Quản trị viên xem, tìm theo tên hoặc số điện thoại, thêm, sửa, xoá nhà cung cấp. Không cho xoá nhà cung cấp đã có phiếu nhập.
+- Lập phiếu nhập: chọn nhà cung cấp, thêm nhiều dòng sản phẩm với số lượng và giá nhập, tự tính thành tiền và tổng tiền.
+- Lưu phiếu nhập và cộng tồn kho trong một giao dịch, nhập sai số lượng hoặc giá thì báo lỗi và không đổi tồn kho.
+- Xem danh sách phiếu nhập và chi tiết từng phiếu.
+- Cảnh báo sản phẩm sắp hết hàng (tồn kho từ 10 trở xuống), có nút lập phiếu nhập ngay.
