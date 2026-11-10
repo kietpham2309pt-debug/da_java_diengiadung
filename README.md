@@ -29,8 +29,8 @@ mvnw spring-boot:run
 
 4. Mở trình duyệt: <http://localhost:8080>
 
-Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp và 36 sản phẩm mẫu
-(35 đang bán, 1 ngừng bán; có sản phẩm hết hàng và sắp hết hàng để thử giao diện).
+Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp, 40 sản phẩm mẫu, 5 khách hàng và 10 đơn hàng mẫu
+(39 đang bán, 1 ngừng bán; có sản phẩm hết hàng và sắp hết hàng để thử giao diện).
 Ảnh sản phẩm do quản trị viên upload được lưu ở thư mục `uploads/` cạnh project, thư mục này không đưa lên git.
 
 ## Tài khoản có sẵn
@@ -67,25 +67,24 @@ src/main/resources/
 └── data.sql      dữ liệu mẫu
 ```
 
-## Phần đã làm và phần còn lại
+## Chức năng đã hoàn thành
 
-Đã có trong nhánh `main`:
+Toàn bộ chức năng theo phân công đã nằm trong nhánh `main` và đã kiểm thử chéo giữa các module.
 
-- 10 lớp thực thể và repository, đủ các kiểu quan hệ `@OneToOne`, `@OneToMany`, `@ManyToOne`.
-- Layout Thymeleaf dùng chung: thanh menu, danh mục, khung thông báo, menu quản trị, chân trang.
-- Đăng ký, đăng nhập, đăng xuất, phân quyền chặn khu vực `/admin`.
-- Quản lý tài khoản: tìm kiếm, khoá hoặc mở khoá, đặt lại mật khẩu.
-- Quản lý loại sản phẩm: danh sách, tìm kiếm, thêm, sửa, xoá, chặn xoá khi còn sản phẩm. **Đây là khuôn mẫu cho các module còn lại.**
-- Trang chủ và trang danh sách sản phẩm ở mức tối thiểu để xem được dữ liệu mẫu.
+- **TV1**: project khung, layout Thymeleaf dùng chung, đăng ký, đăng nhập, đăng xuất, phân quyền chặn `/admin`,
+  quản lý tài khoản (tìm kiếm, khoá hoặc mở khoá, đặt lại mật khẩu), quản lý loại sản phẩm, trang lỗi 400/404/500.
+  Tài khoản bị khoá khi đang đăng nhập sẽ bị đăng xuất ở lần thao tác mua hàng kế tiếp.
+- **TV2**: thương hiệu, nhà cung cấp, lập phiếu nhập nhiều dòng và cộng tồn kho, xem phiếu nhập, cảnh báo sản phẩm sắp hết hàng.
+  Tài liệu trong `docs/tv2/`, ERD trong `ERD/ERD.png`, từ điển dữ liệu `docs/tv2/CSDL-he-thong.docx`.
+- **TV3**: quản lý sản phẩm có upload ảnh và thông số kỹ thuật, ngừng bán hoặc mở bán lại; trang chủ, danh sách theo loại và thương hiệu,
+  tìm kiếm, lọc theo mức giá, sắp xếp, phân trang, chi tiết sản phẩm. Tài liệu trong `docs/tv3/`.
+- **TV4**: giỏ hàng lưu trong session, đặt hàng kiểm tồn và trừ tồn trong một giao dịch, lịch sử đơn, huỷ đơn chờ xác nhận, hồ sơ khách hàng.
+  Tài liệu trong `docs/tv4/`.
+- **TV5**: quản lý đơn hàng (lọc, chi tiết, cập nhật trạng thái, huỷ và hoàn tồn kho), quản lý khách hàng,
+  thống kê doanh thu theo tháng và 10 sản phẩm bán chạy. Tài liệu trong `docs/tv5/`.
 
-Mỗi thành viên làm tiếp phần của mình theo đúng khuôn của `LoaiSanPham`
-(`Entity` → `JpaRepository` → `Service` + `ServiceImpl` → `Controller` → view Thymeleaf):
-
-- **TV2**: thương hiệu, nhà cung cấp, phiếu nhập và cập nhật tồn kho, cảnh báo sắp hết hàng.
-- **TV3**: quản lý sản phẩm có upload ảnh; trang chủ, lọc, sắp xếp, phân trang, chi tiết sản phẩm.
-  Đã làm ở nhánh `tv3-san-pham`, mô tả trong `docs/tv3/`.
-- **TV4**: giỏ hàng lưu trong session, đặt hàng, lịch sử đơn, huỷ đơn, hồ sơ khách hàng.
-- **TV5**: đã có danh sách đơn hàng và lọc theo trạng thái (PR #1). Còn lại: chi tiết đơn, cập nhật trạng thái, huỷ đơn kèm hoàn tồn kho, quản lý khách hàng, thống kê.
+Dữ liệu mẫu trong `data.sql`: 6 loại, 4 thương hiệu, 3 nhà cung cấp, 40 sản phẩm, 5 khách hàng và 10 đơn hàng ở đủ các trạng thái.
+Tài khoản thử: `admin / admin123` (quản trị) và `khach1 / khach123` (khách hàng).
 
 ## Quy ước làm việc
 
