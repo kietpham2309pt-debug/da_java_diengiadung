@@ -91,9 +91,9 @@
 
 .sp__anh:has(img[src*="/img/sp/"]),
 .gal__to:has(img[src*="/img/sp/"]),
-.gal__nho:has(img[src*="/img/sp/"]){background:radial-gradient(ellipse 75% 65% at 50% 46%, #3a342e 0%, #27231f 58%, #1c1a18 100%)}
+.gal__nho:has(img[src*="/img/sp/"]){background:#F1EEE9; background-image:none}
 .sp__anh img[src*="/img/sp/"],
-.gal__to img[src*="/img/sp/"]{object-fit:contain; padding:9%; filter:drop-shadow(0 16px 18px rgba(0,0,0,.55)) drop-shadow(0 0 1px rgba(237,231,224,.35)); transition:transform var(--vua)}
-.gal__nho img[src*="/img/sp/"]{object-fit:contain; padding:8%}
+.gal__to img[src*="/img/sp/"],
+.gal__nho img[src*="/img/sp/"]{object-fit:scale-down; mix-blend-mode:multiply; padding:6%; transition:transform var(--vua)}
 .sp:hover .sp__anh img[src*="/img/sp/"]{transform:scale(1.04)}
-.anh-hien-tai img[src*="/img/sp/"]{object-fit:contain; padding:6px; background:#27231f}
+.anh-hien-tai img[src*="/img/sp/"]{object-fit:contain; padding:6px; background:#F1EEE9}

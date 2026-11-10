@@ -45,6 +45,9 @@ public class SanPham {
 
     private String hinhAnh;
 
+    @Column(length = 2000)
+    private String anhPhu;
+
     @Size(max = 100, message = "Công suất hoặc dung tích tối đa 100 ký tự")
     private String congSuat;
 
@@ -182,6 +185,27 @@ public class SanPham {
 
     public void setThuongHieu(ThuongHieu thuongHieu) {
         this.thuongHieu = thuongHieu;
+    }
+
+    public String getAnhPhu() {
+        return anhPhu;
+    }
+
+    public void setAnhPhu(String anhPhu) {
+        this.anhPhu = anhPhu;
+    }
+
+    public List<String> getDanhSachAnh() {
+        List<String> danhSach = new ArrayList<>();
+        danhSach.add(getDuongDanAnh());
+        if (anhPhu != null) {
+            for (String anh : anhPhu.split("\\|")) {
+                if (!anh.isBlank()) {
+                    danhSach.add(anh.startsWith("/") ? anh.trim() : "/uploads/" + anh.trim());
+                }
+            }
+        }
+        return danhSach;
     }
 
     public String getDuongDanAnh() {
