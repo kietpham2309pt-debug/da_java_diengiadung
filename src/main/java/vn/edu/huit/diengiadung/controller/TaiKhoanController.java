@@ -27,6 +27,8 @@ public class TaiKhoanController {
     public String formDangNhap(@RequestParam(required = false) String loi, Model model) {
         if ("quyen".equals(loi)) {
             model.addAttribute("loiDangNhap", "Bạn cần đăng nhập bằng tài khoản quản trị để vào khu vực này");
+        } else if ("khoa".equals(loi)) {
+            model.addAttribute("loiDangNhap", "Tài khoản của bạn đã bị khoá. Liên hệ cửa hàng để được hỗ trợ");
         }
         return "dang-nhap";
     }

@@ -7,9 +7,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CauHinhKhachHang implements WebMvcConfigurer {
 
+    private final KhachHangInterceptor khachHangInterceptor;
+
+    public CauHinhKhachHang(KhachHangInterceptor khachHangInterceptor) {
+        this.khachHangInterceptor = khachHangInterceptor;
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new KhachHangInterceptor())
+        registry.addInterceptor(khachHangInterceptor)
                 .addPathPatterns("/dat-hang/**", "/don-hang/**", "/ho-so/**");
     }
 }
