@@ -119,9 +119,13 @@ public class SanPhamServiceImpl implements SanPhamService {
         }
 
         String anhCu = null;
+        String anhPhuCu = null;
         if (sanPham.getId() != null) {
-            anhCu = layTheoId(sanPham.getId()).getHinhAnh();
+            SanPham banCu = layTheoId(sanPham.getId());
+            anhCu = banCu.getHinhAnh();
+            anhPhuCu = banCu.getAnhPhu();
         }
+        sanPham.setAnhPhu(anhPhuCu);
 
         String anhMoi = anhCu;
         if (coTepMoi) {

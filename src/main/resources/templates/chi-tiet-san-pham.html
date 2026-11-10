@@ -31,21 +31,11 @@
                     </div>
 
                     <div class="gal__ds" role="group" aria-label="Chọn ảnh">
-                        <button type="button" class="gal__nho dang-chon" aria-label="Ảnh sản phẩm"
-                                th:attr="data-anh=@{${sanPham.duongDanAnh}}">
-                            <img th:src="@{${sanPham.duongDanAnh}}" alt="">
+                        <button type="button" class="gal__nho" th:each="anh, stt : ${sanPham.danhSachAnh}"
+                                th:classappend="${stt.first} ? 'dang-chon'"
+                                th:attr="data-anh=@{${anh}},aria-label='Ảnh sản phẩm thứ ' + ${stt.count}">
+                            <img th:src="@{${anh}}" alt="" loading="lazy">
                         </button>
-                        <th:block th:if="${sanPham.loaiSanPham != null}">
-                            <button type="button" class="gal__nho" aria-label="Ảnh nhóm hàng"
-                                    th:if="${sanPham.coAnhRieng()}"
-                                    th:attr="data-anh=@{${sanPham.loaiSanPham.anhDanhMuc}}">
-                                <img th:src="@{${sanPham.loaiSanPham.anhDanhMuc}}" alt="">
-                            </button>
-                            <button type="button" class="gal__nho" aria-label="Ảnh lắp đặt trong căn bếp"
-                                    th:attr="data-anh=@{${sanPham.loaiSanPham.anhBanner}}">
-                                <img th:src="@{${sanPham.loaiSanPham.anhBanner}}" alt="">
-                            </button>
-                        </th:block>
                     </div>
                 </div>
 
