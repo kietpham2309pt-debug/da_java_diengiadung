@@ -20,3 +20,12 @@
 - Xem các sản phẩm cùng loại ngay dưới trang chi tiết.
 - Quản trị viên thêm, sửa, xoá sản phẩm, upload ảnh và nhập thông số kỹ thuật.
 - Quản trị viên tìm, lọc danh sách sản phẩm và chuyển sản phẩm sang ngừng bán hoặc mở bán lại.
+
+## TV4 – Giỏ hàng, đặt hàng, lịch sử đơn và hồ sơ khách hàng
+
+- Thêm sản phẩm vào giỏ hàng, có kiểm tra sản phẩm còn bán và số lượng không vượt tồn kho.
+- Xem giỏ hàng, cập nhật số lượng, xoá sản phẩm khỏi giỏ. Giỏ hàng lưu trong phiên làm việc và hiện số sản phẩm trên thanh menu.
+- Đặt hàng: nhập thông tin nhận hàng (điền sẵn từ hồ sơ), kiểm tra hợp lệ, trừ tồn kho và lưu đơn trong một giao dịch, đơn giá lưu theo giá lúc đặt.
+- Xem lịch sử đơn hàng và chi tiết từng đơn, mỗi khách chỉ xem được đơn của mình.
+- Huỷ đơn khi đơn còn ở trạng thái Chờ xác nhận, tồn kho được hoàn lại.
+- Xem và cập nhật hồ sơ khách hàng (họ tên, email, số điện thoại, địa chỉ).
