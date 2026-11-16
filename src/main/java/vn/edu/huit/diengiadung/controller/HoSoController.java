@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
 import vn.edu.huit.diengiadung.model.HoSoKhachHang;
 import vn.edu.huit.diengiadung.service.HoSoService;
+import vn.edu.huit.diengiadung.service.TaiKhoanService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 
 @Controller
@@ -20,9 +22,33 @@ import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 public class HoSoController {
 
     private final HoSoService dichVuHoSo;
+    private final TaiKhoanService dichVuTaiKhoan;
 
-    public HoSoController(HoSoService dichVuHoSo) {
+    public HoSoController(HoSoService dichVuHoSo, TaiKhoanService dichVuTaiKhoan) {
         this.dichVuHoSo = dichVuHoSo;
+        this.dichVuTaiKhoan = dichVuTaiKhoan;
+    }
+
+    @GetMapping("/doi-mat-khau")
+    public String formDoiMatKhau() {
+        return "doi-mat-khau";
+    }
+
+    @PostMapping("/doi-mat-khau")
+    public String doiMatKhau(@RequestParam String matKhauCu,
+                             @RequestParam String matKhauMoi,
+                             @RequestParam String nhapLai,
+                             HttpSession phien,
+                             Model moHinh,
+                             RedirectAttributes thongBao) {
+        try {
+            dichVuTaiKhoan.doiMatKhau(layTaiKhoan(phien).getId(), matKhauCu, matKhauMoi, nhapLai);
+        } catch (LoiNghiepVu loi) {
+            moHinh.addAttribute("loiDoiMatKhau", loi.getMessage());
+            return "doi-mat-khau";
+        }
+        thongBao.addFlashAttribute("thongBao", "Đã đổi mật khẩu. Lần đăng nhập sau hãy dùng mật khẩu mới");
+        return "redirect:/ho-so";
     }
 
     @GetMapping

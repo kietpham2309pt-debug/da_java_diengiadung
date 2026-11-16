@@ -19,4 +19,6 @@ public interface TaiKhoanService {
     void doiTrangThai(Long id);
 
     void datLaiMatKhau(Long id, String matKhauMoi);
+
+    void doiMatKhau(Long id, String matKhauCu, String matKhauMoi, String nhapLai);
 }
