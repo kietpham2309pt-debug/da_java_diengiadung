@@ -14,7 +14,7 @@
 
 ## Công nghệ
 
-Java 17 · Spring Boot 3.5.3 · Spring MVC + Thymeleaf · Spring Data JPA (Hibernate 6) · Bean Validation · MySQL 8 · Bootstrap 5.
+Java 17 · Spring Boot 3.5.3 · Spring MVC + Thymeleaf · REST API (JSON) · Spring Data JPA và `EntityManager` (Hibernate 6) · Bean Validation · MySQL 8 · BCrypt · JUnit 5 + Mockito.
 
 ## Cách chạy
 
@@ -29,7 +29,7 @@ mvnw spring-boot:run
 
 4. Mở trình duyệt: <http://localhost:8080>
 
-Lần chạy đầu Hibernate tạo 10 bảng, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp, 40 sản phẩm mẫu, 5 khách hàng và 10 đơn hàng mẫu
+Lần chạy đầu Hibernate tạo 10 bảng thực thể và bảng nối `san_pham_yeu_thich`, `data.sql` nạp 6 danh mục (bếp điện từ, bếp hồng ngoại, máy hút mùi, máy rửa chén, lò nướng, lò vi sóng), 4 thương hiệu, 3 nhà cung cấp, 40 sản phẩm mẫu, 5 khách hàng và 10 đơn hàng mẫu
 (39 đang bán, 1 ngừng bán; có sản phẩm hết hàng và sắp hết hàng để thử giao diện).
 Ảnh sản phẩm do quản trị viên upload được lưu ở thư mục `uploads/` cạnh project, thư mục này không đưa lên git.
 
@@ -85,6 +85,47 @@ Toàn bộ chức năng theo phân công đã nằm trong nhánh `main` và đã
 
 Dữ liệu mẫu trong `data.sql`: 6 loại, 4 thương hiệu, 3 nhà cung cấp, 40 sản phẩm, 5 khách hàng và 10 đơn hàng ở đủ các trạng thái.
 Tài khoản thử: `admin / admin123` (quản trị) và `khach1 / khach123` (khách hàng).
+
+### Phần hoàn thiện để chạy thực tế
+
+- **Sản phẩm yêu thích** (`/yeu-thich`): khách lưu sản phẩm để xem lại. Quan hệ `@ManyToMany` hai chiều
+  giữa `KhachHang` và `SanPham` qua bảng nối `san_pham_yeu_thich` (bài 09 · advanced mappings).
+- **Đổi mật khẩu** (`/ho-so/doi-mat-khau`): kiểm tra mật khẩu hiện tại, mật khẩu mới ≥ 6 ký tự, nhập lại khớp, khác mật khẩu cũ.
+- **In hoá đơn** (`/admin/don-hang/{id}/in`): trang khổ A4 có sẵn nút in, ẩn nút khi in.
+- **Thống kê bằng DAO `EntityManager` + JPQL** (`ThongKeDao`, bài 03): tính doanh thu, số đơn, 10 sản phẩm bán chạy ngay trong
+  câu truy vấn thay vì nạp mọi đơn hàng vào bộ nhớ.
+- **Bộ ảnh sản phẩm**: ảnh chụp thật, mỗi sản phẩm có thể có nhiều ảnh (cột `anh_phu`).
+- **Bảo mật**: chống giả mạo yêu cầu (CSRF) cho mọi form POST bằng `RequestDataValueProcessor` + interceptor
+  (`MaChongGiaMao`, `KiemTraMaChongInterceptor`); đổi mã phiên khi đăng nhập; cookie phiên `HttpOnly`, `SameSite=Lax`;
+  form đăng ký chỉ nhận đúng 4 trường để không ghi đè được tài khoản khác; kiểm tra chữ ký tệp ảnh khi upload;
+  tài khoản bị khoá giữa phiên bị đăng xuất ở thao tác mua hàng kế tiếp.
+
+## REST API (bài 01 · REST Controller)
+
+Chỉ đọc, trả JSON, không cần đăng nhập. Lỗi trả về dạng `{"trangThai": 404, "loi": "..."}`.
+
+| Đường dẫn | Kết quả |
+|---|---|
+| `GET /api/loai-san-pham` | Danh sách loại sản phẩm |
+| `GET /api/thuong-hieu` | Danh sách thương hiệu |
+| `GET /api/san-pham?loai=1&hang=2&tuKhoa=bosch&sapXep=gia-tang&trang=1` | Sản phẩm đang bán, có lọc và phân trang |
+| `GET /api/san-pham/{id}` | Chi tiết sản phẩm: giá, tồn kho, mô tả, thông số, bộ ảnh |
+
+## Chạy bản thật (profile `prod`)
+
+```bash
+mvnw -DskipTests package
+java -jar target/diengiadung-1.0.0.jar --spring.profiles.active=prod
+```
+
+Biến môi trường dùng được: `DB_URL`, `DB_USER`, `DB_PASS`, `PORT`, `THU_MUC_ANH` (thư mục lưu ảnh upload),
+`COOKIE_SECURE=true` khi chạy sau HTTPS, `DB_NAP_MAU=always` nếu muốn nạp dữ liệu mẫu (mặc định không nạp).
+Bản `prod` bật bộ nhớ đệm Thymeleaf, ẩn stack trace và giảm log.
+
+## Kiểm thử
+
+`mvnw test` chạy 14 unit test (lọc sản phẩm, thực thể sản phẩm, giỏ hàng, đăng ký và đổi mật khẩu).
+Ngoài ra nhóm đã chạy kiểm thử chéo toàn hệ thống qua HTTP (98 ca) và trên trình duyệt ở khổ 1440px và 520px.
 
 ## Quy ước làm việc
 
