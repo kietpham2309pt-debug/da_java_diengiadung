@@ -37,20 +37,21 @@
 
                     <div class="khoi">
                         <form th:action="@{/admin/thuong-hieu/luu}" th:object="${thuongHieu}" method="post">
+                            <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                             <input type="hidden" th:field="*{id}">
 
                             <div class="o-nhap">
                                 <label for="tenThuongHieu">Tên thương hiệu</label>
                                 <input type="text" id="tenThuongHieu" th:field="*{tenThuongHieu}" placeholder="VD: Bosch">
 
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenThuongHieu')}" th:errors="*{tenThuongHieu}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenThuongHieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenThuongHieu')}"></span>
                             </div>
 
                             <div class="o-nhap">
                                 <label for="xuatXu">Xuất xứ</label>
                                 <input type="text" id="xuatXu" th:field="*{xuatXu}" placeholder="VD: Đức">
 
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('xuatXu')}" th:errors="*{xuatXu}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('xuatXu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'xuatXu')}"></span>
                             </div>
 
                             <div class="hang-nut">

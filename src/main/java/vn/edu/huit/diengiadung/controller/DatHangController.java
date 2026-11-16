@@ -145,13 +145,10 @@ public class DatHangController {
             ketQuaKiemTra.rejectValue("phuongThuc", "codVuotMuc", "Đơn hàng này không áp dụng thanh toán khi nhận hàng");
         }
         if (ketQuaKiemTra.hasErrors()) {
-            String loiChung = "Vui lòng kiểm tra lại các ô được đánh dấu.";
             if (ketQuaKiemTra.hasFieldErrors("maGiamGia")) {
-                loiChung = ketQuaKiemTra.getFieldError("maGiamGia").getDefaultMessage() + ". " + loiChung;
                 thongTin.setMaGiamGia(null);
             }
             nhoiDuLieuTrang(moHinh, chiTiet, thongTin, phien);
-            moHinh.addAttribute("loiChung", loiChung);
             return "dat-hang";
         }
         try {

@@ -70,7 +70,7 @@ public class DonHangServiceImpl implements DonHangService {
 
     @Override
     @Transactional
-    public void huyDonHang(Long id) {
+    public void huyDonHang(Long id, String lyDo, String huyBoi) {
         DonHang donHang = layTheoId(id);
         String trangThai = donHang.getTrangThai();
 
@@ -90,6 +90,9 @@ public class DonHangServiceImpl implements DonHangService {
             sanPhamRepository.save(sanPham);
         }
         uuDaiService.hoanLuotDungMa(donHang.getMaGiamGia());
+        donHang.setLyDoHuy(lyDo);
+        donHang.setHuyBoi(huyBoi);
+        donHang.setNgayHuy(java.time.LocalDateTime.now());
         donHang.setTrangThai(DonHang.DA_HUY);
         donHangRepository.save(donHang);
     }

@@ -34,12 +34,13 @@
 
                     <div class="khoi">
                         <form th:action="@{/admin/loai-san-pham/luu}" th:object="${loaiSanPham}" method="post">
+                            <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                             <input type="hidden" th:field="*{id}">
 
                             <div class="o-nhap">
                                 <label for="tenLoai">Tên loại</label>
                                 <input type="text" id="tenLoai" th:field="*{tenLoai}" placeholder="Bếp điện từ">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenLoai')}" th:errors="*{tenLoai}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenLoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenLoai')}"></span>
                             </div>
 
                             <div class="o-nhap">
@@ -48,14 +49,14 @@
                                 <span class="goi-y">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã này chọn icon,
                                     ảnh danh mục <b>/img/sp-&lt;mã&gt;.jpg</b> và ảnh banner <b>/img/banner-&lt;mã&gt;.jpg</b>.
                                     Mã có sẵn ảnh: bep-dien-tu, bep-hong-ngoai, hut-mui, rua-chen, lo-nuong, lo-vi-song.</span>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('maLoai')}" th:errors="*{maLoai}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('maLoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'maLoai')}"></span>
                             </div>
 
                             <div class="o-nhap">
                                 <label for="moTa">Mô tả</label>
                                 <textarea id="moTa" rows="3" th:field="*{moTa}"
                                           placeholder="Một câu ngắn mô tả nhóm hàng này"></textarea>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
                             </div>
 
                             <div class="hang-nut">

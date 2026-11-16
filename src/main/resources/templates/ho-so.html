@@ -14,29 +14,31 @@
             <div th:replace="~{layout/fragments :: thongBao}"></div>
 
             <div class="the-tk hien-dan">
-                <form th:action="@{/ho-so}" th:object="${hoSo}" method="post">
+                <form th:action="@{/ho-so}" th:object="${hoSo}" method="post" novalidate data-kiem-tra>
+                    <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                     <div class="o-nhap">
                         <label for="hoTen">Họ và tên</label>
-                        <input type="text" id="hoTen" th:field="*{hoTen}" autocomplete="name">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"></span>
+                        <input type="text" id="hoTen" th:field="*{hoTen}" autocomplete="name" required>
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('hoTen')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'hoTen')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="email">Email</label>
-                        <input type="email" id="email" th:field="*{email}" autocomplete="email">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                        <input type="email" id="email" th:field="*{email}" autocomplete="email" data-sai="Email chưa đúng định dạng, ví dụ: ten@gmail.com">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="soDienThoai">Số điện thoại</label>
-                        <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" autocomplete="tel">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
+                        <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" autocomplete="tel" required pattern="0\d{9}" maxlength="10"
+                               inputmode="tel" data-sai="Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng 0">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soDienThoai')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="diaChi">Địa chỉ</label>
                         <input type="text" id="diaChi" th:field="*{diaChi}" autocomplete="street-address">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}"></span>
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('diaChi')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'diaChi')}"></span>
                     </div>
 
                     <button type="submit" class="nut nut--dac the-tk__gui">Lưu hồ sơ</button>

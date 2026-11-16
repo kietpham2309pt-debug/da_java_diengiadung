@@ -28,5 +28,5 @@ public interface DatHangService {
 
     DonHang traCuuDon(String maDon, String soDienThoai);
 
-    void huyDonCuaKhach(TaiKhoan taiKhoan, Long idDonHang);
+    void huyDonCuaKhach(TaiKhoan taiKhoan, Long idDonHang, String lyDo, String lyDoKhac);
 }

@@ -36,31 +36,32 @@
 
                     <div class="khoi">
                         <form th:action="@{/admin/nha-cung-cap/luu}" th:object="${nhaCungCap}" method="post">
+                            <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                             <input type="hidden" th:field="*{id}">
 
                             <div class="o-nhap">
                                 <label for="tenNhaCungCap">Tên nhà cung cấp</label>
                                 <input type="text" id="tenNhaCungCap" th:field="*{tenNhaCungCap}" placeholder="VD: Công ty TNHH Bếp Xanh">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenNhaCungCap')}" th:errors="*{tenNhaCungCap}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenNhaCungCap')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenNhaCungCap')}"></span>
                             </div>
 
                             <div class="o-doi">
                                 <div class="o-nhap">
                                     <label for="soDienThoai">Số điện thoại</label>
                                     <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="VD: 0901234567">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoai')}" th:errors="*{soDienThoai}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soDienThoai')}"></span>
                                 </div>
                                 <div class="o-nhap">
                                     <label for="email">Email</label>
                                     <input type="email" id="email" th:field="*{email}" placeholder="VD: contact@bepxanh.vn">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
                                 </div>
                             </div>
 
                             <div class="o-nhap">
                                 <label for="diaChi">Địa chỉ</label>
                                 <input type="text" id="diaChi" th:field="*{diaChi}" placeholder="VD: 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('diaChi')}" th:errors="*{diaChi}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('diaChi')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'diaChi')}"></span>
                             </div>
 
                             <div class="hang-nut">

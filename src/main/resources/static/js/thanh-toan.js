@@ -186,27 +186,6 @@
       });
     }
 
-    var xoaLoi = function (e) {
-      var o = e.target;
-      if (o.id === "maGiamGia") {
-        return;
-      }
-      var khoi = o.closest(".o-nhap, .tt-dong-y, .tt-nhom");
-      if (o.name === "phuongThuc") {
-        var nhom = o.closest(".tt-pt");
-        nhom.classList.remove("tt-pt--loi");
-        khoi = nhom.parentNode;
-      }
-      if (o.getAttribute("aria-invalid") === "true") {
-        o.setAttribute("aria-invalid", "false");
-      }
-      if (khoi) {
-        khoi.querySelectorAll(":scope > .loi-nhap").forEach(function (el) { el.remove(); });
-      }
-    };
-    form.addEventListener("input", xoaLoi);
-    form.addEventListener("change", xoaLoi);
-
     var loiDau = form.querySelector('[aria-invalid="true"]');
     if (loiDau) {
       loiDau.focus();

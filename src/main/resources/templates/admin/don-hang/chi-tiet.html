@@ -70,6 +70,11 @@
                                   th:text="${donHang.daThanhToan} ? 'Đã nhận tiền' : 'Chưa nhận tiền'">Chưa nhận tiền</span>
                         </p>
 
+                        <p class="dh-huy" th:if="${donHang.trangThai == 'DA_HUY' and donHang.lyDoHuy != null}">
+                            <strong>Lý do huỷ:</strong> <span th:text="${donHang.lyDoHuy}">Lý do</span>
+                            <small th:text="'(' + ${donHang.tenNguoiHuy} + ' huỷ lúc ' + ${#temporals.format(donHang.ngayHuy, 'dd/MM/yyyy HH:mm')} + ')'"></small>
+                        </p>
+
                         <p th:if="${donHang.thanhToanTruoc}">
                             <strong>Nội dung chuyển khoản:</strong>
                             <span th:text="${donHang.maDon}">BN000001</span>
@@ -191,15 +196,14 @@
                                 Xác nhận hoàn thành
                             </button>
                         </form>
-                        <form th:if="${donHang.trangThai == 'CHO_XAC_NHAN'
-                                    or donHang.trangThai == 'DA_XAC_NHAN'}"
-                              th:action="@{/admin/don-hang/{id}/huy(id=${donHang.id})}"
-                              method="post"
-                              onsubmit="return confirm('Bạn có chắc muốn hủy đơn hàng này không? Tồn kho sẽ được hoàn lại.');">
-                            <button class="nut nut--nho" type="submit">
-                                Hủy đơn hàng
-                            </button>
-                        </form>
+                        <button class="nut nut--nho" type="button" data-mo-hop="hop-huy"
+                                th:if="${donHang.trangThai == 'CHO_XAC_NHAN' or donHang.trangThai == 'DA_XAC_NHAN'}">
+                            Hủy đơn hàng
+                        </button>
+                        <th:block th:if="${donHang.trangThai == 'CHO_XAC_NHAN' or donHang.trangThai == 'DA_XAC_NHAN'}">
+                            <dialog th:replace="~{layout/fragments :: hopHuy(@{/admin/don-hang/{id}/huy(id=${donHang.id})}, ${donHang.maDon}, ${dsLyDoHuy},
+                                ${donHang.daThanhToan} ? 'Khách đã chuyển khoản: nhớ hoàn tiền cho khách. Tồn kho và lượt dùng mã sẽ được hoàn lại.' : 'Tồn kho và lượt dùng mã giảm giá sẽ được hoàn lại. Lý do sẽ hiển thị cho khách hàng.')}"></dialog>
+                        </th:block>
 
                         <p th:if="${donHang.trangThai == 'HOAN_THANH'}">
                             Đơn hàng đã hoàn thành, không thể cập nhật thêm.

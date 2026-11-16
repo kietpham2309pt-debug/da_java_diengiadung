@@ -60,6 +60,14 @@ public class DonHang {
 
     private Long tienKhuyenMai;
 
+    @Column(length = 300)
+    private String lyDoHuy;
+
+    @Column(length = 10)
+    private String huyBoi;
+
+    private LocalDateTime ngayHuy;
+
     private Long tongTien = 0L;
 
     private String trangThai = CHO_XAC_NHAN;
@@ -220,6 +228,37 @@ public class DonHang {
 
     public void setTienKhuyenMai(Long tienKhuyenMai) {
         this.tienKhuyenMai = tienKhuyenMai;
+    }
+
+    public String getLyDoHuy() {
+        return lyDoHuy;
+    }
+
+    public void setLyDoHuy(String lyDoHuy) {
+        this.lyDoHuy = lyDoHuy;
+    }
+
+    public String getHuyBoi() {
+        return huyBoi;
+    }
+
+    public void setHuyBoi(String huyBoi) {
+        this.huyBoi = huyBoi;
+    }
+
+    public String getTenNguoiHuy() {
+        if (huyBoi == null) {
+            return null;
+        }
+        return "KHACH".equals(huyBoi) ? "Khách hàng" : "Cửa hàng";
+    }
+
+    public LocalDateTime getNgayHuy() {
+        return ngayHuy;
+    }
+
+    public void setNgayHuy(LocalDateTime ngayHuy) {
+        this.ngayHuy = ngayHuy;
     }
 
     public long getTongUuDai() {

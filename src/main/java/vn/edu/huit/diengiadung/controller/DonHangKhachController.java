@@ -18,6 +18,7 @@ import vn.edu.huit.diengiadung.entity.TaiKhoan;
 import vn.edu.huit.diengiadung.service.CauHinhThanhToan;
 import vn.edu.huit.diengiadung.service.DatHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
+import vn.edu.huit.diengiadung.service.LyDoHuyDon;
 
 import java.util.Map;
 
@@ -85,6 +86,7 @@ public class DonHangKhachController {
             DonHang donHang = layDonDuocXem(phien, id);
             moHinh.addAttribute("donHang", donHang);
             moHinh.addAttribute("laChuDon", layTaiKhoan(phien) != null && !donHang.isKhachVangLai());
+            moHinh.addAttribute("dsLyDoHuy", LyDoHuyDon.CUA_KHACH);
             moHinh.addAttribute("nganHang", cauHinhThanhToan);
             moHinh.addAttribute("linkMaQr", cauHinhThanhToan.linkMaQr(donHang.getTongTien(), donHang.getMaDon()));
         } catch (LoiNghiepVu loi) {
@@ -105,10 +107,13 @@ public class DonHangKhachController {
     }
 
     @PostMapping("/{id}/huy")
-    public String huyDon(@PathVariable Long id, HttpSession phien, RedirectAttributes thongBao) {
+    public String huyDon(@PathVariable Long id,
+                         @RequestParam(required = false) String lyDo,
+                         @RequestParam(required = false) String lyDoKhac,
+                         HttpSession phien, RedirectAttributes thongBao) {
         try {
-            dichVuDatHang.huyDonCuaKhach(layTaiKhoan(phien), id);
-            thongBao.addFlashAttribute("thongBao", "Đã huỷ đơn hàng #" + id);
+            dichVuDatHang.huyDonCuaKhach(layTaiKhoan(phien), id, lyDo, lyDoKhac);
+            thongBao.addFlashAttribute("thongBao", "Đã huỷ đơn hàng. Tồn kho và lượt dùng mã giảm giá (nếu có) đã được hoàn lại.");
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
         }

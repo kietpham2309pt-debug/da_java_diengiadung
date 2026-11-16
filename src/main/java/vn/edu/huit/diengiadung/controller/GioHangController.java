@@ -34,6 +34,20 @@ public class GioHangController {
         return "gio-hang";
     }
 
+    @PostMapping("/mua-ngay")
+    public String muaNgay(@RequestParam Long id,
+                          @RequestParam(defaultValue = "1") String soLuong,
+                          HttpSession phien,
+                          RedirectAttributes thongBao) {
+        try {
+            dichVuGioHang.them(layGioHang(phien), id, docSoLuong(soLuong));
+            return "redirect:/dat-hang";
+        } catch (LoiNghiepVu loi) {
+            thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
+            return "redirect:/san-pham/" + id;
+        }
+    }
+
     @PostMapping("/them")
     public String them(@RequestParam Long id,
                        @RequestParam(defaultValue = "1") String soLuong,

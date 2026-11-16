@@ -37,6 +37,7 @@
 
                     <div class="khoi">
                         <form th:action="@{/admin/ma-giam-gia/luu}" th:object="${maGiamGia}" method="post" novalidate>
+                            <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                             <input type="hidden" th:field="*{id}">
 
                             <fieldset class="qt-nhom">
@@ -48,12 +49,12 @@
                                         <button class="nut nut--nho" type="button" id="tao-ma" th:attr="data-url=@{/admin/ma-giam-gia/ma-ngau-nhien}">Tạo mã ngẫu nhiên</button>
                                     </div>
                                     <span class="o-nhap__goi">Khách nhập mã này ở bước thanh toán, không phân biệt hoa thường.</span>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ma')}" th:errors="*{ma}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ma')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ma')}"></span>
                                 </div>
                                 <div class="o-nhap">
                                     <label for="moTa">Mô tả (nội bộ)</label>
                                     <input type="text" id="moTa" th:field="*{moTa}" maxlength="255" placeholder="VD: Tặng khách đăng ký mới">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
                                 </div>
                             </fieldset>
 
@@ -64,7 +65,7 @@
                                 <div class="o-nhap">
                                     <label for="gioiHanLuotDung">Tổng số lượt được dùng</label>
                                     <input type="number" id="gioiHanLuotDung" th:field="*{gioiHanLuotDung}" min="1" placeholder="Để trống = không giới hạn">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('gioiHanLuotDung')}" th:errors="*{gioiHanLuotDung}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('gioiHanLuotDung')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'gioiHanLuotDung')}"></span>
                                 </div>
                                 <div class="qt-chon" style="margin-top:14px">
                                     <label><input type="checkbox" th:field="*{moiKhachMotLan}"> Mỗi khách hàng chỉ được dùng 1 lần</label>

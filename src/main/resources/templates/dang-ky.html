@@ -17,35 +17,40 @@
             </p>
 
             <div class="the-tk hien-dan">
-                <form th:action="@{/dang-ky}" th:object="${taiKhoan}" method="post">
+                <form th:action="@{/dang-ky}" th:object="${taiKhoan}" method="post" novalidate data-kiem-tra>
+                    <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                     <div class="o-nhap">
                         <label for="tenDangNhap">Tên đăng nhập</label>
-                        <input type="text" id="tenDangNhap" th:field="*{tenDangNhap}" autocomplete="username">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('tenDangNhap')}" th:errors="*{tenDangNhap}"></span>
+                        <input type="text" id="tenDangNhap" th:field="*{tenDangNhap}" autocomplete="username" required minlength="4" maxlength="50"
+                               data-sai="Tên đăng nhập phải từ 4 đến 50 ký tự">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('tenDangNhap')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenDangNhap')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="matKhau">Mật khẩu</label>
-                        <input type="password" id="matKhau" th:field="*{matKhau}" autocomplete="new-password">
+                        <input type="password" id="matKhau" th:field="*{matKhau}" autocomplete="new-password" required minlength="6"
+                               data-sai="Mật khẩu phải có ít nhất 6 ký tự">
                         <span class="goi-y">Ít nhất 6 ký tự.</span>
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('matKhau')}" th:errors="*{matKhau}"></span>
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('matKhau')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'matKhau')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="hoTen">Họ và tên</label>
-                        <input type="text" id="hoTen" th:field="*{hoTen}">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('hoTen')}" th:errors="*{hoTen}"></span>
+                        <input type="text" id="hoTen" th:field="*{hoTen}" required autocomplete="name">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('hoTen')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'hoTen')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="email">Email</label>
-                        <input type="email" id="email" th:field="*{email}" placeholder="ban@gmail.com">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                        <input type="email" id="email" th:field="*{email}" placeholder="ban@gmail.com"
+                               data-sai="Email chưa đúng định dạng, ví dụ: ten@gmail.com">
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="soDienThoai">Số điện thoại</label>
-                        <input type="tel" id="soDienThoai" name="soDienThoai" th:value="${soDienThoai}">
+                        <input type="tel" id="soDienThoai" name="soDienThoai" th:value="${soDienThoai}" pattern="0\d{9}" maxlength="10"
+                               inputmode="tel" data-sai="Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng 0">
                     </div>
 
                     <div class="o-nhap">

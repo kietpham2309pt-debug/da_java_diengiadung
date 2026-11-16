@@ -7,15 +7,15 @@ import jakarta.validation.constraints.Size;
 
 public class HoSoKhachHang {
 
-    @NotBlank(message = "Họ tên không được để trống")
+    @NotBlank(message = "Vui lòng nhập họ tên")
     @Size(max = 100, message = "Họ tên tối đa 100 ký tự")
     private String hoTen;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Email chưa đúng định dạng, ví dụ: ten@gmail.com")
     private String email;
 
-    @NotBlank(message = "Số điện thoại không được để trống")
-    @Pattern(regexp = "^0\\d{9}$", message = "Số điện thoại gồm 10 chữ số và bắt đầu bằng 0")
+    @NotBlank(message = "Vui lòng nhập số điện thoại")
+    @Pattern(regexp = "^$|^0\\d{9}$", message = "Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng 0")
     private String soDienThoai;
 
     @Size(max = 255, message = "Địa chỉ tối đa 255 ký tự")
