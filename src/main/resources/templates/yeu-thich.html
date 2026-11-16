@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Sản phẩm yêu thích', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Sản phẩm yêu thích', 'Những sản phẩm bạn đã lưu để xem lại', 'banner-tai-khoan.jpg', 'Sản phẩm yêu thích')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+            <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
+                <svg class="ic ic--to"><use xlink:href="#ic-yeu-thich"></use></svg>
+                <p>Bạn chưa lưu sản phẩm nào. Bấm «Thêm vào danh sách yêu thích» ở trang chi tiết sản phẩm để lưu lại.</p>
+                <a class="nut nut--dac" th:href="@{/san-pham}">Xem sản phẩm</a>
+            </div>
+
+            <div class="luoi-sp" th:unless="${#lists.isEmpty(danhSach)}">
+                <div class="o-yeu-thich" th:each="sp : ${danhSach}">
+                    <a th:replace="~{layout/the-san-pham :: theSanPham(${sp})}"></a>
+                    <form method="post" th:action="@{/yeu-thich/{id}(id=${sp.id})}">
+                        <input type="hidden" name="quayVe" value="danh-sach">
+                        <button type="submit" class="nut-chu dang-chon">
+                            <svg class="ic"><use xlink:href="#ic-yeu-thich"></use></svg>
+                            <span>Bỏ khỏi danh sách</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

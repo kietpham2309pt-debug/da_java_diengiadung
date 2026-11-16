@@ -73,6 +73,8 @@
                th:href="@{/don-hang}">Đơn hàng</a>
             <a class="dh-nut" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
                th:href="@{/ho-so}">Hồ sơ</a>
+            <a class="dh-nut" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/yeu-thich}">Yêu thích</a>
             <a class="dh-nut" th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}"
                th:text="'Đăng xuất (' + ${taiKhoanHienTai.hoTen} + ')'">Đăng xuất</a>
         </nav>
@@ -219,6 +221,8 @@
                th:href="@{/don-hang}">Đơn hàng của tôi</a>
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
                th:href="@{/ho-so}">Hồ sơ</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and !taiKhoanHienTai.laQuanTri()}"
+               th:href="@{/yeu-thich}">Sản phẩm yêu thích</a>
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null}" th:href="@{/dang-xuat}">Đăng xuất</a>
         </div>
     </div>

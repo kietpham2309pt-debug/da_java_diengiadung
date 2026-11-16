@@ -97,3 +97,11 @@
 .gal__nho img[src*="/img/sp/"]{object-fit:scale-down; mix-blend-mode:multiply; padding:6%; transition:transform var(--vua)}
 .sp:hover .sp__anh img[src*="/img/sp/"]{transform:scale(1.04)}
 .anh-hien-tai img[src*="/img/sp/"]{object-fit:contain; padding:6px; background:#F1EEE9}
+
+.ct__yeu-thich{margin-top:14px}
+.nut-chu{display:inline-flex; align-items:center; gap:8px; padding:6px 0; background:none; border:0; color:var(--chu-nhat); font:inherit; font-size:14.5px; cursor:pointer; transition:color var(--nhanh)}
+.nut-chu .ic{width:20px; height:20px; fill:none; stroke:currentColor}
+.nut-chu:hover,.nut-chu.dang-chon{color:var(--dong)}
+.nut-chu.dang-chon .ic{fill:currentColor}
+.o-yeu-thich{display:grid; gap:10px; align-content:start}
+.o-yeu-thich form{display:flex; justify-content:center}

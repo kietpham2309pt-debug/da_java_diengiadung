@@ -10,7 +10,9 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Formula;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class SanPham {
@@ -47,6 +49,9 @@ public class SanPham {
 
     @Column(length = 2000)
     private String anhPhu;
+
+    @ManyToMany(mappedBy = "sanPhamYeuThich")
+    private Set<KhachHang> khachHangYeuThich = new LinkedHashSet<>();
 
     @Size(max = 100, message = "Công suất hoặc dung tích tối đa 100 ký tự")
     private String congSuat;
@@ -185,6 +190,14 @@ public class SanPham {
 
     public void setThuongHieu(ThuongHieu thuongHieu) {
         this.thuongHieu = thuongHieu;
+    }
+
+    public Set<KhachHang> getKhachHangYeuThich() {
+        return khachHangYeuThich;
+    }
+
+    public void setKhachHangYeuThich(Set<KhachHang> khachHangYeuThich) {
+        this.khachHangYeuThich = khachHangYeuThich;
     }
 
     public String getAnhPhu() {

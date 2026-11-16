@@ -1,6 +1,7 @@
 package vn.edu.huit.diengiadung.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 import vn.edu.huit.diengiadung.entity.LoaiSanPham;
 import vn.edu.huit.diengiadung.entity.SanPham;
+import vn.edu.huit.diengiadung.entity.TaiKhoan;
 import vn.edu.huit.diengiadung.entity.ThuongHieu;
 import vn.edu.huit.diengiadung.repository.ThuongHieuRepository;
 import vn.edu.huit.diengiadung.service.BoLocSanPham;
@@ -18,6 +20,7 @@ import vn.edu.huit.diengiadung.service.LoaiSanPhamService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.MucGia;
 import vn.edu.huit.diengiadung.service.SanPhamService;
+import vn.edu.huit.diengiadung.service.YeuThichService;
 
 @Controller
 public class SanPhamController {
@@ -27,13 +30,16 @@ public class SanPhamController {
     private final SanPhamService dichVuSanPham;
     private final LoaiSanPhamService dichVuLoaiSanPham;
     private final ThuongHieuRepository duLieuThuongHieu;
+    private final YeuThichService dichVuYeuThich;
 
     public SanPhamController(SanPhamService dichVuSanPham,
                              LoaiSanPhamService dichVuLoaiSanPham,
-                             ThuongHieuRepository duLieuThuongHieu) {
+                             ThuongHieuRepository duLieuThuongHieu,
+                             YeuThichService dichVuYeuThich) {
         this.dichVuSanPham = dichVuSanPham;
         this.dichVuLoaiSanPham = dichVuLoaiSanPham;
         this.duLieuThuongHieu = duLieuThuongHieu;
+        this.dichVuYeuThich = dichVuYeuThich;
     }
 
     @GetMapping("/san-pham")
@@ -72,7 +78,7 @@ public class SanPhamController {
     }
 
     @GetMapping("/san-pham/{id}")
-    public String chiTiet(@PathVariable Long id, Model moHinh) {
+    public String chiTiet(@PathVariable Long id, HttpSession phien, Model moHinh) {
         SanPham sanPham;
         try {
             sanPham = dichVuSanPham.laySanPhamDangBan(id);
@@ -81,6 +87,9 @@ public class SanPhamController {
         }
         moHinh.addAttribute("sanPham", sanPham);
         moHinh.addAttribute("danhSachCungLoai", dichVuSanPham.laySanPhamCungLoai(sanPham, SO_SAN_PHAM_CUNG_LOAI));
+        Object nguoiDung = phien.getAttribute("taiKhoan");
+        moHinh.addAttribute("daYeuThich",
+                nguoiDung instanceof TaiKhoan taiKhoan && !taiKhoan.laQuanTri() && dichVuYeuThich.daYeuThich(taiKhoan, id));
         return "chi-tiet-san-pham";
     }
 
