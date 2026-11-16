@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Hoá đơn #' + ${donHang.id} + ' - Bep Nè'">Hoá đơn</title>
+    <link rel="stylesheet" th:href="@{/css/hoa-don.css}">
+</head>
+<body>
+<div class="hd">
+    <div class="hd__nut">
+        <button type="button" onclick="window.print()">In hoá đơn</button>
+        <a th:href="@{/admin/don-hang/{id}(id=${donHang.id})}">Quay lại đơn hàng</a>
+    </div>
+
+    <header class="hd__dau">
+        <div>
+            <h1>Bep Nè</h1>
+            <p>140 Lê Trọng Tấn, phường Tây Thạnh, TP. Hồ Chí Minh</p>
+            <p>Điện thoại: 0339 999 999</p>
+        </div>
+        <div class="hd__so">
+            <h2>Hoá đơn bán hàng</h2>
+            <p>Số: <b th:text="'#' + ${donHang.id}">#1</b></p>
+            <p>Ngày đặt: <span th:text="${donHang.ngayDat != null ? #temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm') : ''}">21/10/2026</span></p>
+            <p>Trạng thái: <span th:text="${donHang.tenTrangThai}">Hoàn thành</span></p>
+        </div>
+    </header>
+
+    <section class="hd__khach">
+        <p><b>Người nhận:</b> <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span></p>
+        <p><b>Số điện thoại:</b> <span th:text="${donHang.soDienThoaiNhan}">0900000000</span></p>
+        <p><b>Địa chỉ giao hàng:</b> <span th:text="${donHang.diaChiGiao}">TP.HCM</span></p>
+        <p th:if="${donHang.ghiChu != null and !donHang.ghiChu.isBlank()}"><b>Ghi chú:</b> <span th:text="${donHang.ghiChu}"></span></p>
+    </section>
+
+    <table class="hd__bang">
+        <thead>
+        <tr>
+            <th>STT</th>
+            <th>Sản phẩm</th>
+            <th class="phai">Đơn giá</th>
+            <th class="phai">SL</th>
+            <th class="phai">Thành tiền</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ct, stt : ${donHang.danhSachChiTiet}">
+            <td th:text="${stt.count}">1</td>
+            <td>
+                <span th:text="${ct.sanPham != null ? ct.sanPham.tenSanPham : 'Sản phẩm không còn tồn tại'}">Tên</span>
+                <small th:if="${ct.sanPham != null}" th:text="${ct.sanPham.maSanPham}">MA</small>
+            </td>
+            <td class="phai" th:text="${#numbers.formatInteger(ct.donGia != null ? ct.donGia : 0, 1, 'POINT')} + ' ₫'">0 ₫</td>
+            <td class="phai" th:text="${ct.soLuong}">1</td>
+            <td class="phai" th:text="${#numbers.formatInteger(ct.thanhTien, 1, 'POINT')} + ' ₫'">0 ₫</td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th colspan="4" class="phai">Tổng cộng</th>
+            <th class="phai" th:text="${#numbers.formatInteger(donHang.tongTien != null ? donHang.tongTien : 0, 1, 'POINT')} + ' ₫'">0 ₫</th>
+        </tr>
+        </tfoot>
+    </table>
+
+    <footer class="hd__ky">
+        <div><b>Người mua hàng</b><span>(Ký, ghi rõ họ tên)</span></div>
+        <div><b>Người bán hàng</b><span>(Ký, ghi rõ họ tên)</span></div>
+    </footer>
+</div>
+</body>
+</html>
