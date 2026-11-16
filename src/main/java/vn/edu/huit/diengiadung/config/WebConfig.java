@@ -24,6 +24,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new KiemTraMaChongInterceptor()).addPathPatterns("/**").excludePathPatterns("/api/**", "/error");
         registry.addInterceptor(new QuanTriInterceptor()).addPathPatterns("/admin/**");
     }
 

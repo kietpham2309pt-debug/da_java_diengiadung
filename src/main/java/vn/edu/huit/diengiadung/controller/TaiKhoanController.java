@@ -1,5 +1,6 @@
 package vn.edu.huit.diengiadung.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -38,10 +39,12 @@ public class TaiKhoanController {
     @PostMapping("/dang-nhap")
     public String dangNhap(@RequestParam String tenDangNhap,
                            @RequestParam String matKhau,
+                           HttpServletRequest yeuCau,
                            HttpSession session,
                            Model model) {
         try {
             TaiKhoan taiKhoan = taiKhoanService.dangNhap(tenDangNhap, matKhau);
+            yeuCau.changeSessionId();
             session.setAttribute("taiKhoan", taiKhoan);
             if (taiKhoan.laQuanTri()) {
                 return "redirect:/admin";
