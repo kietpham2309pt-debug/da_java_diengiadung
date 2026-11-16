@@ -1,16 +1,20 @@
 package vn.edu.huit.diengiadung.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.model.GioHang;
 import vn.edu.huit.diengiadung.service.GioHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/gio-hang")
@@ -42,6 +46,22 @@ public class GioHangController {
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
             return "redirect:/gio-hang";
+        }
+    }
+
+    @PostMapping(value = "/them", headers = "X-Requested-With=XMLHttpRequest")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> themKhongChuyenTrang(@RequestParam Long id,
+                                                                     @RequestParam(defaultValue = "1") String soLuong,
+                                                                     HttpSession phien) {
+        GioHang gioHang = layGioHang(phien);
+        try {
+            dichVuGioHang.them(gioHang, id, docSoLuong(soLuong));
+            return ResponseEntity.ok(Map.of("ok", true, "soMon", gioHang.getTongSoLuong(),
+                    "thongBao", "Đã thêm sản phẩm vào giỏ hàng"));
+        } catch (LoiNghiepVu loi) {
+            return ResponseEntity.badRequest().body(Map.of("ok", false, "soMon", gioHang.getTongSoLuong(),
+                    "loi", loi.getMessage()));
         }
     }
 
