@@ -94,3 +94,7 @@ INSERT IGNORE INTO khuyen_mai (id, ten, mo_ta, loai_giam, gia_tri, giam_toi_da, 
 (1, 'Tuần lễ bếp từ - thành viên giảm 3%', 'Áp dụng cho mọi bếp điện từ', 'PHAN_TRAM', 3, 1000000, 0, '2026-11-01 00:00:00', '2026-12-31 23:59:00', b'1', 'LOAI_SAN_PHAM', 1, NULL, b'1'),
 (2, 'Thành viên mua Bosch giảm 500k', 'Đơn hàng Bosch từ 15 triệu', 'SO_TIEN', 500000, NULL, 15000000, '2026-11-01 00:00:00', '2026-12-31 23:59:00', b'1', 'THUONG_HIEU', NULL, 1, b'1'),
 (3, 'Giảm 1% mọi đơn từ 20 triệu', 'Áp dụng cả khách không đăng nhập', 'PHAN_TRAM', 1, 300000, 20000000, '2026-11-01 00:00:00', NULL, b'1', 'TAT_CA', NULL, NULL, b'0');
+INSERT IGNORE INTO danh_gia (id, san_pham_id, khach_hang_id, so_sao, noi_dung, ngay_tao, hien) VALUES
+(1, 1, 101, 5, 'Bếp nấu nhanh, mặt kính dễ lau. Nhân viên giao và lắp đặt đúng hẹn.', '2026-10-23 19:10:00', b'1'),
+(2, 7, 102, 4, 'Bếp chạy êm, nấu ổn. Trừ 1 sao vì hộp hơi móp khi giao.', '2026-10-24 08:40:00', b'1'),
+(3, 14, 104, 5, 'Máy rửa sạch, sấy khô tốt, gia đình 5 người dùng rất hợp.', '2026-10-21 21:05:00', b'1');

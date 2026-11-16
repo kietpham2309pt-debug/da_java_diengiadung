@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Đánh giá sản phẩm', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Đánh giá sản phẩm</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('danh-gia')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Đánh giá sản phẩm</h1>
+                            <p>Đánh giá của khách đã mua hàng. Ẩn những nhận xét vi phạm hoặc spam.</p>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/danh-gia}" method="get">
+                            <select name="soSao" aria-label="Lọc theo số sao">
+                                <option value="">Mọi số sao</option>
+                                <option th:each="s : ${#numbers.sequence(5, 1, -1)}" th:value="${s}" th:selected="${soSao == s}"
+                                        th:text="${s} + ' sao'">5 sao</option>
+                            </select>
+                            <select name="hien" aria-label="Lọc theo hiển thị">
+                                <option value="">Đang hiện và đã ẩn</option>
+                                <option value="true" th:selected="${hien == true}">Đang hiện</option>
+                                <option value="false" th:selected="${hien == false}">Đã ẩn</option>
+                            </select>
+                            <button class="nut nut--nho" type="submit">Lọc</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Chưa có đánh giá nào phù hợp.</p>
+                    </div>
+
+                    <div class="khoi" th:unless="${#lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Sản phẩm</th>
+                                    <th>Khách hàng</th>
+                                    <th>Đánh giá</th>
+                                    <th>Ngày</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="dg : ${danhSach}">
+                                    <td>
+                                        <a th:href="@{'/san-pham/' + ${dg.sanPham.id} + '#danh-gia'}" target="_blank" rel="noopener"
+                                           th:text="${dg.sanPham.tenSanPham}">Sản phẩm</a>
+                                    </td>
+                                    <td th:text="${dg.khachHang.hoTen}">Khách</td>
+                                    <td>
+                                        <span class="sao" th:attr="aria-label=${dg.soSao} + ' sao'"
+                                              th:text="${#strings.repeat('★', dg.soSao)} + ${#strings.repeat('☆', 5 - dg.soSao)}">★★★★★</span>
+                                        <span class="qt-phu" th:text="${dg.noiDung} ?: '(không có nhận xét)'">Nhận xét</span>
+                                        <span class="qt-the qt-the--het" th:unless="${dg.hien}">Đã ẩn</span>
+                                    </td>
+                                    <td th:text="${#temporals.format(dg.ngayTao, 'dd/MM/yyyy')}">01/11/2026</td>
+                                    <td>
+                                        <div class="hang-thao-tac qt-doc">
+                                            <form th:action="@{'/admin/danh-gia/doi-hien/' + ${dg.id}}" method="post">
+                                                <button class="nut nut--nho" type="submit" th:text="${dg.hien} ? 'Ẩn' : 'Hiện lại'">Ẩn</button>
+                                            </form>
+                                            <form th:action="@{'/admin/danh-gia/xoa/' + ${dg.id}}" method="post"
+                                                  onsubmit="return confirm('Xoá hẳn đánh giá này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

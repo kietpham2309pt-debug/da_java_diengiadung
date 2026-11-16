@@ -17,6 +17,7 @@ import vn.edu.huit.diengiadung.repository.ThuongHieuRepository;
 import vn.edu.huit.diengiadung.service.BoLocSanPham;
 import vn.edu.huit.diengiadung.service.KieuSapXep;
 import vn.edu.huit.diengiadung.service.LoaiSanPhamService;
+import vn.edu.huit.diengiadung.service.DanhGiaService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.MucGia;
 import vn.edu.huit.diengiadung.service.SanPhamService;
@@ -24,6 +25,8 @@ import vn.edu.huit.diengiadung.service.YeuThichService;
 
 @Controller
 public class SanPhamController {
+
+    private final DanhGiaService danhGiaService;
 
     private static final int SO_SAN_PHAM_CUNG_LOAI = 6;
 
@@ -35,7 +38,8 @@ public class SanPhamController {
     public SanPhamController(SanPhamService dichVuSanPham,
                              LoaiSanPhamService dichVuLoaiSanPham,
                              ThuongHieuRepository duLieuThuongHieu,
-                             YeuThichService dichVuYeuThich) {
+                             YeuThichService dichVuYeuThich, DanhGiaService danhGiaService) {
+        this.danhGiaService = danhGiaService;
         this.dichVuSanPham = dichVuSanPham;
         this.dichVuLoaiSanPham = dichVuLoaiSanPham;
         this.duLieuThuongHieu = duLieuThuongHieu;
@@ -90,6 +94,11 @@ public class SanPhamController {
         Object nguoiDung = phien.getAttribute("taiKhoan");
         moHinh.addAttribute("daYeuThich",
                 nguoiDung instanceof TaiKhoan taiKhoan && !taiKhoan.laQuanTri() && dichVuYeuThich.daYeuThich(taiKhoan, id));
+        TaiKhoan dangDung = nguoiDung instanceof TaiKhoan tk ? tk : null;
+        moHinh.addAttribute("dsDanhGia", danhGiaService.layDanhGiaHien(id));
+        moHinh.addAttribute("tongDanhGia", danhGiaService.tongHop(id));
+        moHinh.addAttribute("danhGiaCuaToi", danhGiaService.layCuaToi(dangDung, id));
+        moHinh.addAttribute("duocDanhGia", danhGiaService.duocDanhGia(dangDung, id));
         return "chi-tiet-san-pham";
     }
 

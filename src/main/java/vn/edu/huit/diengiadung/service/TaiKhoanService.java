@@ -20,5 +20,7 @@ public interface TaiKhoanService {
 
     void datLaiMatKhau(Long id, String matKhauMoi);
 
+    Long xacMinhQuenMatKhau(String tenDangNhap, String lienHe);
+
     void doiMatKhau(Long id, String matKhauCu, String matKhauMoi, String nhapLai);
 }

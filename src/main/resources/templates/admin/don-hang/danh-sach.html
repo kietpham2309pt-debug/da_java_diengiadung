@@ -32,7 +32,14 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/don-hang}" method="get">
-                            <select name="trangThai">
+                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Mã đơn, SĐT hoặc tên người nhận..." aria-label="Tìm đơn hàng">
+                            <select name="thanhToan" aria-label="Lọc theo thanh toán">
+                                <option value="">Mọi hình thức thanh toán</option>
+                                <option value="CHO_TIEN" th:selected="${thanhToan == 'CHO_TIEN'}">Chuyển khoản chưa nhận tiền</option>
+                                <option value="CK" th:selected="${thanhToan == 'CK'}">Thanh toán trước (CK)</option>
+                                <option value="COD" th:selected="${thanhToan == 'COD'}">COD</option>
+                            </select>
+                            <select name="trangThai" aria-label="Lọc theo trạng thái">
                                 <option value="">Tất cả trạng thái</option>
                                 <option value="CHO_XAC_NHAN"
                                         th:selected="${trangThai == 'CHO_XAC_NHAN'}">
@@ -58,12 +65,16 @@
 
                             <button class="nut nut--nho" type="submit">Lọc</button>
 
-                            <a th:if="${trangThai != null and !trangThai.isBlank()}"
+                            <a th:if="${(trangThai != null and !trangThai.isBlank()) or (tuKhoa != null and !tuKhoa.isBlank()) or (thanhToan != null and !thanhToan.isBlank())}"
                                th:href="@{/admin/don-hang}"
                                class="nut nut--nho">
                                 Bỏ lọc
                             </a>
                         </form>
+                    </div>
+
+                    <div class="khoi" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Không có đơn hàng nào khớp điều kiện lọc.</p>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
@@ -83,7 +94,10 @@
 
                                 <tbody>
                                 <tr th:each="donHang : ${danhSach}">
-                                    <td th:text="'#' + ${donHang.id}">#1</td>
+                                    <td>
+                                        <span th:text="${donHang.maDon}">BN000001</span>
+                                        <span class="qt-phu" th:text="${donHang.thanhToanTruoc} ? (${donHang.daThanhToan} ? 'CK · đã nhận tiền' : 'CK · chưa nhận tiền') : 'COD'">COD</span>
+                                    </td>
 
                                     <td th:text="${#temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')}">
                                         27/09/2026 10:30

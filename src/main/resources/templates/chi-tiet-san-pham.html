@@ -47,6 +47,14 @@
                     <p class="ct__hieu" th:if="${sanPham.thuongHieu != null}" th:text="${sanPham.thuongHieu.tenThuongHieu}">Bosch</p>
                     <h1 class="ct__ten" th:text="${sanPham.tenSanPham}">Tên sản phẩm</h1>
                     <p class="ma-mo" th:text="'Mã sản phẩm: ' + ${sanPham.maSanPham}">Mã sản phẩm</p>
+                    <a class="ct__sao" href="#danh-gia">
+                        <th:block th:if="${tongDanhGia.tongSo > 0}">
+                            <span class="sao" aria-hidden="true"
+                                  th:text="${#strings.repeat('★', T(java.lang.Math).round(tongDanhGia.trungBinh))} + ${#strings.repeat('☆', 5 - T(java.lang.Math).round(tongDanhGia.trungBinh))}">★★★★★</span>
+                            <span th:text="${tongDanhGia.trungBinh} + '/5 · ' + ${tongDanhGia.tongSo} + ' đánh giá'">4.7/5 · 3 đánh giá</span>
+                        </th:block>
+                        <span th:if="${tongDanhGia.tongSo == 0}">Chưa có đánh giá</span>
+                    </a>
 
                     <div class="ct__gia">
                         <b th:text="${#numbers.formatInteger(sanPham.giaHienTai, 0, 'POINT')} + ' ₫'">0 ₫</b>
@@ -177,6 +185,76 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="muc muc--vien" id="danh-gia">
+        <div class="khung">
+            <h2 class="tieu-de-muc">Đánh giá từ khách đã mua</h2>
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+            <div class="dg">
+                <div class="dg__tong">
+                    <p class="dg__diem"><b th:text="${tongDanhGia.tongSo > 0} ? ${tongDanhGia.trungBinh} : '–'">4.7</b><span>/5</span></p>
+                    <p class="sao sao--to" aria-hidden="true"
+                       th:text="${#strings.repeat('★', T(java.lang.Math).round(tongDanhGia.trungBinh))} + ${#strings.repeat('☆', 5 - T(java.lang.Math).round(tongDanhGia.trungBinh))}">★★★★★</p>
+                    <p class="dg__so" th:text="${tongDanhGia.tongSo} + ' đánh giá'">3 đánh giá</p>
+                    <ul class="dg__cot">
+                        <li th:each="s : ${#numbers.sequence(5, 1, -1)}">
+                            <span th:text="${s} + '★'">5★</span>
+                            <span class="dg__thanh"><span th:style="'width:' + ${tongDanhGia.phanTram(s)} + '%'"></span></span>
+                            <span th:text="${tongDanhGia.soLuong(s)}">0</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="dg__phai">
+                    <form class="dg__form" th:if="${duocDanhGia}" th:action="@{/san-pham/{id}/danh-gia(id=${sanPham.id})}" method="post"
+                          novalidate data-kiem-tra>
+                        <h3 th:text="${danhGiaCuaToi != null} ? 'Sửa đánh giá của bạn' : 'Viết đánh giá của bạn'">Viết đánh giá</h3>
+                        <p class="dg__an" th:if="${danhGiaCuaToi != null and !danhGiaCuaToi.hien}">Đánh giá trước của bạn đang bị ẩn do chưa phù hợp quy định. Bạn có thể sửa lại nội dung.</p>
+                        <fieldset class="dg__chon-sao">
+                            <legend>Bạn chấm mấy sao? <span class="tt-bb" aria-hidden="true">*</span></legend>
+                            <div class="dg__sao">
+                                <th:block th:each="s : ${#numbers.sequence(5, 1, -1)}">
+                                    <input type="radio" name="soSao" th:id="'sao' + ${s}" th:value="${s}" required
+                                           th:checked="${danhGiaCuaToi != null and danhGiaCuaToi.soSao == s}"
+                                           data-nhan="Số sao" data-thieu="Vui lòng chọn số sao (1 đến 5)">
+                                    <label th:for="'sao' + ${s}" th:title="${s} + ' sao'"><span class="an-di" th:text="${s} + ' sao'">5 sao</span>★</label>
+                                </th:block>
+                            </div>
+                        </fieldset>
+                        <div class="o-nhap">
+                            <label for="noiDungDg">Nhận xét <span class="tt-tuy-chon">(không bắt buộc)</span></label>
+                            <textarea id="noiDungDg" name="noiDung" rows="3" maxlength="1000"
+                                      placeholder="Sản phẩm dùng thế nào? Giao hàng, lắp đặt ra sao?"
+                                      th:text="${noiDungCu != null} ? ${noiDungCu} : (${danhGiaCuaToi != null} ? ${danhGiaCuaToi.noiDung} : '')"></textarea>
+                        </div>
+                        <button type="submit" class="nut nut--dac" th:text="${danhGiaCuaToi != null} ? 'Cập nhật đánh giá' : 'Gửi đánh giá'">Gửi đánh giá</button>
+                    </form>
+
+                    <p class="dg__moi" th:unless="${duocDanhGia}">
+                        <th:block th:if="${taiKhoanHienTai == null}">
+                            <a th:href="@{/dang-nhap(tiepTuc='/san-pham/' + ${sanPham.id})}">Đăng nhập</a> để viết đánh giá nếu bạn đã mua sản phẩm này.
+                        </th:block>
+                        <th:block th:if="${taiKhoanHienTai != null}">Chỉ khách đã mua và nhận hàng thành công mới đánh giá được sản phẩm này.</th:block>
+                    </p>
+
+                    <ul class="dg__ds" th:unless="${#lists.isEmpty(dsDanhGia)}">
+                        <li class="dg__muc" th:each="dg : ${dsDanhGia}">
+                            <p class="dg__dau">
+                                <b th:text="${dg.tenHienThi}">Nguyễn V. An</b>
+                                <span class="dg__mua">Đã mua hàng</span>
+                                <time th:text="${#temporals.format(dg.ngayTao, 'dd/MM/yyyy')}">01/11/2026</time>
+                            </p>
+                            <p class="sao" th:attr="aria-label=${dg.soSao} + ' trên 5 sao'"
+                               th:text="${#strings.repeat('★', dg.soSao)} + ${#strings.repeat('☆', 5 - dg.soSao)}">★★★★★</p>
+                            <p class="dg__noi" th:if="${dg.noiDung}" th:text="${dg.noiDung}">Nhận xét</p>
+                        </li>
+                    </ul>
+                    <p class="dg__trong" th:if="${#lists.isEmpty(dsDanhGia)}">Sản phẩm chưa có đánh giá nào.</p>
+                </div>
             </div>
         </div>
     </section>

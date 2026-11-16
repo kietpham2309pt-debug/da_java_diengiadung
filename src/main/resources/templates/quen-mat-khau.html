@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Quên mật khẩu', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Quên mật khẩu', 'Xác minh tài khoản để đặt lại mật khẩu mới', 'banner-tai-khoan.jpg', 'Quên mật khẩu')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+            <p class="thong-bao thong-bao--loi" th:if="${loiQuenMatKhau}" role="alert">
+                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                <span th:text="${loiQuenMatKhau}">Thông tin không khớp</span>
+            </p>
+
+            <div class="the-tk hien-dan">
+                <p class="the-tk__dan">Nhập tên đăng nhập và email hoặc số điện thoại bạn đã dùng khi đăng ký. Nếu khớp, bạn sẽ đặt được mật khẩu mới ngay.</p>
+                <form th:action="@{/quen-mat-khau}" method="post" novalidate data-kiem-tra>
+                    <div class="o-nhap">
+                        <label for="tenDangNhap">Tên đăng nhập</label>
+                        <input type="text" id="tenDangNhap" name="tenDangNhap" th:value="${tenDangNhapCu}" autocomplete="username" required>
+                    </div>
+                    <div class="o-nhap">
+                        <label for="lienHe">Email hoặc số điện thoại đã đăng ký</label>
+                        <input type="text" id="lienHe" name="lienHe" th:value="${lienHeCu}" autocomplete="email" required
+                               placeholder="ten@gmail.com hoặc 09xx xxx xxx" data-thieu="Vui lòng nhập email hoặc số điện thoại đã đăng ký">
+                    </div>
+                    <button type="submit" class="nut nut--dac the-tk__gui">Tiếp tục</button>
+                </form>
+                <p class="the-tk__doi"><a th:href="@{/dang-nhap}">Quay lại đăng nhập</a></p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

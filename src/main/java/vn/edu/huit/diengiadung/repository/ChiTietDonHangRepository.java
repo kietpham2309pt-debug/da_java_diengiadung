@@ -8,4 +8,6 @@ import java.util.List;
 public interface ChiTietDonHangRepository extends JpaRepository<ChiTietDonHang, Long> {
 
     List<ChiTietDonHang> findByDonHangId(Long donHangId);
+
+    boolean existsByDonHangKhachHangIdAndSanPhamIdAndDonHangTrangThai(Long khachHangId, Long sanPhamId, String trangThai);
 }

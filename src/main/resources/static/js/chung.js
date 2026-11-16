@@ -320,3 +320,24 @@
     }
   });
 })();
+
+(function () {
+  document.querySelectorAll('table.bang-dl').forEach(function (bang) {
+    var tieuDe = Array.prototype.map.call(bang.querySelectorAll('thead th'), function (th) {
+      return th.textContent.replace(/\s+/g, ' ').trim();
+    });
+    bang.querySelectorAll('tbody tr').forEach(function (hang) {
+      Array.prototype.forEach.call(hang.children, function (o, i) {
+        if (o.tagName === 'TD' && !o.hasAttribute('data-nhan') && !o.classList.contains('bang-dl__anh')) {
+          o.setAttribute('data-nhan', tieuDe[i] || '');
+        }
+      });
+    });
+  });
+
+  var menu = document.querySelector('.qt-ben');
+  var dangChon = menu && menu.querySelector('a.dang-chon');
+  if (menu && dangChon && menu.scrollWidth > menu.clientWidth) {
+    menu.scrollLeft = dangChon.offsetLeft - (menu.clientWidth - dangChon.offsetWidth) / 2;
+  }
+})();
