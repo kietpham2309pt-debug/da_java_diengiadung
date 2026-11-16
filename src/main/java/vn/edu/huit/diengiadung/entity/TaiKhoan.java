@@ -3,7 +3,7 @@ package vn.edu.huit.diengiadung.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDateTime;
 
@@ -14,19 +14,19 @@ public class TaiKhoan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Tên đăng nhập không được để trống")
-    @Size(min = 4, max = 50, message = "Tên đăng nhập từ 4 đến 50 ký tự")
+    @NotBlank(message = "Vui lòng nhập tên đăng nhập")
+    @Pattern(regexp = "^$|^.{4,50}$", message = "Tên đăng nhập phải từ 4 đến 50 ký tự")
     @Column(unique = true, nullable = false, length = 50)
     private String tenDangNhap;
 
-    @NotBlank(message = "Mật khẩu không được để trống")
-    @Size(min = 6, message = "Mật khẩu ít nhất 6 ký tự")
+    @NotBlank(message = "Vui lòng nhập mật khẩu")
+    @Pattern(regexp = "^$|^.{6,}$", message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String matKhau;
 
-    @NotBlank(message = "Họ tên không được để trống")
+    @NotBlank(message = "Vui lòng nhập họ tên")
     private String hoTen;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Email chưa đúng định dạng, ví dụ: ten@gmail.com")
     private String email;
 
     private String vaiTro = "KHACHHANG";

@@ -153,7 +153,60 @@
     <a th:href="@{/admin/canh-bao}" th:classappend="${trang == 'canh-bao'} ? 'dang-chon'">Sắp hết hàng</a>
 </nav>
 
+<div th:fragment="tomTatLoi" class="tom-tat-loi" role="alert" tabindex="-1" data-tom-tat-loi
+     th:if="${#fields.hasErrors('*')}"
+     th:with="ds=${@tomTatLoi.gom(#fields.detailedErrors())}, dsThieu=${@tomTatLoi.thieu(ds)}, dsSai=${@tomTatLoi.sai(ds)}">
+    <p class="tom-tat-loi__tieu-de">
+        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+        <span th:text="'Có ' + ${#lists.size(ds)} + ' thông tin cần sửa trước khi tiếp tục'">Có thông tin cần sửa</span>
+    </p>
+    <div class="tom-tat-loi__nhom" th:unless="${#lists.isEmpty(dsThieu)}">
+        <p class="tom-tat-loi__nhan" th:text="'Còn thiếu (' + ${#lists.size(dsThieu)} + ')'">Còn thiếu</p>
+        <ul>
+            <li th:each="loi : ${dsThieu}" th:attr="data-truong=${loi.truong}">
+                <a th:href="'#' + ${loi.truong}" th:text="${loi.thongBao}">Vui lòng nhập họ tên</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tom-tat-loi__nhom tom-tat-loi__nhom--sai" th:unless="${#lists.isEmpty(dsSai)}">
+        <p class="tom-tat-loi__nhan" th:text="'Chưa đúng (' + ${#lists.size(dsSai)} + ')'">Chưa đúng</p>
+        <ul>
+            <li th:each="loi : ${dsSai}" th:attr="data-truong=${loi.truong}">
+                <a th:href="'#' + ${loi.truong}" th:text="${loi.thongBao}">Số điện thoại chưa đúng</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<dialog th:fragment="hopHuy(hanhDong, maDon, dsLyDo, ghiChu)" class="hop" id="hop-huy" aria-labelledby="hop-huy-tieu-de">
+    <form class="hop__form" th:action="${hanhDong}" method="post" novalidate data-kiem-tra>
+        <h2 id="hop-huy-tieu-de" th:text="'Huỷ đơn hàng ' + ${maDon} + '?'">Huỷ đơn hàng?</h2>
+        <p class="hop__mo-ta" th:text="${ghiChu}">Đơn đã huỷ không thể khôi phục.</p>
+        <fieldset class="hop__ly-do">
+            <legend>Lý do huỷ <span class="tt-bb" aria-hidden="true">*</span></legend>
+            <label class="hop__chon" th:each="lyDo, vt : ${dsLyDo}">
+                <input type="radio" name="lyDo" th:id="'lyDo' + ${vt.count}" th:value="${lyDo}" required
+                       data-nhan="Lý do huỷ" data-thieu="Vui lòng chọn lý do huỷ đơn">
+                <span th:text="${lyDo}">Lý do</span>
+            </label>
+        </fieldset>
+        <div class="o-nhap" data-khi-khac hidden>
+            <label for="lyDoKhac">Ghi rõ lý do <span class="tt-bb" aria-hidden="true">*</span></label>
+            <textarea id="lyDoKhac" name="lyDoKhac" rows="3" maxlength="250" minlength="5"
+                      placeholder="Ví dụ: tôi muốn đổi sang màu khác"
+                      data-thieu="Vui lòng ghi rõ lý do huỷ" data-sai="Lý do cần ít nhất 5 ký tự"></textarea>
+        </div>
+        <div class="hop__nut">
+            <button type="button" class="nut" data-dong-hop>Giữ đơn hàng</button>
+            <button type="submit" class="nut nut--huy">Xác nhận huỷ đơn</button>
+        </div>
+    </form>
+</dialog>
+
 <footer class="chan" th:fragment="chanTrang">
+    <form id="form-mua-ngay" th:action="@{/gio-hang/mua-ngay}" method="post" hidden>
+        <input type="hidden" name="soLuong" value="1">
+    </form>
     <div class="khung">
         <a class="logo logo--chan" th:href="@{/}" aria-label="Bep Nè, về trang chủ">
             <div th:replace="~{layout/logo :: logo}"></div>
@@ -232,6 +285,7 @@
     </div>
 
     <script th:src="@{/js/site.js}"></script>
+    <script th:src="@{/js/chung.js}"></script>
 </div>
 
 </body>

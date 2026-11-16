@@ -20,6 +20,7 @@ import vn.edu.huit.diengiadung.service.DatHangService;
 import vn.edu.huit.diengiadung.service.DiaChiHanhChinh;
 import vn.edu.huit.diengiadung.service.DonHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
+import vn.edu.huit.diengiadung.service.LyDoHuyDon;
 import vn.edu.huit.diengiadung.service.UuDaiService;
 
 import java.util.LinkedHashMap;
@@ -201,12 +202,12 @@ public class DatHangServiceImpl implements DatHangService {
 
     @Override
     @Transactional
-    public void huyDonCuaKhach(TaiKhoan taiKhoan, Long idDonHang) {
+    public void huyDonCuaKhach(TaiKhoan taiKhoan, Long idDonHang, String lyDo, String lyDoKhac) {
         DonHang donHang = layDonCuaKhach(taiKhoan, idDonHang);
         if (!DonHang.CHO_XAC_NHAN.equals(donHang.getTrangThai())) {
             throw new LoiNghiepVu("Chỉ huỷ được đơn đang chờ xác nhận. Với đơn khác, vui lòng gọi cửa hàng để được hỗ trợ");
         }
-        dichVuDonHang.huyDonHang(idDonHang);
+        dichVuDonHang.huyDonHang(idDonHang, LyDoHuyDon.chuanHoa(lyDo, lyDoKhac, LyDoHuyDon.CUA_KHACH), "KHACH");
     }
 
     private KhachHang layKhachHang(TaiKhoan taiKhoan) {

@@ -82,7 +82,9 @@
                             <button type="button" class="dem__nut" data-dem="1" aria-label="Thêm một">+</button>
                         </div>
 
-                        <button type="submit" class="nut nut--dac ct__them" th:disabled="${!sanPham.conHang}"
+                        <button type="submit" class="nut nut--dac ct__mua-ngay" th:if="${sanPham.conHang}"
+                                th:formaction="@{/gio-hang/mua-ngay}">Mua ngay</button>
+                        <button type="submit" class="nut ct__them" th:disabled="${!sanPham.conHang}"
                                 th:text="${sanPham.conHang} ? 'Thêm vào giỏ hàng' : 'Tạm hết hàng'">Thêm vào giỏ hàng</button>
 
                         <a class="nut ct__goi" href="tel:0339999999">Gọi tư vấn 0339 999 999</a>

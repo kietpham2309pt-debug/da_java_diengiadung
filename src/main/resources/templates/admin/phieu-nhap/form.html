@@ -32,6 +32,7 @@
                     <div th:replace="~{layout/fragments :: thongBao}"></div>
 
                     <form th:action="@{/admin/phieu-nhap/luu}" th:object="${phieuNhap}" method="post" id="formPhieuNhap">
+                        <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                         <div class="khoi">
                             <div class="khoi__dau">
                                 <h2>Thông tin chung</h2>

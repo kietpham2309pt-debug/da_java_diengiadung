@@ -82,6 +82,10 @@
                             (${donHang.trangThai == 'CHO_XAC_NHAN'} ? ' the-nhan--vang' : ''))"
                           th:text="${donHang.tenTrangThai}">Chờ xác nhận</span>
                 </p>
+                <p class="dh-huy" th:if="${donHang.trangThai == 'DA_HUY' and donHang.lyDoHuy != null}">
+                    <strong>Lý do huỷ:</strong> <span th:text="${donHang.lyDoHuy}">Lý do</span>
+                    <small th:text="'(' + ${donHang.tenNguoiHuy} + ' huỷ lúc ' + ${#temporals.format(donHang.ngayHuy, 'dd/MM/yyyy HH:mm')} + ')'"></small>
+                </p>
                 <p><strong>Người nhận:</strong> <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span></p>
                 <p><strong>Số điện thoại:</strong> <span th:text="${donHang.soDienThoaiNhan}">0900000000</span></p>
                 <p th:if="${donHang.emailNhan != null}"><strong>Email:</strong> <span th:text="${donHang.emailNhan}">a@b.vn</span></p>
@@ -148,12 +152,14 @@
             <div class="hang-nut">
                 <a class="nut" th:if="${laChuDon}" th:href="@{/don-hang}">Quay lại danh sách</a>
                 <a class="nut" th:unless="${laChuDon}" th:href="@{/san-pham}">Tiếp tục mua sắm</a>
-                <form th:if="${laChuDon and donHang.trangThai == 'CHO_XAC_NHAN'}"
-                      th:action="@{/don-hang/{id}/huy(id=${donHang.id})}" method="post"
-                      onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này không?');">
-                    <button class="nut" type="submit">Huỷ đơn</button>
-                </form>
+                <button class="nut" type="button" data-mo-hop="hop-huy"
+                        th:if="${laChuDon and donHang.trangThai == 'CHO_XAC_NHAN'}">Huỷ đơn</button>
             </div>
+
+            <th:block th:if="${laChuDon and donHang.trangThai == 'CHO_XAC_NHAN'}">
+                <dialog th:replace="~{layout/fragments :: hopHuy(@{/don-hang/{id}/huy(id=${donHang.id})}, ${donHang.maDon}, ${dsLyDoHuy},
+                    ${donHang.daThanhToan} ? 'Bạn đã chuyển khoản cho đơn này, cửa hàng sẽ liên hệ hoàn tiền trong 1-3 ngày làm việc. Đơn đã huỷ không thể khôi phục.' : 'Cho cửa hàng biết lý do để phục vụ bạn tốt hơn. Đơn đã huỷ không thể khôi phục.')}"></dialog>
+            </th:block>
         </div>
     </section>
 </main>

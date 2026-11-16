@@ -200,6 +200,7 @@
   }
 
   form.addEventListener('submit', function (su) {
+    if (su.submitter && su.submitter.hasAttribute('formaction')) return;
     su.preventDefault();
     if (nut.disabled) return;
     nut.disabled = true;

@@ -32,6 +32,7 @@
 
                     <div class="khoi">
                         <form th:action="@{/admin/khuyen-mai/luu}" th:object="${khuyenMai}" method="post" novalidate>
+                            <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
                             <input type="hidden" th:field="*{id}">
 
                             <fieldset class="qt-nhom">
@@ -40,12 +41,12 @@
                                     <label for="ten">Tên chương trình</label>
                                     <input type="text" id="ten" th:field="*{ten}" maxlength="120" placeholder="VD: Tuần lễ bếp từ - giảm 5%">
                                     <span class="o-nhap__goi">Tên hiển thị cho khách ở trang thanh toán và trên đơn hàng.</span>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ten')}" th:errors="*{ten}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ten')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ten')}"></span>
                                 </div>
                                 <div class="o-nhap">
                                     <label for="moTa">Mô tả</label>
                                     <input type="text" id="moTa" th:field="*{moTa}" maxlength="255">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
                                 </div>
                             </fieldset>
 
@@ -74,7 +75,7 @@
                                                 th:selected="${khuyenMai.thuongHieu != null and khuyenMai.thuongHieu.id == hang.id}">Bosch</option>
                                     </select>
                                 </div>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('phamViHopLe')}" th:errors="*{phamViHopLe}"></span>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('phamViHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phamViHopLe')}"></span>
                                 <div class="qt-chon" style="margin-top:16px">
                                     <label><input type="checkbox" th:field="*{chiThanhVien}"> Chỉ dành cho thành viên đã đăng nhập</label>
                                 </div>

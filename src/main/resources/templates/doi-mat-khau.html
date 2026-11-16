@@ -17,7 +17,7 @@
             </p>
 
             <div class="the-tk hien-dan">
-                <form th:action="@{/ho-so/doi-mat-khau}" method="post">
+                <form th:action="@{/ho-so/doi-mat-khau}" method="post" novalidate data-kiem-tra>
                     <div class="o-nhap">
                         <label for="matKhauCu">Mật khẩu hiện tại</label>
                         <input type="password" id="matKhauCu" name="matKhauCu" autocomplete="current-password" required>
@@ -25,13 +25,15 @@
 
                     <div class="o-nhap">
                         <label for="matKhauMoi">Mật khẩu mới</label>
-                        <input type="password" id="matKhauMoi" name="matKhauMoi" autocomplete="new-password" minlength="6" required>
+                        <input type="password" id="matKhauMoi" name="matKhauMoi" autocomplete="new-password" minlength="6" required
+                               data-sai="Mật khẩu mới phải có ít nhất 6 ký tự">
                         <span class="goi-y">Ít nhất 6 ký tự, khác mật khẩu hiện tại.</span>
                     </div>
 
                     <div class="o-nhap">
                         <label for="nhapLai">Nhập lại mật khẩu mới</label>
-                        <input type="password" id="nhapLai" name="nhapLai" autocomplete="new-password" minlength="6" required>
+                        <input type="password" id="nhapLai" name="nhapLai" autocomplete="new-password" minlength="6" required
+                               data-giong="matKhauMoi" data-sai="Mật khẩu nhập lại chưa khớp với mật khẩu mới">
                     </div>
 
                     <button type="submit" class="nut nut--dac the-tk__gui">Đổi mật khẩu</button>

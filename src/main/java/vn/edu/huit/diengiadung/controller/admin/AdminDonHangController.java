@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.service.DonHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
+import vn.edu.huit.diengiadung.service.LyDoHuyDon;
 
 @Controller
 @RequestMapping("/admin/don-hang")
@@ -32,6 +33,7 @@ public class AdminDonHangController {
     public String chiTiet(@PathVariable Long id, Model model, RedirectAttributes thongBao) {
         try {
             model.addAttribute("donHang", donHangService.layTheoId(id));
+            model.addAttribute("dsLyDoHuy", LyDoHuyDon.CUA_CUA_HANG);
             return "admin/don-hang/chi-tiet";
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
@@ -73,9 +75,12 @@ public class AdminDonHangController {
     }
 
     @PostMapping("/{id}/huy")
-    public String huyDonHang(@PathVariable Long id, RedirectAttributes thongBao) {
+    public String huyDonHang(@PathVariable Long id,
+                             @RequestParam(required = false) String lyDo,
+                             @RequestParam(required = false) String lyDoKhac,
+                             RedirectAttributes thongBao) {
         try {
-            donHangService.huyDonHang(id);
+            donHangService.huyDonHang(id, LyDoHuyDon.chuanHoa(lyDo, lyDoKhac, LyDoHuyDon.CUA_CUA_HANG), "CUA_HANG");
             thongBao.addFlashAttribute("thongBao", "Đã hủy đơn hàng và hoàn lại tồn kho.");
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());

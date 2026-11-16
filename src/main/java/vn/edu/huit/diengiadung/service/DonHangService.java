@@ -13,7 +13,7 @@ public interface DonHangService {
     DonHang layTheoId(Long id);
 
     void capNhatTrangThai(Long id, String trangThaiMoi);
-    void huyDonHang(Long id);
+    void huyDonHang(Long id, String lyDo, String huyBoi);
 
     void xacNhanDaThanhToan(Long id);
 }

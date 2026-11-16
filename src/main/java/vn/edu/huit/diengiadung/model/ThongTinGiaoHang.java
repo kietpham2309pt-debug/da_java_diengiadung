@@ -9,14 +9,14 @@ import jakarta.validation.constraints.Size;
 public class ThongTinGiaoHang {
 
     @NotBlank(message = "Vui lòng nhập họ tên người nhận")
-    @Size(min = 2, max = 80, message = "Họ tên từ 2 đến 80 ký tự")
+    @Pattern(regexp = "^\\s*$|^[\\s\\S]{2,80}$", message = "Họ tên phải từ 2 đến 80 ký tự")
     private String tenNguoiNhan;
 
     @NotBlank(message = "Vui lòng nhập số điện thoại")
-    @Pattern(regexp = "^0\\d{9}$", message = "Số điện thoại gồm 10 chữ số và bắt đầu bằng 0")
+    @Pattern(regexp = "^$|^0\\d{9}$", message = "Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng 0")
     private String soDienThoaiNhan;
 
-    @Email(message = "Email không hợp lệ")
+    @Email(message = "Email chưa đúng định dạng, ví dụ: ten@gmail.com")
     @Size(max = 120, message = "Email tối đa 120 ký tự")
     private String email;
 
@@ -27,14 +27,14 @@ public class ThongTinGiaoHang {
     private String phuongXa;
 
     @NotBlank(message = "Vui lòng nhập số nhà, tên đường")
-    @Size(min = 3, max = 200, message = "Số nhà, tên đường từ 3 đến 200 ký tự")
+    @Pattern(regexp = "^\\s*$|^[\\s\\S]{3,200}$", message = "Số nhà, tên đường phải từ 3 đến 200 ký tự")
     private String diaChiCuThe;
 
     @Size(max = 500, message = "Ghi chú tối đa 500 ký tự")
     private String ghiChu;
 
     @NotBlank(message = "Vui lòng chọn phương thức thanh toán")
-    @Pattern(regexp = "CK|COD", message = "Vui lòng chọn phương thức thanh toán")
+    @Pattern(regexp = "^$|CK|COD", message = "Phương thức thanh toán không hợp lệ")
     private String phuongThuc;
 
     @Size(max = 30, message = "Mã giảm giá tối đa 30 ký tự")

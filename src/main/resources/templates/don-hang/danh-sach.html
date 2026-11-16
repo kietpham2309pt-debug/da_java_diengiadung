@@ -13,7 +13,7 @@
         <div class="khung">
             <div th:replace="~{layout/fragments :: thongBao}"></div>
 
-            <div class="hang-nut">
+            <div class="hang-nut hang-nut--dau">
                 <a class="nut" th:href="@{/ho-so}">Hồ sơ của tôi</a>
                 <a class="nut" th:href="@{/gio-hang}">Giỏ hàng</a>
             </div>
@@ -24,7 +24,7 @@
                 <a class="nut nut--dac" th:href="@{/san-pham}">Bắt đầu mua hàng</a>
             </div>
 
-            <div class="cuon-ngang" th:unless="${#lists.isEmpty(danhSachDon)}">
+            <div class="khoi cuon-ngang" th:unless="${#lists.isEmpty(danhSachDon)}">
                 <table class="bang-dl">
                     <thead>
                     <tr>
@@ -37,7 +37,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="donHang : ${danhSachDon}">
-                        <td th:text="'#' + ${donHang.id}">#1</td>
+                        <td th:text="${donHang.maDon}">BN000001</td>
                         <td th:text="${#temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')}">21/10/2026 10:30</td>
                         <td class="canh-giua" th:text="${#numbers.formatInteger(donHang.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</td>
                         <td class="canh-giua">
