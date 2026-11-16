@@ -82,8 +82,9 @@
                                         <span class="sp__anh"><img th:src="@{${sp.duongDanAnh}}" alt="" loading="lazy"></span>
                                     </td>
                                     <td class="o-ten" data-nhan="Sản phẩm">
-                                        <a th:href="@{'/san-pham/' + ${sp.id}}" th:text="${sp.tenSanPham}"
-                                           target="_blank" rel="noopener">Tên sản phẩm</a>
+                                        <a th:href="@{'/admin/san-pham/sua/' + ${sp.id}}" th:text="${sp.tenSanPham}">Tên sản phẩm</a>
+                                        <a class="qt-phu" th:if="${sp.dangBan}" th:href="@{'/san-pham/' + ${sp.id}}"
+                                           target="_blank" rel="noopener">Xem trên web ↗</a>
                                         <span class="ma-mo dong-phu"
                                               th:text="${sp.maSanPham}
                                                 + (${sp.thuongHieu != null} ? ' · ' + ${sp.thuongHieu.tenThuongHieu} : '')

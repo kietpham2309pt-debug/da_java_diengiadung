@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.edu.huit.diengiadung.entity.DonHang;
 import vn.edu.huit.diengiadung.service.DonHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.LyDoHuyDon;
@@ -23,9 +24,27 @@ public class AdminDonHangController {
     }
 
     @GetMapping
-    public String danhSach(@RequestParam(required = false) String trangThai, Model model) {
-        model.addAttribute("danhSach", donHangService.timTheoTrangThai(trangThai));
+    public String danhSach(@RequestParam(required = false) String trangThai,
+                           @RequestParam(required = false) String tuKhoa,
+                           @RequestParam(required = false) String thanhToan,
+                           Model model) {
+        String khoa = tuKhoa == null ? "" : tuKhoa.trim().toLowerCase();
+        String khoaSo = khoa.replaceAll("\\s", "");
+        java.util.List<DonHang> danhSach = donHangService.timTheoTrangThai(trangThai).stream()
+                .filter(don -> khoa.isEmpty()
+                        || don.getMaDon().toLowerCase().contains(khoaSo)
+                        || String.valueOf(don.getId()).equals(khoaSo)
+                        || (don.getSoDienThoaiNhan() != null && don.getSoDienThoaiNhan().contains(khoaSo))
+                        || (don.getTenNguoiNhan() != null && don.getTenNguoiNhan().toLowerCase().contains(khoa)))
+                .filter(don -> thanhToan == null || thanhToan.isBlank()
+                        || ("CHO_TIEN".equals(thanhToan) && don.isChoThanhToan())
+                        || ("CK".equals(thanhToan) && don.isThanhToanTruoc())
+                        || ("COD".equals(thanhToan) && !don.isThanhToanTruoc()))
+                .toList();
+        model.addAttribute("danhSach", danhSach);
         model.addAttribute("trangThai", trangThai);
+        model.addAttribute("tuKhoa", tuKhoa);
+        model.addAttribute("thanhToan", thanhToan);
         return "admin/don-hang/danh-sach";
     }
 

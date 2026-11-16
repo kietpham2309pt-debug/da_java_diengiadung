@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Đặt lại mật khẩu', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Đặt lại mật khẩu', 'Tạo mật khẩu mới cho tài khoản của bạn', 'banner-tai-khoan.jpg', 'Đặt lại mật khẩu')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <p class="thong-bao thong-bao--loi" th:if="${loiDatLai}" role="alert">
+                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                <span th:text="${loiDatLai}">Có lỗi</span>
+            </p>
+
+            <div class="the-tk hien-dan">
+                <p class="the-tk__dan">Xác minh thành công. Vui lòng đặt mật khẩu mới trong vòng 10 phút.</p>
+                <form th:action="@{/quen-mat-khau/dat-lai}" method="post" novalidate data-kiem-tra>
+                    <div class="o-nhap">
+                        <label for="matKhauMoi">Mật khẩu mới</label>
+                        <input type="password" id="matKhauMoi" name="matKhauMoi" autocomplete="new-password" minlength="6" required
+                               data-sai="Mật khẩu mới phải có ít nhất 6 ký tự">
+                        <span class="goi-y">Ít nhất 6 ký tự.</span>
+                    </div>
+                    <div class="o-nhap">
+                        <label for="nhapLai">Nhập lại mật khẩu mới</label>
+                        <input type="password" id="nhapLai" name="nhapLai" autocomplete="new-password" required
+                               data-giong="matKhauMoi" data-sai="Mật khẩu nhập lại chưa khớp với mật khẩu mới">
+                    </div>
+                    <button type="submit" class="nut nut--dac the-tk__gui">Đặt lại mật khẩu</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

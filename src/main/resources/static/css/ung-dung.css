@@ -343,3 +343,87 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 .sp__mua-nut:hover{background:var(--dong); border-color:var(--dong); color:#141210}
 .hang-nut--dau{margin:0 0 clamp(22px, 2.6vw, 30px)}
 .tom-tat-loi, .o-nhap input, .o-nhap select, .o-nhap textarea, .tt-pt, .tt-dong-y{scroll-margin-top:110px}
+
+.an-di{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0, 0, 0, 0); white-space:nowrap; border:0}
+
+.o-nhap input[type="datetime-local"],
+.o-nhap input[type="date"],
+.o-nhap input[type="search"]{
+  width:100%; padding:13px 15px;
+  border:1px solid var(--vien); border-radius:0;
+  background:var(--nen); color:var(--chu);
+  font:inherit; font-size:15px; color-scheme:dark;
+}
+.o-nhap input[type="datetime-local"]:focus{outline:none; border-color:var(--dong); background:var(--nen-noi)}
+
+.banner__cham{bottom:calc(clamp(22px, 4vw, 44px) - 10px)}
+.banner__cham button{position:relative; height:24px; background:transparent; cursor:pointer}
+.banner__cham button::before{content:""; position:absolute; left:0; right:0; top:50%; height:3px; margin-top:-1.5px; border-radius:2px; background:rgba(255, 255, 255, .32); transition:background var(--vua)}
+.banner__cham button:hover{background:transparent}
+.banner__cham button:hover::before{background:rgba(255, 255, 255, .6)}
+.banner__cham button[aria-current="true"]{background:transparent}
+.banner__cham button[aria-current="true"]::before{background:#fff}
+
+.o-nhap__phu{display:inline-block; margin-top:8px; padding-block:4px; font-size:13px; color:var(--dong)}
+.o-nhap__phu:hover{text-decoration:underline}
+.the-tk__dan{margin:0 0 20px; font-size:14px; line-height:1.6; color:var(--chu-nhat)}
+@media (max-width:620px){
+  .loc__ve a, .the-tk__doi a, .tt-don__them a, .o-nhap__phu, .dh-tt__ghi a, .dg__moi a, .khoi p > a[href^="tel:"]{display:inline-block; padding-block:8px}
+}
+
+.sao{margin:0; color:var(--dong); letter-spacing:2px; font-size:15px; line-height:1}
+.sao--to{font-size:22px; letter-spacing:3px}
+.ct__sao{display:inline-flex; align-items:center; gap:10px; margin:2px 0 14px; padding-block:4px; font-size:13.5px; color:var(--chu-nhat)}
+.ct__sao:hover{color:var(--dong)}
+
+.dg{display:grid; gap:clamp(24px, 3vw, 40px)}
+@media (min-width:860px){ .dg{grid-template-columns:280px minmax(0, 1fr); align-items:start} }
+.dg__tong{padding:22px; border:1px solid var(--vien); background:var(--nen-noi); text-align:center}
+.dg__diem{margin:0; font-size:15px; color:var(--chu-mo)}
+.dg__diem b{font-size:44px; font-weight:var(--dam-nhan); color:var(--chu); line-height:1}
+.dg__tong .sao{margin:8px 0 6px}
+.dg__so{margin:0 0 16px; font-size:13.5px; color:var(--chu-mo)}
+.dg__cot{margin:0; padding:0; list-style:none; display:grid; gap:6px; text-align:left}
+.dg__cot li{display:grid; grid-template-columns:28px 1fr 24px; align-items:center; gap:10px; font-size:12.5px; color:var(--chu-mo)}
+.dg__thanh{height:6px; background:var(--vien); overflow:hidden}
+.dg__thanh span{display:block; height:100%; background:var(--dong)}
+.dg__form{margin-bottom:26px; padding:20px 22px; border:1px solid rgba(203, 170, 125, .45); background:rgba(203, 170, 125, .05)}
+.dg__form h3{margin:0 0 12px; font-size:16px; font-weight:var(--dam-nhan)}
+.dg__chon-sao{margin:0 0 14px; padding:0; border:0; min-width:0}
+.dg__chon-sao legend{padding:0; margin-bottom:6px; font-size:12.5px; font-weight:var(--dam-nhan); letter-spacing:.04em; color:var(--chu-nhat)}
+.dg__sao{display:inline-flex; flex-direction:row-reverse; gap:4px}
+.dg__sao input{position:absolute; opacity:0; width:1px; height:1px}
+.dg__sao label{padding:2px 4px; font-size:30px; line-height:1; color:var(--vien-sang); cursor:pointer; transition:color var(--nhanh)}
+.dg__sao label:hover, .dg__sao label:hover ~ label, .dg__sao input:checked ~ label{color:var(--dong)}
+.dg__sao input:focus-visible + label{outline:2px solid var(--dong); outline-offset:2px}
+.dg__chon-sao:has(input[aria-invalid="true"]) .dg__sao label{color:rgba(217, 83, 79, .55)}
+.dg__form .o-nhap{margin-bottom:14px}
+.dg__form .nut{border-radius:0}
+.dg__moi, .dg__trong{margin:0 0 20px; padding:14px 16px; border:1px dashed var(--vien-sang); font-size:14px; color:var(--chu-nhat)}
+.dg__moi a{color:var(--dong); text-decoration:underline}
+.dg__ds{margin:0; padding:0; list-style:none}
+.dg__muc{padding:16px 0; border-bottom:1px solid var(--vien)}
+.dg__muc:first-child{padding-top:0}
+.dg__dau{display:flex; flex-wrap:wrap; align-items:center; gap:8px 12px; margin:0 0 8px; font-size:14px}
+.dg__dau time{margin-left:auto; font-size:12.5px; color:var(--chu-mo)}
+.dg__mua{padding:2px 8px; border:1px solid rgba(79, 180, 119, .6); color:#4FB477; font-size:11.5px}
+.dg__noi{margin:8px 0 0; font-size:14.5px; line-height:1.6; color:var(--chu-nhat); white-space:pre-line}
+
+@media (max-width:760px){
+  .cuon-ngang{overflow-x:visible}
+  .cuon-ngang .bang-dl{min-width:0}
+  .bang-dl tr:not(:has(.bang-dl__anh)){padding-left:0; min-height:0}
+  .bang-dl tbody td{text-align:left !important; white-space:normal}
+  .bang-dl td[data-nhan=""]::before, .bang-dl td[data-nhan="Thao tác"]::before{content:none}
+  .bang-dl .hang-thao-tac{justify-content:flex-start; margin-top:6px}
+  .bang-dl .qt-doc{flex-direction:row; flex-wrap:wrap}
+  .bang-dl .qt-doc form, .bang-dl .qt-doc .nut{width:auto}
+}
+
+@media (max-width:919px){
+  .qt-ben{display:flex; gap:2px; padding:6px; overflow-x:auto; white-space:nowrap; scrollbar-width:thin; -webkit-overflow-scrolling:touch}
+  .qt-ben__nhan{display:none}
+  .qt-ben a{flex:none; padding:10px 14px; border-left:0; border-bottom:2px solid transparent; font-size:14px}
+  .qt-ben a.dang-chon{border-bottom-color:var(--dong)}
+}
+.dg__an{margin:-4px 0 12px; font-size:13px; color:#F08A85}

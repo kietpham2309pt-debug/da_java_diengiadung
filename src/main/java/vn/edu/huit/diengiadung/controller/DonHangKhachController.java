@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import vn.edu.huit.diengiadung.entity.ChiTietDonHang;
 import vn.edu.huit.diengiadung.entity.DonHang;
+import vn.edu.huit.diengiadung.entity.SanPham;
+import vn.edu.huit.diengiadung.model.GioHang;
+import vn.edu.huit.diengiadung.service.GioHangService;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
 import vn.edu.huit.diengiadung.service.CauHinhThanhToan;
 import vn.edu.huit.diengiadung.service.DatHangService;
@@ -28,10 +32,13 @@ public class DonHangKhachController {
 
     private final DatHangService dichVuDatHang;
     private final CauHinhThanhToan cauHinhThanhToan;
+    private final GioHangService dichVuGioHang;
 
-    public DonHangKhachController(DatHangService dichVuDatHang, CauHinhThanhToan cauHinhThanhToan) {
+    public DonHangKhachController(DatHangService dichVuDatHang, CauHinhThanhToan cauHinhThanhToan,
+                                  GioHangService dichVuGioHang) {
         this.dichVuDatHang = dichVuDatHang;
         this.cauHinhThanhToan = cauHinhThanhToan;
+        this.dichVuGioHang = dichVuGioHang;
     }
 
     @GetMapping
@@ -103,6 +110,41 @@ public class DonHangKhachController {
             return ResponseEntity.ok(Map.of("daThanhToan", donHang.isDaThanhToan(), "trangThai", donHang.getTrangThai()));
         } catch (LoiNghiepVu loi) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("loi", loi.getMessage()));
+        }
+    }
+
+    @PostMapping("/{id}/mua-lai")
+    public String muaLai(@PathVariable Long id, HttpSession phien, RedirectAttributes thongBao) {
+        try {
+            DonHang donHang = dichVuDatHang.layDonCuaKhach(layTaiKhoan(phien), id);
+            GioHang gioHang = GioHangController.layGioHang(phien);
+            int daThem = 0;
+            java.util.List<String> boQua = new java.util.ArrayList<>();
+            for (ChiTietDonHang dong : donHang.getDanhSachChiTiet()) {
+                SanPham sanPham = dong.getSanPham();
+                if (sanPham == null || !sanPham.isDangBan() || !sanPham.isConHang()) {
+                    boQua.add(sanPham == null ? "Sản phẩm đã xoá" : sanPham.getTenSanPham());
+                    continue;
+                }
+                int dangCo = gioHang.getSoLuongTheoSanPham().getOrDefault(sanPham.getId(), 0);
+                int soLuong = Math.min(dong.getSoLuong(), sanPham.getSoLuongTon() - dangCo);
+                if (soLuong <= 0) {
+                    boQua.add(sanPham.getTenSanPham());
+                    continue;
+                }
+                dichVuGioHang.them(gioHang, sanPham.getId(), soLuong);
+                daThem++;
+            }
+            if (daThem == 0) {
+                thongBao.addFlashAttribute("thongBaoLoi", "Các sản phẩm trong đơn này hiện đã hết hàng hoặc ngừng kinh doanh");
+                return "redirect:/don-hang/" + id;
+            }
+            thongBao.addFlashAttribute("thongBao", "Đã thêm " + daThem + " sản phẩm của đơn " + donHang.getMaDon() + " vào giỏ hàng"
+                    + (boQua.isEmpty() ? "" : ". Không thêm được: " + String.join(", ", boQua) + " (hết hàng hoặc ngừng bán)"));
+            return "redirect:/gio-hang";
+        } catch (LoiNghiepVu loi) {
+            thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
+            return "redirect:/don-hang";
         }
     }
 

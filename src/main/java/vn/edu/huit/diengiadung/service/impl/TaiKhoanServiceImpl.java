@@ -66,6 +66,28 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Long xacMinhQuenMatKhau(String tenDangNhap, String lienHe) {
+        if (tenDangNhap == null || tenDangNhap.isBlank() || lienHe == null || lienHe.isBlank()) {
+            throw new LoiNghiepVu("Vui lòng nhập tên đăng nhập và email hoặc số điện thoại đã đăng ký");
+        }
+        String khoa = lienHe.trim().replaceAll("\\s", "");
+        LoiNghiepVu khongKhop = new LoiNghiepVu("Thông tin xác minh không khớp với tài khoản nào. Vui lòng kiểm tra lại.");
+        TaiKhoan taiKhoan = taiKhoanRepository.findByTenDangNhap(tenDangNhap.trim()).orElseThrow(() -> khongKhop);
+        if (taiKhoan.laQuanTri() || !taiKhoan.isHoatDong()) {
+            throw khongKhop;
+        }
+        KhachHang khachHang = khachHangRepository.findByTaiKhoan(taiKhoan).orElse(null);
+        boolean khop = khoa.equalsIgnoreCase(taiKhoan.getEmail() == null ? "" : taiKhoan.getEmail().trim())
+                || (khachHang != null && (khoa.equalsIgnoreCase(khachHang.getEmail() == null ? "" : khachHang.getEmail().trim())
+                || khoa.equals(khachHang.getSoDienThoai())));
+        if (!khop) {
+            throw khongKhop;
+        }
+        return taiKhoan.getId();
+    }
+
+    @Override
     public List<TaiKhoan> layTatCa() {
         return taiKhoanRepository.findAll();
     }
