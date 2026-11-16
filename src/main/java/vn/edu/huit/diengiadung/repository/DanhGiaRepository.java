@@ -18,4 +18,7 @@ public interface DanhGiaRepository extends JpaRepository<DanhGia, Long> {
 
     @Query("select d.soSao, count(d) from DanhGia d where d.sanPham.id = :sanPhamId and d.hien = true group by d.soSao")
     List<Object[]> demTheoSao(@Param("sanPhamId") Long sanPhamId);
+
+    @Query("select d.sanPham.id, avg(d.soSao), count(d) from DanhGia d where d.hien = true group by d.sanPham.id")
+    List<Object[]> tongHopTheoSanPham();
 }

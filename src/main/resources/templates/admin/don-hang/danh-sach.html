@@ -34,7 +34,7 @@
                         <form th:action="@{/admin/don-hang}" method="get">
                             <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Mã đơn, SĐT hoặc tên người nhận..." aria-label="Tìm đơn hàng">
                             <select name="thanhToan" aria-label="Lọc theo thanh toán">
-                                <option value="">Mọi hình thức thanh toán</option>
+                                <option value="">Mọi thanh toán</option>
                                 <option value="CHO_TIEN" th:selected="${thanhToan == 'CHO_TIEN'}">Chuyển khoản chưa nhận tiền</option>
                                 <option value="CK" th:selected="${thanhToan == 'CK'}">Thanh toán trước (CK)</option>
                                 <option value="COD" th:selected="${thanhToan == 'COD'}">COD</option>
@@ -73,11 +73,14 @@
                         </form>
                     </div>
 
-                    <div class="khoi" th:if="${#lists.isEmpty(danhSach)}">
+                    <div class="khoi" th:if="${ketQua.trong}">
                         <p>Không có đơn hàng nào khớp điều kiện lọc.</p>
                     </div>
 
-                    <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
+                    <p class="qt-dem" th:unless="${ketQua.trong}"
+                       th:text="'Hiển thị ' + ${tuDong} + '–' + ${denDong} + ' trên ' + ${ketQua.tongSo} + ' đơn hàng'">Hiển thị 1–15 trên 40 đơn hàng</p>
+
+                    <div class="khoi" th:unless="${ketQua.trong}">
                         <div class="cuon-ngang">
                             <table class="bang-dl">
                                 <thead>
@@ -85,7 +88,6 @@
                                     <th>Mã đơn</th>
                                     <th>Ngày đặt</th>
                                     <th>Người nhận</th>
-                                    <th>Số điện thoại</th>
                                     <th class="canh-phai">Tổng tiền</th>
                                     <th>Trạng thái</th>
                                     <th class="canh-phai">Thao tác</th>
@@ -93,7 +95,7 @@
                                 </thead>
 
                                 <tbody>
-                                <tr th:each="donHang : ${danhSach}">
+                                <tr th:each="donHang : ${ketQua.danhSach}">
                                     <td>
                                         <span th:text="${donHang.maDon}">BN000001</span>
                                         <span class="qt-phu" th:text="${donHang.thanhToanTruoc} ? (${donHang.daThanhToan} ? 'CK · đã nhận tiền' : 'CK · chưa nhận tiền') : 'COD'">COD</span>
@@ -103,12 +105,9 @@
                                         27/09/2026 10:30
                                     </td>
 
-                                    <td th:text="${donHang.tenNguoiNhan}">
-                                        Nguyễn Văn A
-                                    </td>
-
-                                    <td th:text="${donHang.soDienThoaiNhan}">
-                                        0900000000
+                                    <td>
+                                        <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span>
+                                        <span class="qt-phu" th:text="${donHang.soDienThoaiNhan}">0900000000</span>
                                     </td>
 
                                     <td class="canh-phai"
@@ -140,9 +139,16 @@
                         </div>
                     </div>
 
-                    <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
-                        <p>Chưa có đơn hàng nào.</p>
-                    </div>
+                    <nav class="trang" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
+                        <a class="trang__nut" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
+                           th:href="@{'/admin/don-hang?' + ${thamSoLoc} + 'trang=' + ${ketQua.trangHienTai - 1}}">&lsaquo;</a>
+                        <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut"
+                           th:classappend="${so == ketQua.trangHienTai} ? 'dang-chon'"
+                           th:attr="aria-current=${so == ketQua.trangHienTai} ? 'page' : null"
+                           th:href="@{'/admin/don-hang?' + ${thamSoLoc} + 'trang=' + ${so}}" th:text="${so}">1</a>
+                        <a class="trang__nut" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
+                           th:href="@{'/admin/don-hang?' + ${thamSoLoc} + 'trang=' + ${ketQua.trangHienTai + 1}}">&rsaquo;</a>
+                    </nav>
                 </div>
             </div>
         </div>

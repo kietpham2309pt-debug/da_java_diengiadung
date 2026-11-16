@@ -4,7 +4,7 @@
 .thong-bao--loi .ic{color:var(--do)}
 
 .qt{display:grid; grid-template-columns:minmax(0,1fr); gap:clamp(22px, 3vw, 36px); align-items:start}
-@media (min-width:920px){.qt{grid-template-columns:230px minmax(0,1fr)}}
+@media (min-width:1200px){.qt{grid-template-columns:230px minmax(0,1fr)}}
 
 .qt-ben{border:1px solid var(--vien); background:var(--nen-noi); padding:10px 0}
 .qt-ben__nhan{display:block; padding:12px 18px 8px; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--chu-mo)}
@@ -420,10 +420,35 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
   .bang-dl .qt-doc form, .bang-dl .qt-doc .nut{width:auto}
 }
 
-@media (max-width:919px){
+@media (max-width:1199px){
   .qt-ben{display:flex; gap:2px; padding:6px; overflow-x:auto; white-space:nowrap; scrollbar-width:thin; -webkit-overflow-scrolling:touch}
   .qt-ben__nhan{display:none}
   .qt-ben a{flex:none; padding:10px 14px; border-left:0; border-bottom:2px solid transparent; font-size:14px}
   .qt-ben a.dang-chon{border-bottom-color:var(--dong)}
 }
 .dg__an{margin:-4px 0 12px; font-size:13px; color:#F08A85}
+
+.sp__sao{display:flex; align-items:center; gap:6px; margin:-4px 0 10px; font-size:12.5px; color:var(--chu-nhat)}
+.sp__sao-nen{position:relative; display:inline-block; color:var(--vien-sang); letter-spacing:1px; line-height:1; white-space:nowrap}
+.sp__sao-day{position:absolute; top:0; left:0; overflow:hidden; color:var(--dong); white-space:nowrap}
+.sp__sao b{font-weight:var(--dam-nhan); color:var(--chu)}
+.sp__sao-so{color:var(--chu-mo)}
+.qt-dem{margin:0 0 12px; font-size:13px; color:var(--chu-mo)}
+@media (min-width:761px){
+  .qt .bang-dl tbody td{white-space:normal}
+  .qt .bang-dl tbody td.canh-phai, .qt .bang-dl .the-nhan, .qt .bang-dl .qt-the, .qt .bang-dl .nut{white-space:nowrap}
+}
+@media (min-width:761px) and (max-width:1199px){ .cuon-ngang .bang-dl{min-width:0} }
+@media (min-width:761px) and (max-width:899px){
+  .qt .bang-dl thead{position:absolute; width:1px; height:1px; clip-path:inset(50%); overflow:hidden}
+  .qt .bang-dl, .qt .bang-dl tbody, .qt .bang-dl tr, .qt .bang-dl td{display:block; width:auto}
+  .qt .bang-dl tr{position:relative; padding:16px 0 16px 100px; border-bottom:1px solid var(--vien); min-height:112px}
+  .qt .bang-dl tr:not(:has(.bang-dl__anh)){padding-left:0; min-height:0}
+  .qt .bang-dl tbody td{padding:5px 0; border:0; text-align:left !important}
+  .qt .bang-dl__anh{position:absolute; left:0; top:16px; padding:0 !important}
+  .qt .bang-dl td[data-nhan]::before{content:attr(data-nhan) ": "; color:var(--chu-mo)}
+  .qt .bang-dl td[data-nhan=""]::before, .qt .bang-dl td[data-nhan="Thao tác"]::before, .qt .bang-dl td[data-nhan="Sản phẩm"]::before{content:none}
+  .qt .bang-dl .hang-thao-tac{justify-content:flex-start; margin-top:6px}
+  .qt .bang-dl .qt-doc{flex-direction:row; flex-wrap:wrap}
+  .qt .bang-dl .qt-doc form, .qt .bang-dl .qt-doc .nut{width:auto}
+}

@@ -14,6 +14,7 @@ import vn.edu.huit.diengiadung.repository.KhachHangRepository;
 import vn.edu.huit.diengiadung.repository.SanPhamRepository;
 import vn.edu.huit.diengiadung.service.DanhGiaService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
+import vn.edu.huit.diengiadung.service.SaoSanPham;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,13 +26,16 @@ public class DanhGiaServiceImpl implements DanhGiaService {
     private final KhachHangRepository duLieuKhachHang;
     private final SanPhamRepository duLieuSanPham;
     private final ChiTietDonHangRepository duLieuChiTiet;
+    private final SaoSanPham saoSanPham;
 
     public DanhGiaServiceImpl(DanhGiaRepository duLieuDanhGia, KhachHangRepository duLieuKhachHang,
-                              SanPhamRepository duLieuSanPham, ChiTietDonHangRepository duLieuChiTiet) {
+                              SanPhamRepository duLieuSanPham, ChiTietDonHangRepository duLieuChiTiet,
+                              SaoSanPham saoSanPham) {
         this.duLieuDanhGia = duLieuDanhGia;
         this.duLieuKhachHang = duLieuKhachHang;
         this.duLieuSanPham = duLieuSanPham;
         this.duLieuChiTiet = duLieuChiTiet;
+        this.saoSanPham = saoSanPham;
     }
 
     private KhachHang timKhach(TaiKhoan taiKhoan) {
@@ -94,7 +98,9 @@ public class DanhGiaServiceImpl implements DanhGiaService {
         danhGia.setSoSao(soSao);
         danhGia.setNoiDung(noiDungSach.isEmpty() ? null : noiDungSach);
         danhGia.setNgayTao(LocalDateTime.now());
-        return duLieuDanhGia.save(danhGia);
+        DanhGia daLuu = duLieuDanhGia.save(danhGia);
+        saoSanPham.lamMoi();
+        return daLuu;
     }
 
     @Override
@@ -112,6 +118,7 @@ public class DanhGiaServiceImpl implements DanhGiaService {
         DanhGia danhGia = duLieuDanhGia.findById(id).orElseThrow(() -> new LoiNghiepVu("Không tìm thấy đánh giá"));
         danhGia.setHien(!danhGia.isHien());
         duLieuDanhGia.save(danhGia);
+        saoSanPham.lamMoi();
     }
 
     @Override
@@ -121,5 +128,6 @@ public class DanhGiaServiceImpl implements DanhGiaService {
             throw new LoiNghiepVu("Không tìm thấy đánh giá");
         }
         duLieuDanhGia.deleteById(id);
+        saoSanPham.lamMoi();
     }
 }

@@ -10,12 +10,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.entity.DonHang;
 import vn.edu.huit.diengiadung.service.DonHangService;
+import vn.edu.huit.diengiadung.service.KetQuaPhanTrang;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.LyDoHuyDon;
 
 @Controller
 @RequestMapping("/admin/don-hang")
 public class AdminDonHangController {
+
+    private static final int SO_DON_MOI_TRANG = 15;
 
     private final DonHangService donHangService;
 
@@ -27,6 +34,7 @@ public class AdminDonHangController {
     public String danhSach(@RequestParam(required = false) String trangThai,
                            @RequestParam(required = false) String tuKhoa,
                            @RequestParam(required = false) String thanhToan,
+                           @RequestParam(defaultValue = "1") int trang,
                            Model model) {
         String khoa = tuKhoa == null ? "" : tuKhoa.trim().toLowerCase();
         String khoaSo = khoa.replaceAll("\\s", "");
@@ -41,7 +49,21 @@ public class AdminDonHangController {
                         || ("CK".equals(thanhToan) && don.isThanhToanTruoc())
                         || ("COD".equals(thanhToan) && !don.isThanhToanTruoc()))
                 .toList();
-        model.addAttribute("danhSach", danhSach);
+        int soTrang = Math.max(1, (danhSach.size() + SO_DON_MOI_TRANG - 1) / SO_DON_MOI_TRANG);
+        int trangHienTai = Math.min(Math.max(trang, 1), soTrang);
+        int tu = (trangHienTai - 1) * SO_DON_MOI_TRANG;
+        int den = Math.min(tu + SO_DON_MOI_TRANG, danhSach.size());
+        model.addAttribute("ketQua", new KetQuaPhanTrang<>(new PageImpl<>(danhSach.subList(tu, den),
+                PageRequest.of(trangHienTai - 1, SO_DON_MOI_TRANG), danhSach.size())));
+        model.addAttribute("tuDong", danhSach.isEmpty() ? 0 : tu + 1);
+        model.addAttribute("denDong", den);
+        StringBuilder thamSo = new StringBuilder();
+        for (String[] cap : new String[][]{{"trangThai", trangThai}, {"tuKhoa", tuKhoa}, {"thanhToan", thanhToan}}) {
+            if (cap[1] != null && !cap[1].isBlank()) {
+                thamSo.append(cap[0]).append('=').append(URLEncoder.encode(cap[1].trim(), StandardCharsets.UTF_8)).append('&');
+            }
+        }
+        model.addAttribute("thamSoLoc", thamSo.toString());
         model.addAttribute("trangThai", trangThai);
         model.addAttribute("tuKhoa", tuKhoa);
         model.addAttribute("thanhToan", thanhToan);
