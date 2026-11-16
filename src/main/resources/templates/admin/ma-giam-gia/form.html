@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Mã giảm giá', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/ma-giam-gia}">Mã giảm giá</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${maGiamGia.id == null} ? 'Tạo mới' : 'Chỉnh sửa'">Tạo mới</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('ma-giam-gia')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${maGiamGia.id == null} ? 'Tạo mã giảm giá' : 'Sửa mã ' + ${maGiamGia.ma}">Tạo mã giảm giá</h1>
+                            <p th:if="${maGiamGia.id != null}" th:text="'Đã dùng ' + ${maGiamGia.soLuotDaDung} + ' lượt'">Đã dùng</p>
+                        </div>
+                    </div>
+
+                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                        <span th:text="${thongBaoLoi}">Có lỗi xảy ra</span>
+                    </p>
+
+                    <div class="khoi">
+                        <form th:action="@{/admin/ma-giam-gia/luu}" th:object="${maGiamGia}" method="post" novalidate>
+                            <input type="hidden" th:field="*{id}">
+
+                            <fieldset class="qt-nhom">
+                                <legend>Mã khuyến mãi</legend>
+                                <div class="o-nhap">
+                                    <label for="ma">Mã giảm giá</label>
+                                    <div class="qt-ma-o">
+                                        <input type="text" id="ma" th:field="*{ma}" maxlength="30" placeholder="VD: CHAOBANMOI">
+                                        <button class="nut nut--nho" type="button" id="tao-ma" th:attr="data-url=@{/admin/ma-giam-gia/ma-ngau-nhien}">Tạo mã ngẫu nhiên</button>
+                                    </div>
+                                    <span class="o-nhap__goi">Khách nhập mã này ở bước thanh toán, không phân biệt hoa thường.</span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ma')}" th:errors="*{ma}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="moTa">Mô tả (nội bộ)</label>
+                                    <input type="text" id="moTa" th:field="*{moTa}" maxlength="255" placeholder="VD: Tặng khách đăng ký mới">
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                                </div>
+                            </fieldset>
+
+                            <div th:replace="~{admin/uu-dai-chung :: mucGiam}"></div>
+
+                            <fieldset class="qt-nhom">
+                                <legend>Giới hạn sử dụng</legend>
+                                <div class="o-nhap">
+                                    <label for="gioiHanLuotDung">Tổng số lượt được dùng</label>
+                                    <input type="number" id="gioiHanLuotDung" th:field="*{gioiHanLuotDung}" min="1" placeholder="Để trống = không giới hạn">
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('gioiHanLuotDung')}" th:errors="*{gioiHanLuotDung}"></span>
+                                </div>
+                                <div class="qt-chon" style="margin-top:14px">
+                                    <label><input type="checkbox" th:field="*{moiKhachMotLan}"> Mỗi khách hàng chỉ được dùng 1 lần</label>
+                                    <label><input type="checkbox" th:field="*{hienChoKhach}"> Hiện trong mục "Mã dành cho bạn" ở trang thanh toán</label>
+                                </div>
+                            </fieldset>
+
+                            <div th:replace="~{admin/uu-dai-chung :: thoiGian}"></div>
+
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" th:href="@{/admin/ma-giam-gia}">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+<script th:src="@{/js/uu-dai.js}" defer></script>
+</body>
+</html>

@@ -13,8 +13,63 @@
         <div class="khung">
             <div th:replace="~{layout/fragments :: thongBao}"></div>
 
+            <div class="dh-xong" th:if="${vuaDatHang}">
+                <p class="dh-xong__nhan">Đặt hàng thành công</p>
+                <h2 class="dh-xong__tieu-de">Cảm ơn bạn!</h2>
+                <p>Mã đơn hàng: <b th:text="${donHang.maDon}">BN000001</b> - vui lòng lưu lại để tra cứu khi cần.</p>
+            </div>
+
+            <section class="dh-tt" th:if="${donHang.choThanhToan}" aria-labelledby="dh-tt-tieu-de"
+                     th:attr="data-kiem-tra=@{/don-hang/{id}/thanh-toan(id=${donHang.id})}">
+                <figure class="dh-tt__qr">
+                    <img th:src="${linkMaQr}" width="260" height="260" alt="Mã VietQR chuyển khoản cho đơn hàng">
+                    <figcaption>Mở app ngân hàng → Quét mã QR</figcaption>
+                </figure>
+                <div class="dh-tt__noi">
+                    <h2 id="dh-tt-tieu-de">Chuyển khoản để hoàn tất đơn hàng</h2>
+                    <dl class="dh-tt__ds">
+                        <div>
+                            <dt>Số tiền</dt>
+                            <dd><b class="dh-tt__tien" th:text="${#numbers.formatInteger(donHang.tongTien, 1, 'POINT')} + ' ₫'">0 ₫</b>
+                                <button type="button" class="dh-tt__chep" th:attr="data-chep=${donHang.tongTien}">Chép</button></dd>
+                        </div>
+                        <div>
+                            <dt>Nội dung chuyển khoản</dt>
+                            <dd><b th:text="${donHang.maDon}">BN000001</b>
+                                <button type="button" class="dh-tt__chep" th:attr="data-chep=${donHang.maDon}">Chép</button></dd>
+                        </div>
+                        <div>
+                            <dt>Số tài khoản</dt>
+                            <dd><b th:text="${nganHang.soTaiKhoan}">0000</b>
+                                <button type="button" class="dh-tt__chep" th:attr="data-chep=${nganHang.soTaiKhoan}">Chép</button></dd>
+                        </div>
+                        <div>
+                            <dt>Ngân hàng · Chủ tài khoản</dt>
+                            <dd th:text="${nganHang.tenNganHang} + ' · ' + ${nganHang.chuTaiKhoan}">Ngân hàng</dd>
+                        </div>
+                    </dl>
+                    <p class="dh-tt__cho" role="status"><span class="dh-tt__cham" aria-hidden="true"></span>
+                        Đang chờ cửa hàng xác nhận đã nhận tiền - trang tự cập nhật…</p>
+                    <p class="dh-tt__ghi">Nhớ ghi đúng nội dung <b th:text="${donHang.maDon}">BN000001</b>.
+                        Đã chuyển mà sau 10 phút chưa xác nhận, vui lòng gọi hotline <a href="tel:0339999999">0339 999 999</a>.</p>
+                    <p class="dh-tt__ghi">Tài khoản ngân hàng trên chỉ là ví dụ minh hoạ cho đồ án, vui lòng không chuyển tiền thật.</p>
+                </div>
+            </section>
+
+            <section class="dh-tt dh-tt--gon" th:if="${donHang.thanhToanTruoc and donHang.daThanhToan}">
+                <h2>Đã nhận thanh toán</h2>
+                <p>Cửa hàng đã nhận <b th:text="${#numbers.formatInteger(donHang.tongTien, 1, 'POINT')} + ' ₫'">0 ₫</b> cho đơn
+                    <b th:text="${donHang.maDon}">BN000001</b>. Đơn hàng sẽ sớm được giao đến bạn.</p>
+            </section>
+
+            <section class="dh-tt dh-tt--gon" th:if="${!donHang.thanhToanTruoc and donHang.trangThai != 'DA_HUY'}">
+                <h2>Thanh toán khi nhận hàng</h2>
+                <p>Vui lòng chuẩn bị <b th:text="${#numbers.formatInteger(donHang.tongTien, 1, 'POINT')} + ' ₫'">0 ₫</b> khi nhận hàng.
+                    Nhân viên Bep Nè sẽ gọi xác nhận đơn trong giờ hành chính.</p>
+            </section>
+
             <div class="khoi">
-                <h2 th:text="'Đơn hàng #' + ${donHang.id}">Đơn hàng #1</h2>
+                <h2 th:text="'Đơn hàng ' + ${donHang.maDon}">Đơn hàng BN000001</h2>
                 <p>
                     <strong>Ngày đặt:</strong>
                     <span th:text="${#temporals.format(donHang.ngayDat, 'dd/MM/yyyy HH:mm')}">21/10/2026 10:30</span>
@@ -29,6 +84,8 @@
                 </p>
                 <p><strong>Người nhận:</strong> <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span></p>
                 <p><strong>Số điện thoại:</strong> <span th:text="${donHang.soDienThoaiNhan}">0900000000</span></p>
+                <p th:if="${donHang.emailNhan != null}"><strong>Email:</strong> <span th:text="${donHang.emailNhan}">a@b.vn</span></p>
+                <p><strong>Thanh toán:</strong> <span th:text="${donHang.tenPhuongThucThanhToan}">COD</span></p>
                 <p><strong>Địa chỉ giao hàng:</strong> <span th:text="${donHang.diaChiGiao}">Địa chỉ</span></p>
                 <p>
                     <strong>Ghi chú:</strong>
@@ -58,15 +115,40 @@
                         </tbody>
                     </table>
                 </div>
-                <p>
-                    Tổng cộng:
-                    <b th:text="${#numbers.formatInteger(donHang.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</b>
-                </p>
+                <dl class="tt-don__tong">
+                    <div class="tt-dong-tien" th:if="${donHang.tongUuDai > 0}">
+                        <dt>Tạm tính</dt>
+                        <dd th:text="${#numbers.formatInteger(donHang.tamTinh, 1, 'POINT')} + ' ₫'">0 ₫</dd>
+                    </div>
+                    <div class="tt-dong-tien tt-dong-tien--dam" th:if="${donHang.tienKhuyenMai > 0}">
+                        <dt th:text="'Khuyến mãi: ' + ${donHang.tenKhuyenMai}">Khuyến mãi</dt>
+                        <dd th:text="'−' + ${#numbers.formatInteger(donHang.tienKhuyenMai, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                    </div>
+                    <div class="tt-dong-tien tt-dong-tien--dam" th:if="${donHang.tienGiamMa > 0}">
+                        <dt th:text="'Mã giảm giá ' + ${donHang.maGiamGia}">Mã giảm giá</dt>
+                        <dd th:text="'−' + ${#numbers.formatInteger(donHang.tienGiamMa, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                    </div>
+                    <div class="tt-dong-tien tt-dong-tien--dam" th:if="${donHang.soTienGiam > 0}">
+                        <dt>Ưu đãi thanh toán trước</dt>
+                        <dd th:text="'−' + ${#numbers.formatInteger(donHang.soTienGiam, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                    </div>
+                    <div class="tt-dong-tien tt-dong-tien--tong">
+                        <dt>Tổng thanh toán</dt>
+                        <dd th:text="${#numbers.formatInteger(donHang.tongTien, 1, 'POINT')} + ' ₫'">0 ₫</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="dh-moi" th:if="${!laChuDon}">
+                <p>Bạn đặt hàng không cần tài khoản. Lưu lại mã <b th:text="${donHang.maDon}">BN000001</b> và số điện thoại để
+                    <a th:href="@{/don-hang/tra-cuu}">tra cứu đơn</a> sau này.
+                    <a th:href="@{/dang-ky}">Tạo tài khoản thành viên</a> để nhận mã giảm giá và khuyến mãi riêng cho lần mua sau.</p>
             </div>
 
             <div class="hang-nut">
-                <a class="nut" th:href="@{/don-hang}">Quay lại danh sách</a>
-                <form th:if="${donHang.trangThai == 'CHO_XAC_NHAN'}"
+                <a class="nut" th:if="${laChuDon}" th:href="@{/don-hang}">Quay lại danh sách</a>
+                <a class="nut" th:unless="${laChuDon}" th:href="@{/san-pham}">Tiếp tục mua sắm</a>
+                <form th:if="${laChuDon and donHang.trangThai == 'CHO_XAC_NHAN'}"
                       th:action="@{/don-hang/{id}/huy(id=${donHang.id})}" method="post"
                       onsubmit="return confirm('Bạn có chắc muốn huỷ đơn hàng này không?');">
                     <button class="nut" type="submit">Huỷ đơn</button>
@@ -78,5 +160,6 @@
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
 <div th:replace="~{layout/fragments :: menuNho}"></div>
+<script th:src="@{/js/thanh-toan.js}" defer></script>
 </body>
 </html>

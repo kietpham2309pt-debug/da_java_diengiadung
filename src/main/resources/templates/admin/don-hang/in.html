@@ -30,6 +30,7 @@
         <p><b>Người nhận:</b> <span th:text="${donHang.tenNguoiNhan}">Nguyễn Văn A</span></p>
         <p><b>Số điện thoại:</b> <span th:text="${donHang.soDienThoaiNhan}">0900000000</span></p>
         <p><b>Địa chỉ giao hàng:</b> <span th:text="${donHang.diaChiGiao}">TP.HCM</span></p>
+        <p><b>Thanh toán:</b> <span th:text="${donHang.tenPhuongThucThanhToan}">COD</span><span th:if="${donHang.thanhToanTruoc}" th:text="${donHang.daThanhToan} ? ' - đã nhận tiền' : ' - chưa nhận tiền'"></span></p>
         <p th:if="${donHang.ghiChu != null and !donHang.ghiChu.isBlank()}"><b>Ghi chú:</b> <span th:text="${donHang.ghiChu}"></span></p>
     </section>
 
@@ -56,6 +57,10 @@
         </tr>
         </tbody>
         <tfoot>
+        <tr th:if="${donHang.soTienGiam > 0}">
+            <td colspan="4" class="phai">Ưu đãi thanh toán trước</td>
+            <td class="phai" th:text="'−' + ${#numbers.formatInteger(donHang.soTienGiam, 1, 'POINT')} + ' ₫'">0 ₫</td>
+        </tr>
         <tr>
             <th colspan="4" class="phai">Tổng cộng</th>
             <th class="phai" th:text="${#numbers.formatInteger(donHang.tongTien != null ? donHang.tongTien : 0, 1, 'POINT')} + ' ₫'">0 ₫</th>

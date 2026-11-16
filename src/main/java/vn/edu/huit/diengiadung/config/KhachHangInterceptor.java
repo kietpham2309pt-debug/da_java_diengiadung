@@ -3,18 +3,18 @@ package vn.edu.huit.diengiadung.config;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
 import vn.edu.huit.diengiadung.repository.TaiKhoanRepository;
 
-@Component
 public class KhachHangInterceptor implements HandlerInterceptor {
 
     private final TaiKhoanRepository duLieuTaiKhoan;
+    private final boolean batBuocDangNhap;
 
-    public KhachHangInterceptor(TaiKhoanRepository duLieuTaiKhoan) {
+    public KhachHangInterceptor(TaiKhoanRepository duLieuTaiKhoan, boolean batBuocDangNhap) {
         this.duLieuTaiKhoan = duLieuTaiKhoan;
+        this.batBuocDangNhap = batBuocDangNhap;
     }
 
     @Override
@@ -23,6 +23,9 @@ public class KhachHangInterceptor implements HandlerInterceptor {
         HttpSession phien = request.getSession();
         Object nguoiDung = phien.getAttribute("taiKhoan");
         if (!(nguoiDung instanceof TaiKhoan taiKhoan)) {
+            if (!batBuocDangNhap) {
+                return true;
+            }
             response.sendRedirect(request.getContextPath() + "/dang-nhap");
             return false;
         }

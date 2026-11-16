@@ -66,6 +66,7 @@
                 </div>
             </div>
 
+            <a class="dh-nut" th:if="${taiKhoanHienTai == null}" th:href="@{/don-hang/tra-cuu}">Tra cứu đơn</a>
             <a class="dh-nut" th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}">Đăng nhập</a>
             <a class="dh-nut" th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}"
                th:href="@{/admin}">Quản trị</a>
@@ -141,6 +142,8 @@
     <a th:href="@{/admin/thuong-hieu}" th:classappend="${trang == 'thuong-hieu'} ? 'dang-chon'">Thương hiệu</a>
     <a th:href="@{/admin/san-pham}" th:classappend="${trang == 'san-pham'} ? 'dang-chon'">Sản phẩm</a>
     <a th:href="@{/admin/don-hang}" th:classappend="${trang == 'don-hang'} ? 'dang-chon'">Đơn hàng</a>
+    <a th:href="@{/admin/khuyen-mai}" th:classappend="${trang == 'khuyen-mai'} ? 'dang-chon'">Khuyến mãi</a>
+    <a th:href="@{/admin/ma-giam-gia}" th:classappend="${trang == 'ma-giam-gia'} ? 'dang-chon'">Mã giảm giá</a>
     <a th:href="@{/admin/khach-hang}" th:classappend="${trang == 'khach-hang'} ? 'dang-chon'">Khách hàng</a>
     <a th:href="@{/admin/thong-ke}" th:classappend="${trang == 'thong-ke'} ? 'dang-chon'">Thống kê</a>
     <a th:href="@{/admin/tai-khoan}" th:classappend="${trang == 'tai-khoan'} ? 'dang-chon'">Tài khoản</a>
@@ -214,6 +217,7 @@
             <a class="menu-nho__chinh" th:href="@{/}">Trang chủ</a>
             <a class="menu-nho__chinh" th:href="@{/san-pham}">Tất cả sản phẩm</a>
             <a class="menu-nho__chinh" th:href="@{/gio-hang}">Giỏ hàng</a>
+            <a class="menu-nho__chinh" th:if="${taiKhoanHienTai == null}" th:href="@{/don-hang/tra-cuu}">Tra cứu đơn</a>
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai == null}" th:href="@{/dang-nhap}">Đăng nhập</a>
             <a class="menu-nho__chinh" th:if="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}"
                th:href="@{/admin}">Trang quản trị</a>

@@ -7,78 +7,276 @@
 <div th:replace="~{layout/fragments :: thanh}"></div>
 
 <main>
-    <div th:replace="~{layout/fragments :: banner('Đặt hàng', 'Nhập thông tin nhận hàng để hoàn tất đơn', 'banner-gio-hang.jpg', 'Đặt hàng')}"></div>
+    <section class="muc muc--dau-trang">
+        <div class="khung tt"
+             th:attr="data-tam-tinh=${bangGia.sauUuDai},data-giam-ck=${tienGiamNeuCk},data-phan-tram=${phanTramGiam},data-kiem-ma=@{/dat-hang/ma-giam-gia}">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/gio-hang}">Giỏ hàng</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Đặt hàng</span>
+            </nav>
 
-    <section class="muc muc--sat-banner">
-        <div class="khung">
-            <div th:replace="~{layout/fragments :: thongBao}"></div>
+            <h1 class="tt__tieu-de">Đặt hàng</h1>
 
-            <div class="khoi">
-                <h2>Đơn hàng của bạn</h2>
-                <div class="cuon-ngang">
-                    <table class="bang-dl">
-                        <thead>
-                        <tr>
-                            <th>Sản phẩm</th>
-                            <th class="canh-giua">Số lượng</th>
-                            <th class="canh-giua">Thành tiền</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="dong : ${chiTiet.danhSachDong}">
-                            <td class="o-dai" th:text="${dong.sanPham.tenSanPham}">Tên sản phẩm</td>
-                            <td class="canh-giua" th:text="${dong.soLuong}">1</td>
-                            <td class="canh-giua" th:text="${#numbers.formatInteger(dong.thanhTien, 0, 'POINT')} + ' ₫'">0 ₫</td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <div class="tt-moi" th:unless="${thanhVien}">
+                <svg class="ic" aria-hidden="true"><use xlink:href="#ic-nguoi-dung"></use></svg>
+                <div class="tt-moi__noi">
+                    <p class="tt-moi__tieu-de" th:text="${daDangNhap} ? 'Tài khoản này không phải tài khoản khách hàng' : 'Bạn đang đặt hàng không cần tài khoản'">Bạn đang đặt hàng không cần tài khoản</p>
+                    <p>Đăng nhập thành viên để dùng <b>mã giảm giá</b> và nhận các <b>chương trình khuyến mãi dành riêng cho thành viên</b>.</p>
+                    <ul class="tt-moi__ds" th:unless="${#lists.isEmpty(khuyenMaiThanhVien)}">
+                        <li th:each="km : ${khuyenMaiThanhVien}">
+                            <b th:text="${km.ten}">Tên chương trình</b> ·
+                            <span th:text="${km.moTaMucGiam} + ' · ' + ${km.moTaPhamVi} + ' · ' + ${km.moTaDieuKien}">Giảm 5%</span>
+                        </li>
+                    </ul>
                 </div>
-                <p>
-                    Tổng cộng:
-                    <b th:text="${#numbers.formatInteger(chiTiet.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</b>
-                </p>
-                <p><a th:href="@{/gio-hang}">Sửa giỏ hàng</a></p>
+                <div class="tt-moi__nut" th:unless="${daDangNhap}">
+                    <a class="nut nut--dac nut--nho" th:href="@{/dang-nhap(tiepTuc='/dat-hang')}">Đăng nhập</a>
+                    <a class="nut nut--nho" th:href="@{/dang-ky}">Đăng ký</a>
+                </div>
             </div>
 
-            <div class="khoi">
-                <h2>Thông tin nhận hàng</h2>
-                <form th:action="@{/dat-hang}" th:object="${thongTin}" method="post">
-                    <div class="o-nhap">
-                        <label for="tenNguoiNhan">Họ tên người nhận</label>
-                        <input type="text" id="tenNguoiNhan" th:field="*{tenNguoiNhan}" autocomplete="name">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('tenNguoiNhan')}" th:errors="*{tenNguoiNhan}"></span>
+            <details class="tt-gon">
+                <summary>
+                    <span>Đơn hàng <span class="tt-gon__so" th:text="'(' + ${chiTiet.tongSoLuong} + ' sản phẩm)'">(1 sản phẩm)</span></span>
+                    <b class="tt-tong-so" th:text="${#numbers.formatInteger(bangGia.sauUuDai, 1, 'POINT')} + ' ₫'">0 ₫</b>
+                </summary>
+                <div th:replace="~{:: tomTatDon}"></div>
+            </details>
+
+            <div class="tt__luoi">
+                <form class="tt__form" th:action="@{/dat-hang}" th:object="${thongTin}" method="post" novalidate id="form-dat-hang">
+                    <p class="thong-bao thong-bao--loi" th:if="${loiChung}" role="alert" id="loi-chung">
+                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                        <span th:text="${loiChung}">Vui lòng kiểm tra lại các ô được đánh dấu.</span>
+                    </p>
+
+                    <fieldset class="tt-nhom">
+                        <legend>Thông tin người nhận</legend>
+                        <div class="tt-hai-cot">
+                            <div class="o-nhap">
+                                <label for="tenNguoiNhan">Họ và tên <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <input type="text" id="tenNguoiNhan" th:field="*{tenNguoiNhan}" autocomplete="name" maxlength="80"
+                                       th:attr="aria-invalid=${#fields.hasErrors('tenNguoiNhan')}">
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenNguoiNhan')}" th:errors="*{tenNguoiNhan}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="soDienThoaiNhan">Số điện thoại <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <input type="tel" id="soDienThoaiNhan" th:field="*{soDienThoaiNhan}" autocomplete="tel" inputmode="tel"
+                                       placeholder="09xx xxx xxx" maxlength="10" th:attr="aria-invalid=${#fields.hasErrors('soDienThoaiNhan')}">
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoaiNhan')}" th:errors="*{soDienThoaiNhan}"></span>
+                            </div>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="email">Email <span class="tt-tuy-chon">(không bắt buộc)</span></label>
+                            <input type="email" id="email" th:field="*{email}" autocomplete="email" inputmode="email" maxlength="120"
+                                   th:attr="aria-invalid=${#fields.hasErrors('email')}">
+                            <span class="goi-y" th:unless="${#fields.hasErrors('email')}">Để nhận thông tin đơn hàng qua email.</span>
+                            <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="tt-nhom">
+                        <legend>Địa chỉ giao hàng</legend>
+                        <p class="tt-ghi-chu">Địa chỉ theo đơn vị hành chính mới từ 01/07/2025: Tỉnh / Thành phố và Phường / Xã (không còn Quận / Huyện).</p>
+                        <div class="tt-hai-cot">
+                            <div class="o-nhap">
+                                <label for="tinhThanh">Tỉnh / Thành phố <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <select id="tinhThanh" th:field="*{tinhThanh}" autocomplete="address-level1"
+                                        th:attr="aria-invalid=${#fields.hasErrors('tinhThanh')}">
+                                    <option value="">Chọn tỉnh / thành phố</option>
+                                    <option th:each="tinh : ${danhSachTinh}" th:value="${tinh}" th:text="${tinh}">Thành phố Hồ Chí Minh</option>
+                                </select>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('tinhThanh')}" th:errors="*{tinhThanh}"></span>
+                            </div>
+                            <div class="o-nhap">
+                                <label for="phuongXa">Phường / Xã <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <select id="phuongXa" th:field="*{phuongXa}" autocomplete="address-level2"
+                                        th:disabled="${#lists.isEmpty(danhSachPhuong)}"
+                                        th:attr="aria-invalid=${#fields.hasErrors('phuongXa')}">
+                                    <option value="" th:text="${#lists.isEmpty(danhSachPhuong)} ? 'Chọn tỉnh / thành phố trước' : 'Chọn phường / xã'">Chọn phường / xã</option>
+                                    <option th:each="phuong : ${danhSachPhuong}" th:value="${phuong}" th:text="${phuong}">Phường Tây Thạnh</option>
+                                </select>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('phuongXa')}" th:errors="*{phuongXa}"></span>
+                            </div>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="diaChiCuThe">Số nhà, tên đường <span class="tt-bb" aria-hidden="true">*</span></label>
+                            <input type="text" id="diaChiCuThe" th:field="*{diaChiCuThe}" autocomplete="street-address" maxlength="200"
+                                   placeholder="Ví dụ: 140 Lê Trọng Tấn" th:attr="aria-invalid=${#fields.hasErrors('diaChiCuThe')}">
+                            <span class="loi-nhap" th:if="${#fields.hasErrors('diaChiCuThe')}" th:errors="*{diaChiCuThe}"></span>
+                        </div>
+                        <div class="o-nhap">
+                            <label for="ghiChu">Ghi chú cho đơn hàng <span class="tt-tuy-chon">(không bắt buộc)</span></label>
+                            <textarea id="ghiChu" th:field="*{ghiChu}" rows="3" maxlength="500" placeholder="Ví dụ: giao giờ hành chính"></textarea>
+                            <span class="loi-nhap" th:if="${#fields.hasErrors('ghiChu')}" th:errors="*{ghiChu}"></span>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="tt-nhom" th:if="${thanhVien}">
+                        <legend>Mã giảm giá &amp; khuyến mãi</legend>
+                        <p class="tt-km" th:if="${bangGia.khuyenMai != null}">
+                            <span class="tt-nhan">Tự động áp dụng</span>
+                            <span><b th:text="${bangGia.khuyenMai.ten}">Tên chương trình</b> -
+                                giảm <b th:text="${#numbers.formatInteger(bangGia.tienKhuyenMai, 1, 'POINT')} + ' ₫'">0 ₫</b></span>
+                        </p>
+                        <div class="o-nhap">
+                            <label for="maGiamGia">Mã giảm giá <span class="tt-tuy-chon">(nếu có)</span></label>
+                            <div class="tt-ma">
+                                <input type="text" id="maGiamGia" th:field="*{maGiamGia}" maxlength="30" autocomplete="off"
+                                       placeholder="Nhập mã giảm giá" th:attr="aria-invalid=${#fields.hasErrors('maGiamGia')}">
+                                <button type="submit" class="nut" id="nut-ap-ma" th:formaction="@{/dat-hang/ap-ma}" formnovalidate>Áp dụng</button>
+                            </div>
+                            <span class="loi-nhap" id="loi-ma" th:text="${#fields.hasErrors('maGiamGia')} ? ${#fields.errors('maGiamGia')[0]} : ${bangGia.loiMa}"></span>
+                            <span class="tt-ma__ok" id="ma-ok" th:text="${bangGia.maGiamGia != null} ? 'Đã áp dụng mã ' + ${bangGia.maGiamGia.ma} + ': ' + ${bangGia.maGiamGia.moTaMucGiam} : ''"></span>
+                        </div>
+                        <div class="tt-ma-goi-y" th:unless="${#lists.isEmpty(danhSachMa)}">
+                            <p>Mã dành cho bạn</p>
+                            <ul>
+                                <li th:each="ma : ${danhSachMa}">
+                                    <button type="button" class="tt-phieu" th:attr="data-ma=${ma.ma}">
+                                        <b th:text="${ma.ma}">MA</b>
+                                        <span th:text="${ma.moTaMucGiam}">Giảm 5%</span>
+                                        <small th:text="${ma.moTaDieuKien} + (${ma.ketThuc != null} ? ' · HSD ' + ${#temporals.format(ma.ketThuc, 'dd/MM/yyyy')} : '')">Mọi đơn</small>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="tt-nhom">
+                        <legend>Phương thức thanh toán <span class="tt-bb" aria-hidden="true">*</span></legend>
+                        <div class="tt-pt" role="radiogroup" aria-label="Phương thức thanh toán"
+                             th:classappend="${#fields.hasErrors('phuongThuc')} ? 'tt-pt--loi'">
+                            <label class="tt-pt__o tt-pt__o--ck">
+                                <input type="radio" th:field="*{phuongThuc}" value="CK">
+                                <span class="tt-pt__noi">
+                                    <span class="tt-pt__ten">
+                                        <svg class="ic"><use xlink:href="#ic-thanh-toan-qr"></use></svg>
+                                        Thanh toán trước
+                                        <span class="tt-nhan" th:text="'Giảm thêm ' + ${phanTramGiam} + '%'">Giảm thêm 2%</span>
+                                    </span>
+                                    <span class="tt-pt__mo-ta">Hoàn tất thanh toán trước khi giao hàng: chuyển khoản qua mã VietQR, cửa hàng xác nhận ngay khi nhận được tiền.</span>
+                                </span>
+                            </label>
+                            <label class="tt-pt__o" th:classappend="${!codDuocPhep} ? 'tt-pt__o--khoa'">
+                                <input type="radio" th:field="*{phuongThuc}" value="COD" th:disabled="${!codDuocPhep}">
+                                <span class="tt-pt__noi">
+                                    <span class="tt-pt__ten">
+                                        <svg class="ic"><use xlink:href="#ic-giao-hang"></use></svg>
+                                        COD – Thanh toán khi nhận hàng
+                                    </span>
+                                    <span class="tt-pt__mo-ta" th:if="${codDuocPhep}" th:text="'Không áp dụng ưu đãi giảm thêm ' + ${phanTramGiam} + '%.'">Không áp dụng ưu đãi.</span>
+                                    <span class="tt-pt__mo-ta" th:unless="${codDuocPhep}"
+                                          th:text="'Không áp dụng cho đơn hàng trên ' + ${#numbers.formatInteger(codToiDa, 1, 'POINT')} + ' ₫.'">Không áp dụng.</span>
+                                </span>
+                            </label>
+                        </div>
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('phuongThuc')}" th:errors="*{phuongThuc}"></span>
+
+                        <div class="tt-uu-dai" id="tt-uu-dai" th:hidden="${thongTin.phuongThuc != 'CK'}">
+                            <span class="tt-uu-dai__bieu-tuong" aria-hidden="true">%</span>
+                            <div>
+                                <p class="tt-uu-dai__tieu-de" th:text="'Đã áp dụng ưu đãi thanh toán trước ' + ${phanTramGiam} + '%'">Đã áp dụng ưu đãi</p>
+                                <p>Bạn tiết kiệm thêm <b data-tien-ck th:text="${#numbers.formatInteger(tienGiamNeuCk, 1, 'POINT')} + ' ₫'">0 ₫</b>.
+                                    Sau khi đặt hàng, quét mã VietQR để hoàn tất thanh toán.</p>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="tt-dong-y">
+                        <label>
+                            <input type="checkbox" th:field="*{dongY}" th:attr="aria-invalid=${#fields.hasErrors('dongY')}">
+                            <span>Tôi đồng ý để Bep Nè xử lý thông tin cá nhân nhằm giao hàng và chăm sóc khách hàng theo
+                                <a th:href="@{/chinh-sach-bao-mat}" target="_blank" rel="noopener">chính sách bảo vệ dữ liệu cá nhân</a>.
+                                <span class="tt-bb" aria-hidden="true">*</span></span>
+                        </label>
+                        <span class="loi-nhap" th:if="${#fields.hasErrors('dongY')}" th:errors="*{dongY}"></span>
                     </div>
 
-                    <div class="o-nhap">
-                        <label for="soDienThoaiNhan">Số điện thoại</label>
-                        <input type="tel" id="soDienThoaiNhan" th:field="*{soDienThoaiNhan}" autocomplete="tel">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoaiNhan')}" th:errors="*{soDienThoaiNhan}"></span>
-                    </div>
+                    <p class="tt-luu-y">
+                        <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
+                        <span th:text="'Ưu đãi giảm thêm ' + ${phanTramGiam} + '% chỉ áp dụng khi bạn hoàn tất thanh toán trước. Đơn COD không áp dụng ưu đãi này.'">Lưu ý</span>
+                    </p>
 
-                    <div class="o-nhap">
-                        <label for="diaChiGiao">Địa chỉ giao hàng</label>
-                        <input type="text" id="diaChiGiao" th:field="*{diaChiGiao}" autocomplete="street-address">
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('diaChiGiao')}" th:errors="*{diaChiGiao}"></span>
-                    </div>
-
-                    <div class="o-nhap">
-                        <label for="ghiChu">Ghi chú</label>
-                        <input type="text" id="ghiChu" th:field="*{ghiChu}">
-                        <span class="goi-y">Không bắt buộc.</span>
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('ghiChu')}" th:errors="*{ghiChu}"></span>
-                    </div>
-
-                    <div class="hang-nut">
-                        <button class="nut nut--dac" type="submit">Xác nhận đặt hàng</button>
-                        <a class="nut" th:href="@{/gio-hang}">Quay lại giỏ hàng</a>
-                    </div>
+                    <button type="submit" class="nut nut--dac tt__dat">
+                        Đặt hàng · <span class="tt-tong-so" th:text="${#numbers.formatInteger(bangGia.sauUuDai, 1, 'POINT')} + ' ₫'">0 ₫</span>
+                    </button>
                 </form>
+
+                <aside class="tt-tom-tat" aria-label="Tóm tắt đơn hàng">
+                    <h2>Đơn hàng của bạn</h2>
+                    <div th:fragment="tomTatDon" class="tt-don">
+                        <ul class="tt-don__ds">
+                            <li class="tt-don__dong" th:each="dong : ${chiTiet.danhSachDong}">
+                                <span class="tt-don__anh"><img th:src="@{${dong.sanPham.duongDanAnh}}" alt=""></span>
+                                <span class="tt-don__ten">
+                                    <b th:text="${dong.sanPham.tenSanPham}">Tên sản phẩm</b>
+                                    <small th:text="${dong.soLuong} + ' × ' + ${#numbers.formatInteger(dong.donGia, 1, 'POINT')} + ' ₫'">1 × 0 ₫</small>
+                                </span>
+                                <span class="tt-don__tien" th:text="${#numbers.formatInteger(dong.thanhTien, 1, 'POINT')} + ' ₫'">0 ₫</span>
+                            </li>
+                        </ul>
+                        <dl class="tt-don__tong">
+                            <div class="tt-dong-tien tt-dong-tien--mo">
+                                <dt>Giá niêm yết</dt>
+                                <dd><del th:text="${#numbers.formatInteger(chiTiet.tongGiaNiemYet, 1, 'POINT')} + ' ₫'">0 ₫</del></dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--tiet-kiem" th:if="${chiTiet.tienTietKiem > 0}">
+                                <dt>Tiết kiệm</dt>
+                                <dd th:text="'−' + ${#numbers.formatInteger(chiTiet.tienTietKiem, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--dam" th:if="${bangGia.khuyenMai != null}">
+                                <dt th:text="'Khuyến mãi: ' + ${bangGia.khuyenMai.ten}">Khuyến mãi</dt>
+                                <dd th:text="'−' + ${#numbers.formatInteger(bangGia.tienKhuyenMai, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--dam" data-dong-ma th:hidden="${bangGia.maGiamGia == null}">
+                                <dt>Mã giảm giá <span data-ten-ma th:text="${bangGia.maGiamGia != null} ? ${bangGia.maGiamGia.ma} : ''"></span></dt>
+                                <dd data-tien-ma th:text="'−' + ${#numbers.formatInteger(bangGia.tienGiamMa, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--vach" data-hien-khi="da-chon" hidden>
+                                <dt>Giá sau ưu đãi</dt>
+                                <dd data-sau-uu-dai th:text="${#numbers.formatInteger(bangGia.sauUuDai, 1, 'POINT')} + ' ₫'">0 ₫</dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--dam" data-hien-khi="CK" hidden>
+                                <dt th:text="'Ưu đãi thanh toán trước ' + ${phanTramGiam} + '%'">Ưu đãi</dt>
+                                <dd data-tien-ck th:text="'−' + ${#numbers.formatInteger(tienGiamNeuCk, 1, 'POINT')} + ' ₫'">−0 ₫</dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--mo" data-hien-khi="COD" hidden>
+                                <dt th:text="'Ưu đãi thanh toán trước ' + ${phanTramGiam} + '%'">Ưu đãi</dt>
+                                <dd>Không áp dụng (COD)</dd>
+                            </div>
+                            <div class="tt-dong-tien tt-dong-tien--tong">
+                                <dt>Tổng thanh toán</dt>
+                                <dd class="tt-tong-so" th:text="${#numbers.formatInteger(bangGia.sauUuDai, 1, 'POINT')} + ' ₫'">0 ₫</dd>
+                            </div>
+                        </dl>
+                        <p class="tt-don__them">
+                            <a th:href="@{/gio-hang}">Sửa giỏ hàng</a> ·
+                            <a th:href="@{/san-pham}">Chọn thêm sản phẩm</a>
+                        </p>
+                    </div>
+                </aside>
             </div>
+
+            <dialog class="tt-hoi" id="tt-hoi" aria-labelledby="tt-hoi-tieu-de" aria-describedby="tt-hoi-mo-ta">
+                <span class="tt-uu-dai__bieu-tuong" aria-hidden="true">%</span>
+                <h2 id="tt-hoi-tieu-de" th:text="'Bạn có muốn tiết kiệm thêm ' + ${phanTramGiam} + '%?'">Bạn có muốn tiết kiệm thêm?</h2>
+                <p id="tt-hoi-mo-ta">Chọn Thanh toán trước để được giảm thêm <span th:text="${phanTramGiam} + '%'">2%</span> trên giá deal -
+                    tiết kiệm <b data-tien-ck th:text="${#numbers.formatInteger(tienGiamNeuCk, 1, 'POINT')} + ' ₫'">0 ₫</b> cho đơn này.</p>
+                <div class="tt-hoi__nut">
+                    <button type="button" class="nut nut--dac" data-chuyen-ck>Chuyển sang Thanh toán trước</button>
+                    <button type="button" class="nut" data-tiep-cod>Tiếp tục COD</button>
+                </div>
+            </dialog>
         </div>
     </section>
 </main>
 
 <div th:replace="~{layout/fragments :: chanTrang}"></div>
 <div th:replace="~{layout/fragments :: menuNho}"></div>
+<script th:src="@{/js/thanh-toan.js}" defer></script>
 </body>
 </html>

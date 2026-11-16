@@ -27,7 +27,9 @@ public class TaiKhoanController {
     }
 
     @GetMapping("/dang-nhap")
-    public String formDangNhap(@RequestParam(required = false) String loi, Model model) {
+    public String formDangNhap(@RequestParam(required = false) String loi,
+                               @RequestParam(required = false) String tiepTuc, Model model) {
+        model.addAttribute("tiepTuc", duongDanAnToan(tiepTuc));
         if ("quyen".equals(loi)) {
             model.addAttribute("loiDangNhap", "Bạn cần đăng nhập bằng tài khoản quản trị để vào khu vực này");
         } else if ("khoa".equals(loi)) {
@@ -39,6 +41,7 @@ public class TaiKhoanController {
     @PostMapping("/dang-nhap")
     public String dangNhap(@RequestParam String tenDangNhap,
                            @RequestParam String matKhau,
+                           @RequestParam(required = false) String tiepTuc,
                            HttpServletRequest yeuCau,
                            HttpSession session,
                            Model model) {
@@ -49,12 +52,21 @@ public class TaiKhoanController {
             if (taiKhoan.laQuanTri()) {
                 return "redirect:/admin";
             }
-            return "redirect:/";
+            String quayLai = duongDanAnToan(tiepTuc);
+            return quayLai == null ? "redirect:/" : "redirect:" + quayLai;
         } catch (LoiNghiepVu loi) {
+            model.addAttribute("tiepTuc", duongDanAnToan(tiepTuc));
             model.addAttribute("loiDangNhap", loi.getMessage());
             model.addAttribute("tenDangNhapCu", tenDangNhap);
             return "dang-nhap";
         }
+    }
+
+    private String duongDanAnToan(String duongDan) {
+        if (duongDan == null || !duongDan.matches("^/[A-Za-z0-9/_-]*$") || duongDan.startsWith("//")) {
+            return null;
+        }
+        return duongDan;
     }
 
     @InitBinder("taiKhoan")
