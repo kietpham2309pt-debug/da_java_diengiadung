@@ -65,10 +65,22 @@
                     <b th:text="${#numbers.formatInteger(chiTiet.tongTien, 0, 'POINT')} + ' ₫'">0 ₫</b>
                 </p>
 
+                <div class="tt-moi" th:if="${taiKhoanHienTai == null}">
+                    <svg class="ic" aria-hidden="true"><use xlink:href="#ic-nguoi-dung"></use></svg>
+                    <div class="tt-moi__noi">
+                        <p class="tt-moi__tieu-de">Thành viên được giảm thêm</p>
+                        <p>Bạn vẫn đặt hàng được mà không cần tài khoản. Đăng nhập để dùng <b>mã giảm giá</b> và nhận <b>khuyến mãi dành riêng cho thành viên</b>.</p>
+                    </div>
+                    <div class="tt-moi__nut">
+                        <a class="nut nut--dac nut--nho" th:href="@{/dang-nhap(tiepTuc='/gio-hang')}">Đăng nhập</a>
+                        <a class="nut nut--nho" th:href="@{/dang-ky}">Đăng ký</a>
+                    </div>
+                </div>
+
                 <div class="hang-nut">
                     <a class="nut" th:href="@{/san-pham}">Tiếp tục mua hàng</a>
-                    <a class="nut" th:href="@{/don-hang}">Đơn hàng của tôi</a>
-                    <a class="nut" th:href="@{/ho-so}">Hồ sơ</a>
+                    <a class="nut" th:if="${taiKhoanHienTai != null}" th:href="@{/don-hang}">Đơn hàng của tôi</a>
+                    <a class="nut" th:if="${taiKhoanHienTai != null}" th:href="@{/ho-so}">Hồ sơ</a>
                     <a class="nut nut--dac" th:href="@{/dat-hang}">Đặt hàng</a>
                 </div>
             </th:block>

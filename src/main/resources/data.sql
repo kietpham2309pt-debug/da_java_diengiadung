@@ -83,3 +83,14 @@ INSERT IGNORE INTO chi_tiet_don_hang (id, don_hang_id, san_pham_id, so_luong, do
 (901, 901, 1, 1, 15240000), (902, 902, 2, 1, 20810000), (903, 903, 7, 1, 11640000), (904, 904, 9, 1, 10370000),
 (905, 905, 4, 1, 11340000), (906, 906, 3, 1, 12380000), (907, 907, 14, 1, 26220000), (908, 908, 12, 1, 3780000),
 (909, 909, 18, 1, 15370000), (910, 910, 13, 1, 4350000);
+
+INSERT IGNORE INTO ma_giam_gia (id, ma, mo_ta, loai_giam, gia_tri, giam_toi_da, don_toi_thieu, bat_dau, ket_thuc, hoat_dong, gioi_han_luot_dung, so_luot_da_dung, moi_khach_mot_lan, hien_cho_khach, ngay_tao) VALUES
+(1, 'CHAOBANMOI', 'Chào thành viên mới', 'PHAN_TRAM', 5, 500000, 0, '2026-01-01 00:00:00', NULL, b'1', NULL, 0, b'1', b'1', '2026-01-01 00:00:00'),
+(2, 'BEPNE300K', 'Giảm 300k đơn từ 10 triệu', 'SO_TIEN', 300000, NULL, 10000000, '2026-01-01 00:00:00', '2027-12-31 23:59:00', b'1', 200, 0, b'1', b'1', '2026-01-02 00:00:00'),
+(3, 'TET2027', 'Khuyến mãi Tết - chưa mở', 'PHAN_TRAM', 8, 1000000, 5000000, '2027-01-15 00:00:00', '2027-02-15 00:00:00', b'1', 100, 0, b'1', b'1', '2026-01-03 00:00:00'),
+(4, 'NOEL2025', 'Giáng sinh 2025 - đã hết hạn', 'SO_TIEN', 200000, NULL, 3000000, '2025-12-01 00:00:00', '2025-12-31 23:59:00', b'1', NULL, 0, b'1', b'0', '2025-11-20 00:00:00');
+
+INSERT IGNORE INTO khuyen_mai (id, ten, mo_ta, loai_giam, gia_tri, giam_toi_da, don_toi_thieu, bat_dau, ket_thuc, hoat_dong, pham_vi, loai_san_pham_id, thuong_hieu_id, chi_thanh_vien) VALUES
+(1, 'Tuần lễ bếp từ - thành viên giảm 3%', 'Áp dụng cho mọi bếp điện từ', 'PHAN_TRAM', 3, 1000000, 0, '2026-11-01 00:00:00', '2026-12-31 23:59:00', b'1', 'LOAI_SAN_PHAM', 1, NULL, b'1'),
+(2, 'Thành viên mua Bosch giảm 500k', 'Đơn hàng Bosch từ 15 triệu', 'SO_TIEN', 500000, NULL, 15000000, '2026-11-01 00:00:00', '2026-12-31 23:59:00', b'1', 'THUONG_HIEU', NULL, 1, b'1'),
+(3, 'Giảm 1% mọi đơn từ 20 triệu', 'Áp dụng cả khách không đăng nhập', 'PHAN_TRAM', 1, 300000, 20000000, '2026-11-01 00:00:00', NULL, b'1', 'TAT_CA', NULL, NULL, b'0');

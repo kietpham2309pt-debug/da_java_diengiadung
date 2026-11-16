@@ -20,6 +20,7 @@
 
             <div class="the-tk hien-dan">
                 <form th:action="@{/dang-nhap}" method="post">
+                    <input type="hidden" name="tiepTuc" th:if="${tiepTuc}" th:value="${tiepTuc}">
                     <div class="o-nhap">
                         <label for="tenDangNhap">Tên đăng nhập</label>
                         <input type="text" id="tenDangNhap" name="tenDangNhap" required

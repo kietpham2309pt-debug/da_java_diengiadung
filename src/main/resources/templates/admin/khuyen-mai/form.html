@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Khuyến mãi', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/khuyen-mai}">Khuyến mãi</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page" th:text="${khuyenMai.id == null} ? 'Tạo mới' : 'Chỉnh sửa'">Tạo mới</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('khuyen-mai')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1 th:text="${khuyenMai.id == null} ? 'Tạo chương trình khuyến mãi' : 'Sửa chương trình khuyến mãi'">Tạo chương trình</h1>
+                            <p>Chương trình tự động áp dụng vào giỏ hàng khi đủ điều kiện, khách không cần nhập mã.</p>
+                        </div>
+                    </div>
+
+                    <div class="khoi">
+                        <form th:action="@{/admin/khuyen-mai/luu}" th:object="${khuyenMai}" method="post" novalidate>
+                            <input type="hidden" th:field="*{id}">
+
+                            <fieldset class="qt-nhom">
+                                <legend>Thông tin chương trình</legend>
+                                <div class="o-nhap">
+                                    <label for="ten">Tên chương trình</label>
+                                    <input type="text" id="ten" th:field="*{ten}" maxlength="120" placeholder="VD: Tuần lễ bếp từ - giảm 5%">
+                                    <span class="o-nhap__goi">Tên hiển thị cho khách ở trang thanh toán và trên đơn hàng.</span>
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ten')}" th:errors="*{ten}"></span>
+                                </div>
+                                <div class="o-nhap">
+                                    <label for="moTa">Mô tả</label>
+                                    <input type="text" id="moTa" th:field="*{moTa}" maxlength="255">
+                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></span>
+                                </div>
+                            </fieldset>
+
+                            <div th:replace="~{admin/uu-dai-chung :: mucGiam}"></div>
+
+                            <fieldset class="qt-nhom">
+                                <legend>Áp dụng cho</legend>
+                                <div class="qt-chon" role="radiogroup" aria-label="Phạm vi áp dụng">
+                                    <label><input type="radio" th:field="*{phamVi}" value="TAT_CA" data-pham-vi> Tất cả sản phẩm</label>
+                                    <label><input type="radio" th:field="*{phamVi}" value="LOAI_SAN_PHAM" data-pham-vi> Một loại sản phẩm</label>
+                                    <label><input type="radio" th:field="*{phamVi}" value="THUONG_HIEU" data-pham-vi> Một thương hiệu</label>
+                                </div>
+                                <div class="o-nhap" data-theo="LOAI_SAN_PHAM" style="margin-top:16px">
+                                    <label for="loaiSanPham">Loại sản phẩm</label>
+                                    <select id="loaiSanPham" name="loaiSanPham">
+                                        <option value="">Chọn loại sản phẩm</option>
+                                        <option th:each="loai : ${dsLoai}" th:value="${loai.id}" th:text="${loai.tenLoai}"
+                                                th:selected="${khuyenMai.loaiSanPham != null and khuyenMai.loaiSanPham.id == loai.id}">Bếp từ</option>
+                                    </select>
+                                </div>
+                                <div class="o-nhap" data-theo="THUONG_HIEU" style="margin-top:16px">
+                                    <label for="thuongHieu">Thương hiệu</label>
+                                    <select id="thuongHieu" name="thuongHieu">
+                                        <option value="">Chọn thương hiệu</option>
+                                        <option th:each="hang : ${dsHang}" th:value="${hang.id}" th:text="${hang.tenThuongHieu}"
+                                                th:selected="${khuyenMai.thuongHieu != null and khuyenMai.thuongHieu.id == hang.id}">Bosch</option>
+                                    </select>
+                                </div>
+                                <span class="loi-nhap" th:if="${#fields.hasErrors('phamViHopLe')}" th:errors="*{phamViHopLe}"></span>
+                                <div class="qt-chon" style="margin-top:16px">
+                                    <label><input type="checkbox" th:field="*{chiThanhVien}"> Chỉ dành cho thành viên đã đăng nhập</label>
+                                </div>
+                            </fieldset>
+
+                            <div th:replace="~{admin/uu-dai-chung :: thoiGian}"></div>
+
+                            <div class="hang-nut">
+                                <button class="nut nut--dac" type="submit">Lưu</button>
+                                <a class="nut" th:href="@{/admin/khuyen-mai}">Quay lại</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+<script th:src="@{/js/uu-dai.js}" defer></script>
+</body>
+</html>

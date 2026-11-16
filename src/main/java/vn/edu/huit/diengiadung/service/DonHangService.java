@@ -14,4 +14,6 @@ public interface DonHangService {
 
     void capNhatTrangThai(Long id, String trangThaiMoi);
     void huyDonHang(Long id);
+
+    void xacNhanDaThanhToan(Long id);
 }

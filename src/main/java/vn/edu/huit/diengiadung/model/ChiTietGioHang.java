@@ -24,6 +24,14 @@ public class ChiTietGioHang {
         return danhSachDong.stream().mapToLong(DongGioHang::getThanhTien).sum();
     }
 
+    public long getTongGiaNiemYet() {
+        return danhSachDong.stream().mapToLong(dong -> dong.getSanPham().getGiaBan() * dong.getSoLuong()).sum();
+    }
+
+    public long getTienTietKiem() {
+        return getTongGiaNiemYet() - getTongTien();
+    }
+
     public int getTongSoLuong() {
         return danhSachDong.stream().mapToInt(DongGioHang::getSoLuong).sum();
     }

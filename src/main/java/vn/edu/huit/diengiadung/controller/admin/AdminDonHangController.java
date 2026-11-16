@@ -61,6 +61,17 @@ public class AdminDonHangController {
         return "redirect:/admin/don-hang/" + id;
     }
 
+    @PostMapping("/{id}/da-thanh-toan")
+    public String xacNhanDaThanhToan(@PathVariable Long id, RedirectAttributes thongBao) {
+        try {
+            donHangService.xacNhanDaThanhToan(id);
+            thongBao.addFlashAttribute("thongBao", "Đã xác nhận nhận tiền chuyển khoản cho đơn hàng.");
+        } catch (LoiNghiepVu loi) {
+            thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
+        }
+        return "redirect:/admin/don-hang/" + id;
+    }
+
     @PostMapping("/{id}/huy")
     public String huyDonHang(@PathVariable Long id, RedirectAttributes thongBao) {
         try {

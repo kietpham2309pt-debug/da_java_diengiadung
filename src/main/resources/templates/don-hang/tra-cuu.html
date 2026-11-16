@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Tra cứu đơn hàng', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Tra cứu đơn hàng', 'Nhập mã đơn và số điện thoại người nhận để xem tình trạng đơn', 'banner-tai-khoan.jpg', 'Tra cứu đơn hàng')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+            <div class="khoi">
+                <form th:action="@{/don-hang/tra-cuu}" method="post">
+                    <div class="o-nhap">
+                        <label for="maDon">Mã đơn hàng</label>
+                        <input type="text" id="maDon" name="maDon" th:value="${maDon}" placeholder="Ví dụ: BN000123" required
+                               maxlength="20" autocomplete="off">
+                    </div>
+                    <div class="o-nhap">
+                        <label for="soDienThoai">Số điện thoại người nhận</label>
+                        <input type="tel" id="soDienThoai" name="soDienThoai" th:value="${soDienThoai}" placeholder="09xx xxx xxx"
+                               required maxlength="10" inputmode="tel" autocomplete="tel">
+                    </div>
+                    <div class="hang-nut">
+                        <button class="nut nut--dac" type="submit">Tra cứu</button>
+                        <a class="nut" th:href="@{/dang-nhap}">Đăng nhập để xem mọi đơn</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

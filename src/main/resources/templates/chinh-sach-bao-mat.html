@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Chính sách bảo vệ dữ liệu cá nhân', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Chính sách bảo vệ dữ liệu cá nhân', 'Cách Bep Nè thu thập, sử dụng và bảo vệ thông tin của bạn', 'banner-tai-khoan.jpg', 'Chính sách bảo vệ dữ liệu')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung">
+            <div class="khoi">
+                <h2>1. Dữ liệu được thu thập</h2>
+                <p>Họ tên, số điện thoại, email (nếu có), địa chỉ giao hàng và lịch sử đơn hàng mà bạn cung cấp khi đăng ký tài khoản và đặt hàng.</p>
+                <h2>2. Mục đích sử dụng</h2>
+                <p>Xác nhận và giao đơn hàng, bảo hành, chăm sóc khách hàng. Bep Nè không bán hay chia sẻ dữ liệu cho bên thứ ba ngoài đơn vị vận chuyển cần thiết để giao hàng.</p>
+                <h2>3. Thời gian lưu trữ</h2>
+                <p>Dữ liệu được lưu trong thời gian tài khoản còn hoạt động và theo thời hạn lưu chứng từ mà pháp luật quy định.</p>
+                <h2>4. Quyền của bạn</h2>
+                <p>Bạn có quyền xem, chỉnh sửa thông tin tại trang Hồ sơ, rút lại sự đồng ý hoặc yêu cầu xoá dữ liệu bằng cách liên hệ hotline
+                    <a href="tel:0339999999">0339 999 999</a>, theo Nghị định 13/2023/NĐ-CP và Luật Bảo vệ dữ liệu cá nhân 2025.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

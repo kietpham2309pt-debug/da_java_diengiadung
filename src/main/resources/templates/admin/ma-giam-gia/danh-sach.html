@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Mã giảm giá', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Mã giảm giá</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('ma-giam-gia')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Mã giảm giá</h1>
+                            <p>Mã khách nhập ở bước thanh toán. Chỉ tài khoản thành viên đã đăng nhập mới dùng được.</p>
+                        </div>
+                        <div class="qt-dau__nut">
+                            <a class="nut nut--dac nut--nho" th:href="@{/admin/ma-giam-gia/them}">Tạo mã giảm giá</a>
+                        </div>
+                    </div>
+
+                    <div th:replace="~{layout/fragments :: thongBao}"></div>
+
+                    <nav class="qt-tab" aria-label="Lọc theo trạng thái">
+                        <a th:href="@{/admin/ma-giam-gia(tuKhoa=${tuKhoa})}" th:classappend="${trangThai == null or trangThai == ''} ? 'dang-chon'"
+                           th:text="'Tất cả (' + ${tongSo} + ')'">Tất cả</a>
+                        <a th:href="@{/admin/ma-giam-gia(trangThai='DANG_CHAY',tuKhoa=${tuKhoa})}" th:classappend="${trangThai == 'DANG_CHAY'} ? 'dang-chon'">Đang chạy</a>
+                        <a th:href="@{/admin/ma-giam-gia(trangThai='SAP_DIEN_RA',tuKhoa=${tuKhoa})}" th:classappend="${trangThai == 'SAP_DIEN_RA'} ? 'dang-chon'">Sắp diễn ra</a>
+                        <a th:href="@{/admin/ma-giam-gia(trangThai='HET_LUOT',tuKhoa=${tuKhoa})}" th:classappend="${trangThai == 'HET_LUOT'} ? 'dang-chon'">Hết lượt</a>
+                        <a th:href="@{/admin/ma-giam-gia(trangThai='HET_HAN',tuKhoa=${tuKhoa})}" th:classappend="${trangThai == 'HET_HAN'} ? 'dang-chon'">Hết hạn</a>
+                        <a th:href="@{/admin/ma-giam-gia(trangThai='TAM_DUNG',tuKhoa=${tuKhoa})}" th:classappend="${trangThai == 'TAM_DUNG'} ? 'dang-chon'">Tạm dừng</a>
+                    </nav>
+
+                    <div class="thanh-loc">
+                        <form th:action="@{/admin/ma-giam-gia}" method="get">
+                            <input type="hidden" name="trangThai" th:value="${trangThai}">
+                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo mã hoặc mô tả..." aria-label="Từ khoá">
+                            <button class="nut nut--nho" type="submit">Tìm</button>
+                        </form>
+                    </div>
+
+                    <div class="khoi" th:if="${#lists.isEmpty(danhSach)}">
+                        <p>Chưa có mã giảm giá nào phù hợp.</p>
+                    </div>
+
+                    <div class="khoi" th:unless="${#lists.isEmpty(danhSach)}">
+                        <div class="cuon-ngang">
+                            <table class="bang-dl">
+                                <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Mức giảm</th>
+                                    <th class="canh-giua">Đã dùng</th>
+                                    <th>Thời gian</th>
+                                    <th class="canh-phai">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="ma : ${danhSach}">
+                                    <td>
+                                        <span class="qt-ma" th:text="${ma.ma}">MA</span>
+                                        <span class="qt-phu" th:if="${ma.moTa}" th:text="${ma.moTa}"></span>
+                                        <span class="qt-the"
+                                              th:classappend="${ma.trangThai == 'DANG_CHAY'} ? 'qt-the--chay' : (${ma.trangThai == 'SAP_DIEN_RA'} ? 'qt-the--sap' : (${ma.trangThai == 'HET_LUOT'} ? 'qt-the--luot' : 'qt-the--het'))"
+                                              th:text="${ma.tenTrangThai}">Đang chạy</span>
+                                    </td>
+                                    <td>
+                                        <span th:text="${ma.moTaMucGiam}">Giảm 10%</span>
+                                        <span class="qt-phu" th:text="${ma.moTaDieuKien} + (${ma.moiKhachMotLan} ? ' · mỗi khách 1 lần' : '')">Mọi đơn</span>
+                                    </td>
+                                    <td class="canh-giua" th:text="${ma.soLuotDaDung} + ' / ' + (${ma.gioiHanLuotDung} ?: '∞')">0 / ∞</td>
+                                    <td>
+                                        <span th:text="${#temporals.format(ma.batDau, 'dd/MM/yyyy HH:mm')}"></span>
+                                        <span class="qt-phu" th:text="${ma.ketThuc != null} ? '→ ' + ${#temporals.format(ma.ketThuc, 'dd/MM/yyyy HH:mm')} : '→ Không giới hạn'"></span>
+                                    </td>
+                                    <td>
+                                        <div class="hang-thao-tac qt-doc">
+                                            <a class="nut nut--nho" th:href="@{'/admin/ma-giam-gia/sua/' + ${ma.id}}">Sửa</a>
+                                            <form th:action="@{'/admin/ma-giam-gia/doi-trang-thai/' + ${ma.id}}" method="post">
+                                                <button class="nut nut--nho" type="submit" th:text="${ma.hoatDong} ? 'Tạm dừng' : 'Kích hoạt'">Tạm dừng</button>
+                                            </form>
+                                            <form th:action="@{'/admin/ma-giam-gia/xoa/' + ${ma.id}}" method="post"
+                                                  onsubmit="return confirm('Xoá mã giảm giá này?');">
+                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

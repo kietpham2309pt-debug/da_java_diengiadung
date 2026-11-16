@@ -9,6 +9,7 @@ import vn.edu.huit.diengiadung.repository.DonHangRepository;
 import vn.edu.huit.diengiadung.repository.SanPhamRepository;
 import vn.edu.huit.diengiadung.service.DonHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
+import vn.edu.huit.diengiadung.service.UuDaiService;
 
 import java.util.List;
 
@@ -17,10 +18,13 @@ public class DonHangServiceImpl implements DonHangService {
 
     private final DonHangRepository donHangRepository;
     private final SanPhamRepository sanPhamRepository;
+    private final UuDaiService uuDaiService;
 
-    public DonHangServiceImpl(DonHangRepository donHangRepository, SanPhamRepository sanPhamRepository) {
+    public DonHangServiceImpl(DonHangRepository donHangRepository, SanPhamRepository sanPhamRepository,
+                              UuDaiService uuDaiService) {
         this.donHangRepository = donHangRepository;
         this.sanPhamRepository = sanPhamRepository;
+        this.uuDaiService = uuDaiService;
     }
 
     @Override
@@ -56,6 +60,9 @@ public class DonHangServiceImpl implements DonHangService {
         if (!hopLe) {
             throw new LoiNghiepVu("Không thể chuyển đơn hàng từ trạng thái " + donHang.getTenTrangThai() + " sang trạng thái được chọn.");
         }
+        if (DonHang.DA_XAC_NHAN.equals(trangThaiMoi) && donHang.isChoThanhToan()) {
+            throw new LoiNghiepVu("Đơn thanh toán trước chưa nhận được tiền. Hãy kiểm tra tài khoản và bấm «Xác nhận đã nhận tiền» trước.");
+        }
 
         donHang.setTrangThai(trangThaiMoi);
         donHangRepository.save(donHang);
@@ -82,7 +89,25 @@ public class DonHangServiceImpl implements DonHangService {
             sanPham.setSoLuongTon(sanPham.getSoLuongTon() + chiTiet.getSoLuong());
             sanPhamRepository.save(sanPham);
         }
+        uuDaiService.hoanLuotDungMa(donHang.getMaGiamGia());
         donHang.setTrangThai(DonHang.DA_HUY);
+        donHangRepository.save(donHang);
+    }
+
+    @Override
+    @Transactional
+    public void xacNhanDaThanhToan(Long id) {
+        DonHang donHang = layTheoId(id);
+        if (!donHang.isThanhToanTruoc()) {
+            throw new LoiNghiepVu("Đơn này thanh toán khi nhận hàng, không cần xác nhận chuyển khoản.");
+        }
+        if (DonHang.DA_HUY.equals(donHang.getTrangThai())) {
+            throw new LoiNghiepVu("Đơn hàng đã huỷ.");
+        }
+        if (donHang.isDaThanhToan()) {
+            throw new LoiNghiepVu("Đơn hàng này đã được xác nhận thanh toán trước đó.");
+        }
+        donHang.setDaThanhToan(true);
         donHangRepository.save(donHang);
     }
 }

@@ -32,4 +32,9 @@ public class TrangChuController {
         moHinh.addAttribute("sanPhamGiamGia", dichVuSanPham.laySanPhamGiamGia(SO_SAN_PHAM_MOI_KHOI));
         return "index";
     }
+
+    @GetMapping("/chinh-sach-bao-mat")
+    public String chinhSachBaoMat() {
+        return "chinh-sach-bao-mat";
+    }
 }
