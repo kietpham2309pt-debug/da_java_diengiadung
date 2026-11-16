@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class KhachHang {
@@ -28,6 +30,20 @@ public class KhachHang {
 
     @OneToMany(mappedBy = "khachHang")
     private List<DonHang> danhSachDonHang = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "san_pham_yeu_thich",
+            joinColumns = @JoinColumn(name = "khach_hang_id"),
+            inverseJoinColumns = @JoinColumn(name = "san_pham_id"))
+    private Set<SanPham> sanPhamYeuThich = new LinkedHashSet<>();
+
+    public Set<SanPham> getSanPhamYeuThich() {
+        return sanPhamYeuThich;
+    }
+
+    public void setSanPhamYeuThich(Set<SanPham> sanPhamYeuThich) {
+        this.sanPhamYeuThich = sanPhamYeuThich;
+    }
 
     public Long getId() {
         return id;

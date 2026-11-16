@@ -106,4 +106,24 @@ public class TaiKhoanServiceImpl implements TaiKhoanService {
         taiKhoan.setMatKhau(maHoaMatKhau.encode(matKhauMoi));
         taiKhoanRepository.save(taiKhoan);
     }
+
+    @Override
+    @Transactional
+    public void doiMatKhau(Long id, String matKhauCu, String matKhauMoi, String nhapLai) {
+        TaiKhoan taiKhoan = layTheoId(id);
+        if (matKhauCu == null || !maHoaMatKhau.matches(matKhauCu, taiKhoan.getMatKhau())) {
+            throw new LoiNghiepVu("Mật khẩu hiện tại không đúng");
+        }
+        if (matKhauMoi == null || matKhauMoi.length() < 6) {
+            throw new LoiNghiepVu("Mật khẩu mới phải có ít nhất 6 ký tự");
+        }
+        if (!matKhauMoi.equals(nhapLai)) {
+            throw new LoiNghiepVu("Hai lần nhập mật khẩu mới không khớp nhau");
+        }
+        if (maHoaMatKhau.matches(matKhauMoi, taiKhoan.getMatKhau())) {
+            throw new LoiNghiepVu("Mật khẩu mới phải khác mật khẩu hiện tại");
+        }
+        taiKhoan.setMatKhau(maHoaMatKhau.encode(matKhauMoi));
+        taiKhoanRepository.save(taiKhoan);
+    }
 }

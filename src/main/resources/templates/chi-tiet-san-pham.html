@@ -22,6 +22,8 @@
                 <span aria-current="page" th:text="${sanPham.tenSanPham}">Tên sản phẩm</span>
             </nav>
 
+            <div th:replace="~{layout/fragments :: thongBao}"></div>
+
             <div class="ct__tren">
                 <div class="gal hien-dan">
                     <div class="gal__to">
@@ -84,6 +86,15 @@
                                 th:text="${sanPham.conHang} ? 'Thêm vào giỏ hàng' : 'Tạm hết hàng'">Thêm vào giỏ hàng</button>
 
                         <a class="nut ct__goi" href="tel:0339999999">Gọi tư vấn 0339 999 999</a>
+                    </form>
+
+                    <form class="ct__yeu-thich" method="post" th:action="@{/yeu-thich/{id}(id=${sanPham.id})}"
+                          th:unless="${taiKhoanHienTai != null and taiKhoanHienTai.laQuanTri()}">
+                        <button type="submit" class="nut-chu" th:classappend="${daYeuThich} ? 'dang-chon'"
+                                th:attr="aria-pressed=${daYeuThich}">
+                            <svg class="ic"><use xlink:href="#ic-yeu-thich"></use></svg>
+                            <span th:text="${daYeuThich} ? 'Đã có trong danh sách yêu thích' : 'Thêm vào danh sách yêu thích'">Thêm vào danh sách yêu thích</span>
+                        </button>
                     </form>
 
                     <ul class="cam-ket hien-dan-nhom">

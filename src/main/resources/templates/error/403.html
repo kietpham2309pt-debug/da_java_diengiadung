@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Yêu cầu bị từ chối', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <div th:replace="~{layout/fragments :: banner('Yêu cầu bị từ chối', 'Hệ thống không nhận yêu cầu vừa gửi.', 'banner-tai-khoan.jpg', 'Yêu cầu bị từ chối')}"></div>
+
+    <section class="muc muc--sat-banner">
+        <div class="khung khung--hep">
+            <div class="the-tk hien-dan">
+                <p class="loi__so" aria-hidden="true">403</p>
+                <p class="loi__chu">Phiên làm việc đã hết hạn hoặc biểu mẫu được gửi từ một trang khác.
+                    Bạn quay lại trang trước, tải lại trang rồi thao tác lần nữa.</p>
+
+                <div class="loi__nut">
+                    <a class="nut nut--dac" th:href="@{/}">Về trang chủ</a>
+                    <a class="nut" th:href="@{/dang-nhap}">Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

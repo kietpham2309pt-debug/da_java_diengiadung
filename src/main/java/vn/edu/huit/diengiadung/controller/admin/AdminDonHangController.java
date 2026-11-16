@@ -39,6 +39,17 @@ public class AdminDonHangController {
         }
     }
 
+    @GetMapping("/{id}/in")
+    public String inHoaDon(@PathVariable Long id, Model model, RedirectAttributes thongBao) {
+        try {
+            model.addAttribute("donHang", donHangService.layTheoId(id));
+            return "admin/don-hang/in";
+        } catch (LoiNghiepVu loi) {
+            thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
+            return "redirect:/admin/don-hang";
+        }
+    }
+
     @PostMapping("/{id}/cap-nhat-trang-thai")
     public String capNhatTrangThai(@PathVariable Long id, @RequestParam String trangThai, RedirectAttributes thongBao) {
         try {

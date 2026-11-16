@@ -16,6 +16,6 @@ public class CauHinhKhachHang implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(khachHangInterceptor)
-                .addPathPatterns("/dat-hang/**", "/don-hang/**", "/ho-so/**");
+                .addPathPatterns("/dat-hang/**", "/don-hang/**", "/ho-so/**", "/yeu-thich/**");
     }
 }
