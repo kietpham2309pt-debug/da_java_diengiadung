@@ -9,6 +9,7 @@ import vn.edu.huit.diengiadung.entity.SanPham;
 import vn.edu.huit.diengiadung.repository.DonHangRepository;
 import vn.edu.huit.diengiadung.service.DatHangService;
 import vn.edu.huit.diengiadung.service.DiaChiHanhChinh;
+import vn.edu.huit.diengiadung.service.DonHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.TuHuyDonQuaHan;
 
@@ -38,6 +39,9 @@ class DatHangDongThoiTest extends CoSoKiemThuSqlServer {
 
     @Autowired
     private TuHuyDonQuaHan tuHuyDonQuaHan;
+
+    @Autowired
+    private DonHangService donHangService;
 
     @Test
     void haiMuoiKhachCungMuaNamSanPhamCuoiThiChiNamDonThanhCong() throws Exception {
@@ -101,6 +105,40 @@ class DatHangDongThoiTest extends CoSoKiemThuSqlServer {
         assertEquals(DonHang.DA_HUY, sau.getTrangThai());
         assertEquals("HE_THONG", sau.getHuyBoi());
         assertEquals(3, tonKho(sp.getId()));
+    }
+
+    @Test
+    void haiLuongCungHuyMotDonThiChiHoanKhoMotLan() throws Exception {
+        SanPham sp = taoSanPham(4, 1_000_000L);
+        GioHang gio = new GioHang();
+        gio.datSoLuong(sp.getId(), 3);
+        DonHang don = datHangService.datHang(null, gio, thongTin("Khách huỷ"));
+        assertEquals(1, tonKho(sp.getId()));
+
+        CountDownLatch cungXuatPhat = new CountDownLatch(1);
+        ExecutorService nhom = Executors.newFixedThreadPool(2);
+        AtomicInteger daHuy = new AtomicInteger();
+        AtomicInteger biTuChoi = new AtomicInteger();
+        for (String nguoi : List.of("ADMIN", "HE_THONG")) {
+            nhom.execute(() -> {
+                try {
+                    cungXuatPhat.await();
+                    donHangService.huyDonHang(don.getId(), "Kiểm thử huỷ đồng thời", nguoi);
+                    daHuy.incrementAndGet();
+                } catch (LoiNghiepVu e) {
+                    biTuChoi.incrementAndGet();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+        cungXuatPhat.countDown();
+        nhom.shutdown();
+        assertTrue(nhom.awaitTermination(60, TimeUnit.SECONDS));
+
+        assertEquals(1, daHuy.get());
+        assertEquals(1, biTuChoi.get());
+        assertEquals(4, tonKho(sp.getId()));
     }
 
     private ThongTinGiaoHang thongTin(String ten) {

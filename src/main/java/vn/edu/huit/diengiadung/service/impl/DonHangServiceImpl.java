@@ -1,5 +1,8 @@
 package vn.edu.huit.diengiadung.service.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.huit.diengiadung.entity.ChiTietDonHang;
@@ -19,6 +22,9 @@ public class DonHangServiceImpl implements DonHangService {
     private final DonHangRepository donHangRepository;
     private final SanPhamRepository sanPhamRepository;
     private final UuDaiService uuDaiService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public DonHangServiceImpl(DonHangRepository donHangRepository, SanPhamRepository sanPhamRepository,
                               UuDaiService uuDaiService) {
@@ -49,7 +55,7 @@ public class DonHangServiceImpl implements DonHangService {
     @Override
     @Transactional
     public void capNhatTrangThai(Long id, String trangThaiMoi) {
-        DonHang donHang = layTheoId(id);
+        DonHang donHang = khoaDon(id);
         String trangThaiCu = donHang.getTrangThai();
         boolean hopLe = (DonHang.CHO_XAC_NHAN.equals(trangThaiCu)
                         && DonHang.DA_XAC_NHAN.equals(trangThaiMoi))
@@ -71,7 +77,7 @@ public class DonHangServiceImpl implements DonHangService {
     @Override
     @Transactional
     public void huyDonHang(Long id, String lyDo, String huyBoi) {
-        DonHang donHang = layTheoId(id);
+        DonHang donHang = khoaDon(id);
         String trangThai = donHang.getTrangThai();
 
         if (DonHang.DA_HUY.equals(trangThai)) {
@@ -103,7 +109,7 @@ public class DonHangServiceImpl implements DonHangService {
     @Override
     @Transactional
     public void xacNhanDaThanhToan(Long id) {
-        DonHang donHang = layTheoId(id);
+        DonHang donHang = khoaDon(id);
         if (!donHang.isThanhToanTruoc()) {
             throw new LoiNghiepVu("Đơn này thanh toán khi nhận hàng, không cần xác nhận chuyển khoản.");
         }
@@ -115,5 +121,11 @@ public class DonHangServiceImpl implements DonHangService {
         }
         donHang.setDaThanhToan(true);
         donHangRepository.save(donHang);
+    }
+
+    private DonHang khoaDon(Long id) {
+        DonHang donHang = layTheoId(id);
+        entityManager.refresh(donHang, LockModeType.PESSIMISTIC_WRITE);
+        return donHang;
     }
 }

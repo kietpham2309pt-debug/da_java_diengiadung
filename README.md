@@ -88,6 +88,7 @@ Mật khẩu lưu trong cơ sở dữ liệu ở dạng mã hoá BCrypt. Khi tri
 |---|---|---|
 | Nhiều khách cùng mua món hàng cuối | Khoá bi quan `@Lock(PESSIMISTIC_WRITE)` trên dòng sản phẩm khi trừ tồn (SQL Server sinh `WITH (UPDLOCK, HOLDLOCK, ROWLOCK)`), khoá theo thứ tự id tăng dần để tránh deadlock | `SanPhamRepository.khoaTheoId`, `DatHangServiceImpl.datHang` |
 | Huỷ đơn, nhập kho chạy cùng lúc với đặt hàng | Cùng khoá dòng sản phẩm trước khi cộng tồn | `DonHangServiceImpl.huyDonHang`, `PhieuNhapServiceImpl` |
+| Quản trị viên, khách và tác vụ nền cùng đổi trạng thái một đơn | Khoá bi quan dòng đơn (`refresh(don, PESSIMISTIC_WRITE)`) trước khi kiểm và đổi trạng thái: đơn chỉ bị huỷ, hoàn kho một lần | `DonHangServiceImpl.khoaDon` |
 | Nhiều khách cùng dùng một mã giảm giá có giới hạn lượt | Khoá bi quan dòng mã giảm giá | `MaGiamGiaRepository.khoaTheoMa` |
 | Tự huỷ đơn chuyển khoản quá 24 giờ chưa thanh toán | Tác vụ nền `@Scheduled` chạy mỗi 10 phút trên luồng `lich-*`, hoàn tồn kho và lượt mã | `service/TuHuyDonQuaHan` |
 | Phục vụ nhiều client kho | Mỗi client một luồng trong `ExecutorService` (luồng `kho-client-N`), đếm kết nối bằng `AtomicInteger` | `mang/MayChuKho` |
@@ -96,6 +97,7 @@ Kiểm thử nhiều luồng nằm ở `src/test/java/vn/edu/huit/diengiadung/do
 
 - `DatHangDongThoiTest`: 20 luồng cùng đặt mua một sản phẩm chỉ còn 5 cái → đúng 5 đơn thành công, 15 luồng báo hết hàng, tồn kho về 0.
 - `DatHangDongThoiTest`: đơn chuyển khoản quá hạn bị tác vụ định kỳ huỷ, tồn kho được hoàn.
+- `DatHangDongThoiTest`: hai luồng cùng huỷ một đơn → đúng một luồng huỷ được, tồn kho chỉ hoàn một lần.
 - `MayChuKhoTest`: 3 client kết nối cùng lúc, mỗi client nhập kho 5 lần → tồn kho tăng đúng 15; lệnh sai, sai mật khẩu, chưa đăng nhập đều bị báo lỗi.
 
 ## Lập trình mạng: máy chủ kho qua Socket
@@ -161,7 +163,7 @@ src/main/java/vn/edu/huit/diengiadung/
 ├── controller/   phía khách; controller/admin phía quản trị; controller/api REST
 ├── service/      interface + impl, TuHuyDonQuaHan (@Scheduled)
 ├── repository/   JpaRepository, truy vấn @Query, khoá bi quan, DAO EntityManager
-├── entity/       14 lớp thực thể
+├── entity/       13 thực thể + lớp cha UuDaiCoBan
 ├── dto/          dữ liệu form và giỏ hàng (GioHang, ThongTinGiaoHang, BangGia...)
 └── mang/         MayChuKho (ServerSocket), PhienKho, XuLyLenhKho
 src/main/resources/
@@ -206,7 +208,7 @@ Biến môi trường dùng được: `DB_URL`, `DB_USER`, `DB_PASS`, `PORT`, `T
 
 ## Kiểm thử
 
-`mvnw test` chạy 22 ca: 18 unit test (lọc sản phẩm, thực thể, giỏ hàng, tài khoản, ưu đãi) và 4 kiểm thử tích hợp
+`mvnw test` chạy 23 ca: 18 unit test (lọc sản phẩm, thực thể, giỏ hàng, tài khoản, ưu đãi) và 5 kiểm thử tích hợp
 đồng thời và mạng trên SQL Server (tự tạo CSDL `dien_gia_dung_test`, login cần quyền `dbcreator`).
 
 ## Quy ước làm việc
