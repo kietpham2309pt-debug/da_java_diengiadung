@@ -1,4 +1,4 @@
-package vn.edu.huit.diengiadung.model;
+package vn.edu.huit.diengiadung.dto;
 
 public class TongDanhGia {
 

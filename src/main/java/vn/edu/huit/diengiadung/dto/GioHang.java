@@ -1,4 +1,4 @@
-package vn.edu.huit.diengiadung.model;
+package vn.edu.huit.diengiadung.dto;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;

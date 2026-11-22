@@ -3,7 +3,7 @@ package vn.edu.huit.diengiadung.controller;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import vn.edu.huit.diengiadung.model.GioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
 
 @ControllerAdvice
 public class ThongTinGioHang {

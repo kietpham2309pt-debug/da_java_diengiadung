@@ -4,7 +4,7 @@ import vn.edu.huit.diengiadung.entity.KhachHang;
 import vn.edu.huit.diengiadung.entity.KhuyenMai;
 import vn.edu.huit.diengiadung.entity.MaGiamGia;
 import vn.edu.huit.diengiadung.entity.SanPham;
-import vn.edu.huit.diengiadung.model.BangGia;
+import vn.edu.huit.diengiadung.dto.BangGia;
 
 import java.util.List;
 import java.util.Map;

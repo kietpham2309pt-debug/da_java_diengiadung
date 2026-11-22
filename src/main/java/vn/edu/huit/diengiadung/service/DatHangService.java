@@ -3,10 +3,10 @@ package vn.edu.huit.diengiadung.service;
 import vn.edu.huit.diengiadung.entity.DonHang;
 import vn.edu.huit.diengiadung.entity.KhachHang;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.BangGia;
-import vn.edu.huit.diengiadung.model.ChiTietGioHang;
-import vn.edu.huit.diengiadung.model.GioHang;
-import vn.edu.huit.diengiadung.model.ThongTinGiaoHang;
+import vn.edu.huit.diengiadung.dto.BangGia;
+import vn.edu.huit.diengiadung.dto.ChiTietGioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
+import vn.edu.huit.diengiadung.dto.ThongTinGiaoHang;
 
 import java.util.List;
 

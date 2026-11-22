@@ -2,9 +2,9 @@ package vn.edu.huit.diengiadung.service.impl;
 
 import org.springframework.stereotype.Service;
 import vn.edu.huit.diengiadung.entity.SanPham;
-import vn.edu.huit.diengiadung.model.ChiTietGioHang;
-import vn.edu.huit.diengiadung.model.DongGioHang;
-import vn.edu.huit.diengiadung.model.GioHang;
+import vn.edu.huit.diengiadung.dto.ChiTietGioHang;
+import vn.edu.huit.diengiadung.dto.DongGioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
 import vn.edu.huit.diengiadung.repository.SanPhamRepository;
 import vn.edu.huit.diengiadung.service.GioHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;

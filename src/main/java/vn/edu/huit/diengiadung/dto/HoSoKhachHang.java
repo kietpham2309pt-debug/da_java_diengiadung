@@ -1,4 +1,4 @@
-package vn.edu.huit.diengiadung.model;
+package vn.edu.huit.diengiadung.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

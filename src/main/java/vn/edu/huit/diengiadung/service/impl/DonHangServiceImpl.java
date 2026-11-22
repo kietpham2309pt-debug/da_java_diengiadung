@@ -81,11 +81,14 @@ public class DonHangServiceImpl implements DonHangService {
                 && !DonHang.DA_XAC_NHAN.equals(trangThai)) {
             throw new LoiNghiepVu("Chỉ có thể hủy đơn đang chờ xác nhận hoặc đã xác nhận.");
         }
-        for (ChiTietDonHang chiTiet : donHang.getDanhSachChiTiet()) {
-            SanPham sanPham = chiTiet.getSanPham();
-            if (sanPham == null) {
+        List<ChiTietDonHang> theoSanPham = new java.util.ArrayList<>(donHang.getDanhSachChiTiet());
+        theoSanPham.sort(java.util.Comparator.comparing(ct -> ct.getSanPham() == null ? 0L : ct.getSanPham().getId()));
+        for (ChiTietDonHang chiTiet : theoSanPham) {
+            if (chiTiet.getSanPham() == null) {
                 throw new LoiNghiepVu("Không tìm thấy sản phẩm trong chi tiết đơn hàng.");
             }
+            SanPham sanPham = sanPhamRepository.khoaTheoId(chiTiet.getSanPham().getId())
+                    .orElseThrow(() -> new LoiNghiepVu("Không tìm thấy sản phẩm trong chi tiết đơn hàng."));
             sanPham.setSoLuongTon(sanPham.getSoLuongTon() + chiTiet.getSoLuong());
             sanPhamRepository.save(sanPham);
         }
