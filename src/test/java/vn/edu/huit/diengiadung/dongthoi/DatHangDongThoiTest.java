@@ -1,6 +1,7 @@
 package vn.edu.huit.diengiadung.dongthoi;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
 import vn.edu.huit.diengiadung.dto.GioHang;
 import vn.edu.huit.diengiadung.dto.ThongTinGiaoHang;
@@ -26,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@EnabledIf("vn.edu.huit.diengiadung.dongthoi.CoSoKiemThuSqlServer#coSqlServer")
 class DatHangDongThoiTest extends CoSoKiemThuSqlServer {
 
     @Autowired

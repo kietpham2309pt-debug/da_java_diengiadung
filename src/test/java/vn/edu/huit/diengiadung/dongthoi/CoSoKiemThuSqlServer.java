@@ -17,17 +17,24 @@ import java.util.UUID;
 @ActiveProfiles("test")
 abstract class CoSoKiemThuSqlServer {
 
-    static {
-        String url = System.getenv().getOrDefault("DB_URL_MASTER",
-                "jdbc:sqlserver://localhost:1433;databaseName=master;encrypt=true;trustServerCertificate=true");
-        String nguoiDung = System.getenv().getOrDefault("DB_USER", "bepne");
-        String matKhau = System.getenv().getOrDefault("DB_PASS", "BepNe@2026");
-        try (Connection c = DriverManager.getConnection(url, nguoiDung, matKhau);
-             Statement s = c.createStatement()) {
-            s.execute("IF DB_ID('dien_gia_dung_test') IS NULL CREATE DATABASE dien_gia_dung_test COLLATE Vietnamese_CI_AI");
-        } catch (Exception e) {
-            throw new IllegalStateException("Không tạo được CSDL kiểm thử dien_gia_dung_test trên SQL Server", e);
+    private static Boolean sanSang;
+
+    static synchronized boolean coSqlServer() {
+        if (sanSang == null) {
+            String url = System.getenv().getOrDefault("DB_URL_MASTER",
+                    "jdbc:sqlserver://localhost:1433;databaseName=master;encrypt=true;trustServerCertificate=true;loginTimeout=5");
+            String nguoiDung = System.getenv().getOrDefault("DB_USER", "bepne");
+            String matKhau = System.getenv().getOrDefault("DB_PASS", "BepNe@2026");
+            try (Connection c = DriverManager.getConnection(url, nguoiDung, matKhau);
+                 Statement s = c.createStatement()) {
+                s.execute("IF DB_ID('dien_gia_dung_test') IS NULL CREATE DATABASE dien_gia_dung_test COLLATE Vietnamese_CI_AI");
+                sanSang = true;
+            } catch (Exception e) {
+                System.out.println("Bỏ qua kiểm thử tích hợp vì chưa kết nối được SQL Server: " + e.getMessage());
+                sanSang = false;
+            }
         }
+        return sanSang;
     }
 
     @Autowired
