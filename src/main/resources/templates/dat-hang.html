@@ -33,8 +33,8 @@
                     </ul>
                 </div>
                 <div class="tt-moi__nut" th:unless="${daDangNhap}">
-                    <a class="nut nut--dac nut--nho" th:href="@{/dang-nhap(tiepTuc='/dat-hang')}">Đăng nhập</a>
-                    <a class="nut nut--nho" th:href="@{/dang-ky}">Đăng ký</a>
+                    <a class="nut nut--dac nut--nho btn" th:href="@{/dang-nhap(tiepTuc='/dat-hang')}">Đăng nhập</a>
+                    <a class="nut nut--nho btn" th:href="@{/dang-ky}">Đăng ký</a>
                 </div>
             </div>
 
@@ -49,7 +49,7 @@
             <div class="tt__luoi">
                 <form class="tt__form" th:action="@{/dat-hang}" th:object="${thongTin}" method="post" novalidate data-kiem-tra id="form-dat-hang">
                     <div th:replace="~{layout/fragments :: tomTatLoi}"></div>
-                    <p class="thong-bao thong-bao--loi" th:if="${loiChung}" role="alert" id="loi-chung">
+                    <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${loiChung}" role="alert" id="loi-chung">
                         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                         <span th:text="${loiChung}">Vui lòng kiểm tra lại các ô được đánh dấu.</span>
                     </p>
@@ -58,27 +58,27 @@
                         <legend>Thông tin người nhận</legend>
                         <div class="tt-hai-cot">
                             <div class="o-nhap">
-                                <label for="tenNguoiNhan">Họ và tên <span class="tt-bb" aria-hidden="true">*</span></label>
-                                <input type="text" id="tenNguoiNhan" th:field="*{tenNguoiNhan}" autocomplete="name" maxlength="80" required minlength="2"
+                                <label class="form-label" for="tenNguoiNhan">Họ và tên <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <input class="form-control" type="text" id="tenNguoiNhan" th:field="*{tenNguoiNhan}" autocomplete="name" maxlength="80" required minlength="2"
                                        data-thieu="Vui lòng nhập họ tên người nhận" data-sai="Họ tên phải từ 2 đến 80 ký tự"
                                        th:attr="aria-invalid=${#fields.hasErrors('tenNguoiNhan')}">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenNguoiNhan')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenNguoiNhan')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('tenNguoiNhan')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenNguoiNhan')}"></span>
                             </div>
                             <div class="o-nhap">
-                                <label for="soDienThoaiNhan">Số điện thoại <span class="tt-bb" aria-hidden="true">*</span></label>
-                                <input type="tel" id="soDienThoaiNhan" th:field="*{soDienThoaiNhan}" autocomplete="tel" inputmode="tel"
+                                <label class="form-label" for="soDienThoaiNhan">Số điện thoại <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <input class="form-control" type="tel" id="soDienThoaiNhan" th:field="*{soDienThoaiNhan}" autocomplete="tel" inputmode="tel"
                                        placeholder="09xx xxx xxx" maxlength="10" required pattern="0\d{9}"
                                        data-sai="Số điện thoại phải gồm đúng 10 chữ số và bắt đầu bằng 0" th:attr="aria-invalid=${#fields.hasErrors('soDienThoaiNhan')}">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoaiNhan')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soDienThoaiNhan')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('soDienThoaiNhan')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soDienThoaiNhan')}"></span>
                             </div>
                         </div>
                         <div class="o-nhap">
-                            <label for="email">Email <span class="tt-tuy-chon">(không bắt buộc)</span></label>
-                            <input type="email" id="email" th:field="*{email}" autocomplete="email" inputmode="email" maxlength="120"
+                            <label class="form-label" for="email">Email <span class="tt-tuy-chon">(không bắt buộc)</span></label>
+                            <input class="form-control" type="email" id="email" th:field="*{email}" autocomplete="email" inputmode="email" maxlength="120"
                                    data-sai="Email chưa đúng định dạng, ví dụ: ten@gmail.com"
                                    th:attr="aria-invalid=${#fields.hasErrors('email')}">
                             <span class="goi-y" th:unless="${#fields.hasErrors('email')}">Để nhận thông tin đơn hàng qua email.</span>
-                            <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
+                            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
                         </div>
                     </fieldset>
 
@@ -87,37 +87,37 @@
                         <p class="tt-ghi-chu">Địa chỉ theo đơn vị hành chính mới từ 01/07/2025: Tỉnh / Thành phố và Phường / Xã (không còn Quận / Huyện).</p>
                         <div class="tt-hai-cot">
                             <div class="o-nhap">
-                                <label for="tinhThanh">Tỉnh / Thành phố <span class="tt-bb" aria-hidden="true">*</span></label>
-                                <select id="tinhThanh" th:field="*{tinhThanh}" autocomplete="address-level1" required data-thieu="Vui lòng chọn tỉnh / thành phố"
+                                <label class="form-label" for="tinhThanh">Tỉnh / Thành phố <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <select class="form-select" id="tinhThanh" th:field="*{tinhThanh}" autocomplete="address-level1" required data-thieu="Vui lòng chọn tỉnh / thành phố"
                                         th:attr="aria-invalid=${#fields.hasErrors('tinhThanh')}">
                                     <option value="">Chọn tỉnh / thành phố</option>
                                     <option th:each="tinh : ${danhSachTinh}" th:value="${tinh}" th:text="${tinh}">Thành phố Hồ Chí Minh</option>
                                 </select>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tinhThanh')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tinhThanh')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('tinhThanh')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tinhThanh')}"></span>
                             </div>
                             <div class="o-nhap">
-                                <label for="phuongXa">Phường / Xã <span class="tt-bb" aria-hidden="true">*</span></label>
-                                <select id="phuongXa" th:field="*{phuongXa}" autocomplete="address-level2" required
+                                <label class="form-label" for="phuongXa">Phường / Xã <span class="tt-bb" aria-hidden="true">*</span></label>
+                                <select class="form-select" id="phuongXa" th:field="*{phuongXa}" autocomplete="address-level2" required
                                         data-thieu="Vui lòng chọn phường / xã (chọn tỉnh / thành phố trước)"
                                         th:disabled="${#lists.isEmpty(danhSachPhuong)}"
                                         th:attr="aria-invalid=${#fields.hasErrors('phuongXa')}">
                                     <option value="" th:text="${#lists.isEmpty(danhSachPhuong)} ? 'Chọn tỉnh / thành phố trước' : 'Chọn phường / xã'">Chọn phường / xã</option>
                                     <option th:each="phuong : ${danhSachPhuong}" th:value="${phuong}" th:text="${phuong}">Phường Tây Thạnh</option>
                                 </select>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('phuongXa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phuongXa')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('phuongXa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phuongXa')}"></span>
                             </div>
                         </div>
                         <div class="o-nhap">
-                            <label for="diaChiCuThe">Số nhà, tên đường <span class="tt-bb" aria-hidden="true">*</span></label>
-                            <input type="text" id="diaChiCuThe" th:field="*{diaChiCuThe}" autocomplete="street-address" maxlength="200" required minlength="3"
+                            <label class="form-label" for="diaChiCuThe">Số nhà, tên đường <span class="tt-bb" aria-hidden="true">*</span></label>
+                            <input class="form-control" type="text" id="diaChiCuThe" th:field="*{diaChiCuThe}" autocomplete="street-address" maxlength="200" required minlength="3"
                                    data-sai="Số nhà, tên đường phải từ 3 đến 200 ký tự"
                                    placeholder="Ví dụ: 140 Lê Trọng Tấn" th:attr="aria-invalid=${#fields.hasErrors('diaChiCuThe')}">
-                            <span class="loi-nhap" th:if="${#fields.hasErrors('diaChiCuThe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'diaChiCuThe')}"></span>
+                            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('diaChiCuThe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'diaChiCuThe')}"></span>
                         </div>
                         <div class="o-nhap">
-                            <label for="ghiChu">Ghi chú cho đơn hàng <span class="tt-tuy-chon">(không bắt buộc)</span></label>
-                            <textarea id="ghiChu" th:field="*{ghiChu}" rows="3" maxlength="500" placeholder="Ví dụ: giao giờ hành chính"></textarea>
-                            <span class="loi-nhap" th:if="${#fields.hasErrors('ghiChu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ghiChu')}"></span>
+                            <label class="form-label" for="ghiChu">Ghi chú cho đơn hàng <span class="tt-tuy-chon">(không bắt buộc)</span></label>
+                            <textarea class="form-control" id="ghiChu" th:field="*{ghiChu}" rows="3" maxlength="500" placeholder="Ví dụ: giao giờ hành chính"></textarea>
+                            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('ghiChu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ghiChu')}"></span>
                         </div>
                     </fieldset>
 
@@ -129,13 +129,13 @@
                                 giảm <b th:text="${#numbers.formatInteger(bangGia.tienKhuyenMai, 1, 'POINT')} + ' ₫'">0 ₫</b></span>
                         </p>
                         <div class="o-nhap">
-                            <label for="maGiamGia">Mã giảm giá <span class="tt-tuy-chon">(nếu có)</span></label>
+                            <label class="form-label" for="maGiamGia">Mã giảm giá <span class="tt-tuy-chon">(nếu có)</span></label>
                             <div class="tt-ma">
-                                <input type="text" id="maGiamGia" th:field="*{maGiamGia}" maxlength="30" autocomplete="off"
+                                <input class="form-control" type="text" id="maGiamGia" th:field="*{maGiamGia}" maxlength="30" autocomplete="off"
                                        placeholder="Nhập mã giảm giá" th:attr="aria-invalid=${#fields.hasErrors('maGiamGia')}">
-                                <button type="submit" class="nut" id="nut-ap-ma" th:formaction="@{/dat-hang/ap-ma}" formnovalidate>Áp dụng</button>
+                                <button type="submit" class="nut btn" id="nut-ap-ma" th:formaction="@{/dat-hang/ap-ma}" formnovalidate>Áp dụng</button>
                             </div>
-                            <span class="loi-nhap" id="loi-ma" th:text="${#fields.hasErrors('maGiamGia')} ? ${#fields.errors('maGiamGia')[0]} : ${bangGia.loiMa}"></span>
+                            <span class="loi-nhap invalid-feedback d-block" id="loi-ma" th:text="${#fields.hasErrors('maGiamGia')} ? ${#fields.errors('maGiamGia')[0]} : ${bangGia.loiMa}"></span>
                             <span class="tt-ma__ok" id="ma-ok" th:text="${bangGia.maGiamGia != null} ? 'Đã áp dụng mã ' + ${bangGia.maGiamGia.ma} + ': ' + ${bangGia.maGiamGia.moTaMucGiam} : ''"></span>
                         </div>
                         <div class="tt-ma-goi-y" th:unless="${#lists.isEmpty(danhSachMa)}">
@@ -180,7 +180,7 @@
                                 </span>
                             </label>
                         </div>
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('phuongThuc')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phuongThuc')}"></span>
+                        <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('phuongThuc')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phuongThuc')}"></span>
 
                         <div class="tt-uu-dai" id="tt-uu-dai" th:hidden="${thongTin.phuongThuc != 'CK'}">
                             <span class="tt-uu-dai__bieu-tuong" aria-hidden="true">%</span>
@@ -200,7 +200,7 @@
                                 <a th:href="@{/chinh-sach-bao-mat}" target="_blank" rel="noopener">chính sách bảo vệ dữ liệu cá nhân</a>.
                                 <span class="tt-bb" aria-hidden="true">*</span></span>
                         </label>
-                        <span class="loi-nhap" th:if="${#fields.hasErrors('dongY')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'dongY')}"></span>
+                        <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('dongY')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'dongY')}"></span>
                     </div>
 
                     <p class="tt-luu-y">
@@ -208,7 +208,7 @@
                         <span th:text="'Ưu đãi giảm thêm ' + ${phanTramGiam} + '% chỉ áp dụng khi bạn hoàn tất thanh toán trước. Đơn COD không áp dụng ưu đãi này.'">Lưu ý</span>
                     </p>
 
-                    <button type="submit" class="nut nut--dac tt__dat">
+                    <button type="submit" class="nut nut--dac tt__dat btn">
                         Đặt hàng · <span class="tt-tong-so" th:text="${#numbers.formatInteger(bangGia.sauUuDai, 1, 'POINT')} + ' ₫'">0 ₫</span>
                     </button>
                 </form>
@@ -274,8 +274,8 @@
                 <p id="tt-hoi-mo-ta">Chọn Thanh toán trước để được giảm thêm <span th:text="${phanTramGiam} + '%'">2%</span> trên giá deal -
                     tiết kiệm <b data-tien-ck th:text="${#numbers.formatInteger(tienGiamNeuCk, 1, 'POINT')} + ' ₫'">0 ₫</b> cho đơn này.</p>
                 <div class="tt-hoi__nut">
-                    <button type="button" class="nut nut--dac" data-chuyen-ck>Chuyển sang Thanh toán trước</button>
-                    <button type="button" class="nut" data-tiep-cod>Tiếp tục COD</button>
+                    <button type="button" class="nut nut--dac btn" data-chuyen-ck>Chuyển sang Thanh toán trước</button>
+                    <button type="button" class="nut btn" data-tiep-cod>Tiếp tục COD</button>
                 </div>
             </dialog>
         </div>

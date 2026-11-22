@@ -27,15 +27,15 @@
                             <p>Lịch sử nhập hàng vào kho từ nhà cung cấp.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập</a>
                         </div>
                     </div>
 
                     <div th:replace="~{layout/fragments :: thongBao}"></div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Mã phiếu</th>
@@ -55,7 +55,7 @@
                                     </td>
                                     <td>
                                         <div class="hang-thao-tac">
-                                            <a class="nut nut--nho" th:href="@{'/admin/phieu-nhap/xem/' + ${item.id}}">Xem chi tiết</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/phieu-nhap/xem/' + ${item.id}}">Xem chi tiết</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -67,7 +67,7 @@
                     <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
                         <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                         <p>Chưa có phiếu nhập kho nào.</p>
-                        <a class="nut nut--dac" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập đầu tiên</a>
+                        <a class="nut nut--dac btn" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập đầu tiên</a>
                     </div>
                 </div>
             </div>

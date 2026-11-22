@@ -27,7 +27,7 @@
                             <p>Tự động giảm giá khi giỏ hàng đủ điều kiện. Mỗi đơn áp dụng chương trình có lợi nhất cho khách.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/khuyen-mai/them}">Tạo chương trình</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/khuyen-mai/them}">Tạo chương trình</a>
                         </div>
                     </div>
 
@@ -45,8 +45,8 @@
                     <div class="thanh-loc">
                         <form th:action="@{/admin/khuyen-mai}" method="get">
                             <input type="hidden" name="trangThai" th:value="${trangThai}">
-                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo tên chương trình..." aria-label="Từ khoá">
-                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <input class="form-control" type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo tên chương trình..." aria-label="Từ khoá">
+                            <button class="nut nut--nho btn" type="submit">Tìm</button>
                         </form>
                     </div>
 
@@ -55,8 +55,8 @@
                     </div>
 
                     <div class="khoi" th:unless="${#lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Chương trình</th>
@@ -84,13 +84,13 @@
                                     </td>
                                     <td>
                                         <div class="hang-thao-tac qt-doc">
-                                            <a class="nut nut--nho" th:href="@{'/admin/khuyen-mai/sua/' + ${km.id}}">Sửa</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/khuyen-mai/sua/' + ${km.id}}">Sửa</a>
                                             <form th:action="@{'/admin/khuyen-mai/doi-trang-thai/' + ${km.id}}" method="post">
-                                                <button class="nut nut--nho" type="submit" th:text="${km.hoatDong} ? 'Tạm dừng' : 'Kích hoạt'">Tạm dừng</button>
+                                                <button class="nut nut--nho btn" type="submit" th:text="${km.hoatDong} ? 'Tạm dừng' : 'Kích hoạt'">Tạm dừng</button>
                                             </form>
                                             <form th:action="@{'/admin/khuyen-mai/xoa/' + ${km.id}}" method="post"
                                                   onsubmit="return confirm('Xoá chương trình khuyến mãi này?');">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>

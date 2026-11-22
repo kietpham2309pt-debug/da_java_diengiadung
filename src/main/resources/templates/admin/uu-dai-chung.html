@@ -8,40 +8,40 @@
         <label><input type="radio" th:field="*{loaiGiam}" value="PHAN_TRAM" data-loai-giam> Giảm theo phần trăm (%)</label>
         <label><input type="radio" th:field="*{loaiGiam}" value="SO_TIEN" data-loai-giam> Giảm số tiền cố định (₫)</label>
     </div>
-    <div class="o-doi" style="margin-top:16px">
-        <div class="o-nhap">
-            <label for="giaTri">Giá trị giảm <span data-don-vi>(%)</span></label>
-            <input type="number" id="giaTri" th:field="*{giaTri}" min="1" placeholder="VD: 10">
-            <span class="loi-nhap" th:if="${#fields.hasErrors('giaTri')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giaTri')}"></span>
-            <span class="loi-nhap" th:if="${#fields.hasErrors('phanTramHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phanTramHopLe')}"></span>
+    <div class="row g-3" style="margin-top:16px">
+        <div class="o-nhap col-md-6">
+            <label class="form-label" for="giaTri">Giá trị giảm <span data-don-vi>(%)</span></label>
+            <input class="form-control" type="number" id="giaTri" th:field="*{giaTri}" min="1" placeholder="VD: 10">
+            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('giaTri')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giaTri')}"></span>
+            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('phanTramHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phanTramHopLe')}"></span>
         </div>
-        <div class="o-nhap" data-chi-phan-tram>
-            <label for="giamToiDa">Giảm tối đa (₫)</label>
-            <input type="number" id="giamToiDa" th:field="*{giamToiDa}" min="1" placeholder="Để trống = không giới hạn">
-            <span class="loi-nhap" th:if="${#fields.hasErrors('giamToiDa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giamToiDa')}"></span>
+        <div class="o-nhap col-md-6" data-chi-phan-tram>
+            <label class="form-label" for="giamToiDa">Giảm tối đa (₫)</label>
+            <input class="form-control" type="number" id="giamToiDa" th:field="*{giamToiDa}" min="1" placeholder="Để trống = không giới hạn">
+            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('giamToiDa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giamToiDa')}"></span>
         </div>
     </div>
     <div class="o-nhap">
-        <label for="donToiThieu">Giá trị đơn hàng tối thiểu (₫)</label>
-        <input type="number" id="donToiThieu" th:field="*{donToiThieu}" min="0" placeholder="0 = mọi đơn hàng">
-        <span class="loi-nhap" th:if="${#fields.hasErrors('donToiThieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'donToiThieu')}"></span>
+        <label class="form-label" for="donToiThieu">Giá trị đơn hàng tối thiểu (₫)</label>
+        <input class="form-control" type="number" id="donToiThieu" th:field="*{donToiThieu}" min="0" placeholder="0 = mọi đơn hàng">
+        <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('donToiThieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'donToiThieu')}"></span>
     </div>
 </fieldset>
 
 <fieldset class="qt-nhom" th:fragment="thoiGian">
     <legend>Thời gian áp dụng</legend>
-    <div class="o-doi">
-        <div class="o-nhap">
-            <label for="batDau">Bắt đầu</label>
-            <input type="datetime-local" id="batDau" th:field="*{batDau}">
-            <span class="loi-nhap" th:if="${#fields.hasErrors('batDau')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'batDau')}"></span>
+    <div class="row g-3">
+        <div class="o-nhap col-md-6">
+            <label class="form-label" for="batDau">Bắt đầu</label>
+            <input class="form-control" type="datetime-local" id="batDau" th:field="*{batDau}">
+            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('batDau')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'batDau')}"></span>
         </div>
-        <div class="o-nhap">
-            <label for="ketThuc">Kết thúc</label>
-            <input type="datetime-local" id="ketThuc" th:field="*{ketThuc}">
+        <div class="o-nhap col-md-6">
+            <label class="form-label" for="ketThuc">Kết thúc</label>
+            <input class="form-control" type="datetime-local" id="ketThuc" th:field="*{ketThuc}">
             <span class="o-nhap__goi">Để trống = không giới hạn thời gian.</span>
-            <span class="loi-nhap" th:if="${#fields.hasErrors('ketThuc')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ketThuc')}"></span>
-            <span class="loi-nhap" th:if="${#fields.hasErrors('thoiGianHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'thoiGianHopLe')}"></span>
+            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('ketThuc')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ketThuc')}"></span>
+            <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('thoiGianHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'thoiGianHopLe')}"></span>
         </div>
     </div>
     <div class="qt-chon" style="margin-top:14px">

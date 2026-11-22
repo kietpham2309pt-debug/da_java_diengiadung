@@ -83,19 +83,19 @@
 
                         <div class="dem" role="group" aria-label="Số lượng">
                             <button type="button" class="dem__nut" data-dem="-1" aria-label="Bớt một">&minus;</button>
-                            <input type="number" id="so-luong" name="soLuong" value="1" min="1" inputmode="numeric"
+                            <input class="form-control" type="number" id="so-luong" name="soLuong" value="1" min="1" inputmode="numeric"
                                    aria-label="Số lượng"
                                    th:attr="max=${sanPham.soLuongTon < 20} ? ${sanPham.soLuongTon} : 20"
                                    th:disabled="${!sanPham.conHang}">
                             <button type="button" class="dem__nut" data-dem="1" aria-label="Thêm một">+</button>
                         </div>
 
-                        <button type="submit" class="nut nut--dac ct__mua-ngay" th:if="${sanPham.conHang}"
+                        <button type="submit" class="nut nut--dac ct__mua-ngay btn" th:if="${sanPham.conHang}"
                                 th:formaction="@{/gio-hang/mua-ngay}">Mua ngay</button>
-                        <button type="submit" class="nut ct__them" th:disabled="${!sanPham.conHang}"
+                        <button type="submit" class="nut ct__them btn" th:disabled="${!sanPham.conHang}"
                                 th:text="${sanPham.conHang} ? 'Thêm vào giỏ hàng' : 'Tạm hết hàng'">Thêm vào giỏ hàng</button>
 
-                        <a class="nut ct__goi" href="tel:0339999999">Gọi tư vấn 0339 999 999</a>
+                        <a class="nut ct__goi btn" href="tel:0339999999">Gọi tư vấn 0339 999 999</a>
                     </form>
 
                     <form class="ct__yeu-thich" method="post" th:action="@{/yeu-thich/{id}(id=${sanPham.id})}"
@@ -221,17 +221,17 @@
                                     <input type="radio" name="soSao" th:id="'sao' + ${s}" th:value="${s}" required
                                            th:checked="${danhGiaCuaToi != null and danhGiaCuaToi.soSao == s}"
                                            data-nhan="Số sao" data-thieu="Vui lòng chọn số sao (1 đến 5)">
-                                    <label th:for="'sao' + ${s}" th:title="${s} + ' sao'"><span class="an-di" th:text="${s} + ' sao'">5 sao</span>★</label>
+                                    <label class="form-label" th:for="'sao' + ${s}" th:title="${s} + ' sao'"><span class="an-di" th:text="${s} + ' sao'">5 sao</span>★</label>
                                 </th:block>
                             </div>
                         </fieldset>
                         <div class="o-nhap">
-                            <label for="noiDungDg">Nhận xét <span class="tt-tuy-chon">(không bắt buộc)</span></label>
-                            <textarea id="noiDungDg" name="noiDung" rows="3" maxlength="1000"
+                            <label class="form-label" for="noiDungDg">Nhận xét <span class="tt-tuy-chon">(không bắt buộc)</span></label>
+                            <textarea class="form-control" id="noiDungDg" name="noiDung" rows="3" maxlength="1000"
                                       placeholder="Sản phẩm dùng thế nào? Giao hàng, lắp đặt ra sao?"
                                       th:text="${noiDungCu != null} ? ${noiDungCu} : (${danhGiaCuaToi != null} ? ${danhGiaCuaToi.noiDung} : '')"></textarea>
                         </div>
-                        <button type="submit" class="nut nut--dac" th:text="${danhGiaCuaToi != null} ? 'Cập nhật đánh giá' : 'Gửi đánh giá'">Gửi đánh giá</button>
+                        <button type="submit" class="nut nut--dac btn" th:text="${danhGiaCuaToi != null} ? 'Cập nhật đánh giá' : 'Gửi đánh giá'">Gửi đánh giá</button>
                     </form>
 
                     <p class="dg__moi" th:unless="${duocDanhGia}">
@@ -272,7 +272,7 @@
             <div class="trong" th:if="${#lists.isEmpty(danhSachCungLoai)}">
                 <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                 <p>Nhóm hàng này hiện chỉ có một sản phẩm.</p>
-                <a class="nut" th:href="@{/san-pham}">Xem tất cả danh mục</a>
+                <a class="nut btn" th:href="@{/san-pham}">Xem tất cả danh mục</a>
             </div>
         </div>
     </section>

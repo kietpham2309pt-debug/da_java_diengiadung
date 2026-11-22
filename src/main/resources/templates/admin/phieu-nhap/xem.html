@@ -48,8 +48,8 @@
             <div class="khoi__dau">
               <h2>Chi tiết sản phẩm</h2>
             </div>
-            <div class="cuon-ngang">
-              <table class="bang-dl">
+            <div class="cuon-ngang table-responsive">
+              <table class="bang-dl table table-hover align-middle">
                 <thead>
                 <tr>
                   <th>Sản phẩm</th>
@@ -74,7 +74,7 @@
               <p>Tổng tiền phiếu nhập: <b class="tong-phieu__so" th:text="${#numbers.formatInteger(phieuNhap.tongTien != null ? phieuNhap.tongTien : 0, 1, 'POINT')} + ' ₫'"></b></p>
             </div>
             <div class="hang-nut">
-              <a class="nut" th:href="@{/admin/phieu-nhap}">Quay lại</a>
+              <a class="nut btn" th:href="@{/admin/phieu-nhap}">Quay lại</a>
             </div>
           </div>
         </div>

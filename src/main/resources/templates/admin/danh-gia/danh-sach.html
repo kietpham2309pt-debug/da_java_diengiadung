@@ -32,17 +32,17 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/danh-gia}" method="get">
-                            <select name="soSao" aria-label="Lọc theo số sao">
+                            <select class="form-select" name="soSao" aria-label="Lọc theo số sao">
                                 <option value="">Mọi số sao</option>
                                 <option th:each="s : ${#numbers.sequence(5, 1, -1)}" th:value="${s}" th:selected="${soSao == s}"
                                         th:text="${s} + ' sao'">5 sao</option>
                             </select>
-                            <select name="hien" aria-label="Lọc theo hiển thị">
+                            <select class="form-select" name="hien" aria-label="Lọc theo hiển thị">
                                 <option value="">Đang hiện và đã ẩn</option>
                                 <option value="true" th:selected="${hien == true}">Đang hiện</option>
                                 <option value="false" th:selected="${hien == false}">Đã ẩn</option>
                             </select>
-                            <button class="nut nut--nho" type="submit">Lọc</button>
+                            <button class="nut nut--nho btn" type="submit">Lọc</button>
                         </form>
                     </div>
 
@@ -51,8 +51,8 @@
                     </div>
 
                     <div class="khoi" th:unless="${#lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Sản phẩm</th>
@@ -79,11 +79,11 @@
                                     <td>
                                         <div class="hang-thao-tac qt-doc">
                                             <form th:action="@{'/admin/danh-gia/doi-hien/' + ${dg.id}}" method="post">
-                                                <button class="nut nut--nho" type="submit" th:text="${dg.hien} ? 'Ẩn' : 'Hiện lại'">Ẩn</button>
+                                                <button class="nut nut--nho btn" type="submit" th:text="${dg.hien} ? 'Ẩn' : 'Hiện lại'">Ẩn</button>
                                             </form>
                                             <form th:action="@{'/admin/danh-gia/xoa/' + ${dg.id}}" method="post"
                                                   onsubmit="return confirm('Xoá hẳn đánh giá này?');">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>

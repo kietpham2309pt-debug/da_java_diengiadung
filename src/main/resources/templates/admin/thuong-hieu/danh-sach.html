@@ -27,7 +27,7 @@
                             <p>Quản lý danh sách các hãng sản xuất.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/thuong-hieu/them}">Thêm hãng</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/thuong-hieu/them}">Thêm hãng</a>
                         </div>
                     </div>
 
@@ -35,14 +35,14 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/thuong-hieu}" method="get">
-                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo tên hãng..." aria-label="Từ khoá">
-                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <input class="form-control" type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo tên hãng..." aria-label="Từ khoá">
+                            <button class="nut nut--nho btn" type="submit">Tìm</button>
                         </form>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Tên thương hiệu</th>
@@ -56,9 +56,9 @@
                                     <td th:text="${item.xuatXu}"></td>
                                     <td>
                                         <div class="hang-thao-tac">
-                                            <a class="nut nut--nho" th:href="@{'/admin/thuong-hieu/sua/' + ${item.id}}">Sửa</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/thuong-hieu/sua/' + ${item.id}}">Sửa</a>
                                             <form th:action="@{'/admin/thuong-hieu/xoa/' + ${item.id}}" method="post">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>

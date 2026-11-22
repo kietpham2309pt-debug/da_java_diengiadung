@@ -38,37 +38,37 @@
                                 <h2>Thông tin chung</h2>
                             </div>
 
-                            <div class="o-doi">
-                                <div class="o-nhap">
-                                    <label for="nhaCungCap">Nhà cung cấp</label>
+                            <div class="row g-3">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="nhaCungCap">Nhà cung cấp</label>
                                     <div class="ds__o" style="width: 100%;">
-                                        <select id="nhaCungCap" name="nhaCungCap" style="width: 100%;" required>
+                                        <select class="form-select" id="nhaCungCap" name="nhaCungCap" style="width: 100%;" required>
                                             <option value="">-- Chọn nhà cung cấp --</option>
                                             <option th:each="ncc : ${danhSachNCC}" th:value="${ncc.id}" th:text="${ncc.tenNhaCungCap}"></option>
                                         </select>
                                         <svg class="ic"><use xlink:href="#ic-chevron"></use></svg>
                                     </div>
                                 </div>
-                                <div class="o-nhap">
+                                <div class="o-nhap col-md-6">
                                     <label>Ngày nhập</label>
-                                    <input type="text" value="Hệ thống tự động tạo khi lưu" disabled>
+                                    <input class="form-control" type="text" value="Hệ thống tự động tạo khi lưu" disabled>
                                 </div>
                             </div>
 
                             <div class="o-nhap" style="margin-top: 16px;">
-                                <label for="ghiChu">Ghi chú</label>
-                                <textarea id="ghiChu" rows="2" th:field="*{ghiChu}" placeholder="Ghi chú thêm về lô hàng này..."></textarea>
+                                <label class="form-label" for="ghiChu">Ghi chú</label>
+                                <textarea class="form-control" id="ghiChu" rows="2" th:field="*{ghiChu}" placeholder="Ghi chú thêm về lô hàng này..."></textarea>
                             </div>
                         </div>
 
                         <div class="khoi">
                             <div class="khoi__dau">
                                 <h2>Chi tiết sản phẩm nhập</h2>
-                                <button type="button" class="nut nut--nho" onclick="themDongSanPham()">Thêm sản phẩm</button>
+                                <button type="button" class="nut nut--nho btn" onclick="themDongSanPham()">Thêm sản phẩm</button>
                             </div>
 
-                            <div class="cuon-ngang">
-                                <table class="bang-dl">
+                            <div class="cuon-ngang table-responsive">
+                                <table class="bang-dl table table-hover align-middle">
                                     <thead>
                                     <tr>
                                         <th>Sản phẩm</th>
@@ -89,8 +89,8 @@
                                     <input type="hidden" id="tongTienHidden" th:field="*{tongTien}" value="0">
                                 </div>
                                 <div class="hang-nut">
-                                    <button class="nut nut--dac" type="button" onclick="kiemTraVaSubmit()">Lưu phiếu nhập</button>
-                                    <a class="nut" th:href="@{/admin/phieu-nhap}">Quay lại</a>
+                                    <button class="nut nut--dac btn" type="button" onclick="kiemTraVaSubmit()">Lưu phiếu nhập</button>
+                                    <a class="nut btn" th:href="@{/admin/phieu-nhap}">Quay lại</a>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
 
 
                     <div id="mauSelectSanPham" style="display: none;">
-                        <select class="sp-select" style="width: 100%;">
+                        <select class="sp-select form-select" style="width: 100%;">
                             <option value="">-- Chọn SP --</option>
                             <option th:each="sp : ${danhSachSP}" th:value="${sp.id}" th:text="${sp.tenSanPham}"></option>
                         </select>
@@ -134,17 +134,17 @@
             </td>
             <td class="canh-giua">
                 <div class="o-nhap">
-                    <input type="number" class="sp-sl" value="1" min="1" required oninput="tinhThanhTien(${soDong})" style="text-align: center;">
+                    <input type="number" class="sp-sl form-control" value="1" min="1" required oninput="tinhThanhTien(${soDong})" style="text-align: center;">
                 </div>
             </td>
             <td class="canh-giua">
                 <div class="o-nhap">
-                    <input type="number" class="sp-gia" value="" min="1000" step="1000" placeholder="Nhập giá..." required oninput="tinhThanhTien(${soDong})" style="text-align: right;">
+                    <input type="number" class="sp-gia form-control" value="" min="1000" step="1000" placeholder="Nhập giá..." required oninput="tinhThanhTien(${soDong})" style="text-align: right;">
                 </div>
             </td>
             <td class="canh-phai" id="thanh_tien_${soDong}" style="font-weight: bold; vertical-align: middle;">0 ₫</td>
             <td class="canh-giua" style="vertical-align: middle;">
-                <button type="button" class="nut nut--nho nut--do" onclick="xoaDong(${soDong})">Xoá</button>
+                <button type="button" class="nut nut--nho nut--do btn" onclick="xoaDong(${soDong})">Xoá</button>
             </td>
         `;
 

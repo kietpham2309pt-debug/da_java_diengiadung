@@ -41,6 +41,7 @@
     <link rel="apple-touch-icon" th:href="@{/img/icon-180.png}">
     <link rel="preload" th:href="@{/fonts/montserrat-latin.woff2}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" th:href="@{/fonts/montserrat-vietnamese.woff2}" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/site.css}">
     <link rel="stylesheet" th:href="@{/css/ung-dung.css}">
 </head>
@@ -84,7 +85,7 @@
             <span class="thanh__vach" aria-hidden="true"></span>
 
             <form class="o-tim" id="o-tim" role="search" th:action="@{/san-pham}" method="get">
-                <input type="search" name="tuKhoa" id="o-tim-nhap" placeholder="Tìm sản phẩm"
+                <input class="form-control" type="search" name="tuKhoa" id="o-tim-nhap" placeholder="Tìm sản phẩm"
                        aria-label="Từ khoá tìm kiếm" th:value="${tuKhoa}">
             </form>
 
@@ -129,7 +130,7 @@
         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-bao-hanh"></use></svg>
         <span th:text="${thongBao}">Đã lưu</span>
     </p>
-    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+    <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${thongBaoLoi}" role="alert">
         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
         <span th:text="${thongBaoLoi}">Có lỗi</span>
     </p>
@@ -192,14 +193,14 @@
             </label>
         </fieldset>
         <div class="o-nhap" data-khi-khac hidden>
-            <label for="lyDoKhac">Ghi rõ lý do <span class="tt-bb" aria-hidden="true">*</span></label>
-            <textarea id="lyDoKhac" name="lyDoKhac" rows="3" maxlength="250" minlength="5"
+            <label class="form-label" for="lyDoKhac">Ghi rõ lý do <span class="tt-bb" aria-hidden="true">*</span></label>
+            <textarea class="form-control" id="lyDoKhac" name="lyDoKhac" rows="3" maxlength="250" minlength="5"
                       placeholder="Ví dụ: tôi muốn đổi sang màu khác"
                       data-thieu="Vui lòng ghi rõ lý do huỷ" data-sai="Lý do cần ít nhất 5 ký tự"></textarea>
         </div>
         <div class="hop__nut">
-            <button type="button" class="nut" data-dong-hop>Giữ đơn hàng</button>
-            <button type="submit" class="nut nut--huy">Xác nhận huỷ đơn</button>
+            <button type="button" class="nut btn" data-dong-hop>Giữ đơn hàng</button>
+            <button type="submit" class="nut nut--huy btn">Xác nhận huỷ đơn</button>
         </div>
     </form>
 </dialog>
@@ -285,6 +286,7 @@
         </div>
     </div>
 
+    <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}" defer></script>
     <script th:src="@{/js/site.js}"></script>
     <script th:src="@{/js/chung.js}"></script>
 </div>

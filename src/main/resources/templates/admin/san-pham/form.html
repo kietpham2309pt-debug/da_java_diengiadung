@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                    <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${thongBaoLoi}" role="alert">
                         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                         <span th:text="${thongBaoLoi}">Có lỗi</span>
                     </p>
@@ -41,93 +41,93 @@
                             <input type="hidden" th:field="*{hinhAnh}">
 
                             <div class="o-nhap">
-                                <label for="tenSanPham">Tên sản phẩm *</label>
-                                <input type="text" id="tenSanPham" th:field="*{tenSanPham}"
+                                <label class="form-label" for="tenSanPham">Tên sản phẩm *</label>
+                                <input class="form-control" type="text" id="tenSanPham" th:field="*{tenSanPham}"
                                        placeholder="Bếp điện từ Bosch PPI82560MS">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenSanPham')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenSanPham')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('tenSanPham')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenSanPham')}"></span>
                             </div>
 
-                            <div class="o-doi">
-                                <div class="o-nhap">
-                                    <label for="maSanPham">Mã sản phẩm *</label>
-                                    <input type="text" id="maSanPham" th:field="*{maSanPham}" placeholder="BDT-BOS-001">
+                            <div class="row g-3">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="maSanPham">Mã sản phẩm *</label>
+                                    <input class="form-control" type="text" id="maSanPham" th:field="*{maSanPham}" placeholder="BDT-BOS-001">
                                     <span class="goi-y">Chữ không dấu, số và dấu gạch ngang. Hệ thống tự viết hoa.</span>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('maSanPham')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'maSanPham')}"></span>
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('maSanPham')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'maSanPham')}"></span>
                                 </div>
-                                <div class="o-nhap">
-                                    <label for="congSuat">Công suất hoặc dung tích</label>
-                                    <input type="text" id="congSuat" th:field="*{congSuat}" placeholder="7000W, 70 lít, 1000 m3/h">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('congSuat')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'congSuat')}"></span>
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="congSuat">Công suất hoặc dung tích</label>
+                                    <input class="form-control" type="text" id="congSuat" th:field="*{congSuat}" placeholder="7000W, 70 lít, 1000 m3/h">
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('congSuat')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'congSuat')}"></span>
                                 </div>
                             </div>
 
-                            <div class="o-doi">
-                                <div class="o-nhap">
-                                    <label for="loaiSanPham">Loại sản phẩm *</label>
-                                    <select id="loaiSanPham" name="loaiSanPham">
+                            <div class="row g-3">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="loaiSanPham">Loại sản phẩm *</label>
+                                    <select class="form-select" id="loaiSanPham" name="loaiSanPham">
                                         <option value="">Chọn loại sản phẩm</option>
                                         <option th:each="loai : ${danhSachLoai}" th:value="${loai.id}" th:text="${loai.tenLoai}"
                                                 th:selected="${sanPham.loaiSanPham != null and sanPham.loaiSanPham.id == loai.id}">Bếp điện từ</option>
                                     </select>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('loaiSanPham')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'loaiSanPham')}"></span>
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('loaiSanPham')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'loaiSanPham')}"></span>
                                 </div>
-                                <div class="o-nhap">
-                                    <label for="thuongHieu">Thương hiệu *</label>
-                                    <select id="thuongHieu" name="thuongHieu">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="thuongHieu">Thương hiệu *</label>
+                                    <select class="form-select" id="thuongHieu" name="thuongHieu">
                                         <option value="">Chọn thương hiệu</option>
                                         <option th:each="hang : ${danhSachThuongHieu}" th:value="${hang.id}" th:text="${hang.tenThuongHieu}"
                                                 th:selected="${sanPham.thuongHieu != null and sanPham.thuongHieu.id == hang.id}">Bosch</option>
                                     </select>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('thuongHieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'thuongHieu')}"></span>
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('thuongHieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'thuongHieu')}"></span>
                                 </div>
                             </div>
 
-                            <div class="o-doi">
-                                <div class="o-nhap">
-                                    <label for="giaBan">Giá bán (đồng) *</label>
-                                    <input type="number" id="giaBan" th:field="*{giaBan}" min="1" placeholder="26900000">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('giaBan')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giaBan')}"></span>
+                            <div class="row g-3">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="giaBan">Giá bán (đồng) *</label>
+                                    <input class="form-control" type="number" id="giaBan" th:field="*{giaBan}" min="1" placeholder="26900000">
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('giaBan')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giaBan')}"></span>
                                 </div>
-                                <div class="o-nhap">
-                                    <label for="giaKhuyenMai">Giá khuyến mãi (đồng)</label>
-                                    <input type="number" id="giaKhuyenMai" th:field="*{giaKhuyenMai}" min="0" placeholder="22900000">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="giaKhuyenMai">Giá khuyến mãi (đồng)</label>
+                                    <input class="form-control" type="number" id="giaKhuyenMai" th:field="*{giaKhuyenMai}" min="0" placeholder="22900000">
                                     <span class="goi-y">Bỏ trống nếu không giảm giá. Phải nhỏ hơn giá bán.</span>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('giaKhuyenMai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giaKhuyenMai')}"></span>
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('giaKhuyenMai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'giaKhuyenMai')}"></span>
                                 </div>
                             </div>
 
-                            <div class="o-doi">
-                                <div class="o-nhap">
-                                    <label for="soLuongTon">Số lượng tồn</label>
-                                    <input type="number" id="soLuongTon" th:field="*{soLuongTon}" min="0">
+                            <div class="row g-3">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="soLuongTon">Số lượng tồn</label>
+                                    <input class="form-control" type="number" id="soLuongTon" th:field="*{soLuongTon}" min="0">
                                     <span class="goi-y">Sau này tăng tự động khi lập phiếu nhập kho.</span>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('soLuongTon')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soLuongTon')}"></span>
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('soLuongTon')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soLuongTon')}"></span>
                                 </div>
-                                <div class="o-nhap">
-                                    <label for="baoHanhThang">Bảo hành (tháng)</label>
-                                    <input type="number" id="baoHanhThang" th:field="*{baoHanhThang}" min="0" max="120">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('baoHanhThang')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'baoHanhThang')}"></span>
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="baoHanhThang">Bảo hành (tháng)</label>
+                                    <input class="form-control" type="number" id="baoHanhThang" th:field="*{baoHanhThang}" min="0" max="120">
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('baoHanhThang')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'baoHanhThang')}"></span>
                                 </div>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="moTa">Mô tả</label>
-                                <textarea id="moTa" rows="4" th:field="*{moTa}"
+                                <label class="form-label" for="moTa">Mô tả</label>
+                                <textarea class="form-control" id="moTa" rows="4" th:field="*{moTa}"
                                           placeholder="Vài câu giới thiệu sản phẩm. Xuống dòng để tách đoạn."></textarea>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="thongSoKyThuat">Thông số kỹ thuật</label>
-                                <textarea id="thongSoKyThuat" rows="7" th:field="*{thongSoKyThuat}"
+                                <label class="form-label" for="thongSoKyThuat">Thông số kỹ thuật</label>
+                                <textarea class="form-control" id="thongSoKyThuat" rows="7" th:field="*{thongSoKyThuat}"
                                           placeholder="Kích thước khoét đá: 560 x 490 mm&#10;Số mức công suất: 17&#10;Khoá an toàn trẻ em"></textarea>
                                 <span class="goi-y">Mỗi dòng một thông số dạng <b>Tên: Giá trị</b>, sẽ vào bảng thông số.
                                     Dòng không có dấu hai chấm được hiển thị ở mục Tính năng.</span>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('thongSoKyThuat')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'thongSoKyThuat')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('thongSoKyThuat')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'thongSoKyThuat')}"></span>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="tepAnh">Ảnh sản phẩm</label>
+                                <label class="form-label" for="tepAnh">Ảnh sản phẩm</label>
                                 <div class="anh-hien-tai">
                                     <img th:src="@{${sanPham.duongDanAnh}}" alt="Ảnh đang dùng">
                                     <div>
@@ -141,7 +141,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <input type="file" id="tepAnh" name="tepAnh" accept=".jpg,.jpeg,.png,.webp,.gif,image/*">
+                                <input class="form-control" type="file" id="tepAnh" name="tepAnh" accept=".jpg,.jpeg,.png,.webp,.gif,image/*">
                                 <span class="goi-y">JPG, PNG, WEBP hoặc GIF, tối đa 5 MB. Chọn ảnh mới sẽ thay ảnh cũ.</span>
                             </div>
 
@@ -153,8 +153,8 @@
                             </label>
 
                             <div class="hang-nut">
-                                <button class="nut nut--dac" type="submit">Lưu</button>
-                                <a class="nut" th:href="@{/admin/san-pham}">Quay lại</a>
+                                <button class="nut nut--dac btn" type="submit">Lưu</button>
+                                <a class="nut btn" th:href="@{/admin/san-pham}">Quay lại</a>
                             </div>
                         </form>
                     </div>

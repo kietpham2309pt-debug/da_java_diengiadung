@@ -16,7 +16,7 @@
             <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
                 <svg class="ic ic--to"><use xlink:href="#ic-yeu-thich"></use></svg>
                 <p>Bạn chưa lưu sản phẩm nào. Bấm «Thêm vào danh sách yêu thích» ở trang chi tiết sản phẩm để lưu lại.</p>
-                <a class="nut nut--dac" th:href="@{/san-pham}">Xem sản phẩm</a>
+                <a class="nut nut--dac btn" th:href="@{/san-pham}">Xem sản phẩm</a>
             </div>
 
             <div class="luoi-sp" th:unless="${#lists.isEmpty(danhSach)}">

@@ -27,7 +27,7 @@
                             <p>Hàng hoá đang có trên cửa hàng, kèm giá, tồn kho và trạng thái bán.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/san-pham/them}">Thêm sản phẩm</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/san-pham/them}">Thêm sản phẩm</a>
                         </div>
                     </div>
 
@@ -35,26 +35,26 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/san-pham}" method="get">
-                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên, mã hoặc thương hiệu"
+                            <input class="form-control" type="search" name="tuKhoa" placeholder="Tìm theo tên, mã hoặc thương hiệu"
                                    aria-label="Từ khoá" th:value="${tuKhoa}">
-                            <select name="loai" aria-label="Loại sản phẩm">
+                            <select class="form-select" name="loai" aria-label="Loại sản phẩm">
                                 <option value="">Tất cả loại</option>
                                 <option th:each="loai : ${danhSachLoai}" th:value="${loai.id}" th:text="${loai.tenLoai}"
                                         th:selected="${loaiDangChon == loai.id}">Bếp điện từ</option>
                             </select>
-                            <select name="hang" aria-label="Thương hiệu">
+                            <select class="form-select" name="hang" aria-label="Thương hiệu">
                                 <option value="">Tất cả thương hiệu</option>
                                 <option th:each="hang : ${danhSachThuongHieu}" th:value="${hang.id}"
                                         th:text="${hang.tenThuongHieu}" th:selected="${hangDangChon == hang.id}">Bosch</option>
                             </select>
-                            <select name="trangThai" aria-label="Trạng thái bán">
+                            <select class="form-select" name="trangThai" aria-label="Trạng thái bán">
                                 <option value="">Mọi trạng thái</option>
                                 <option value="dang-ban" th:selected="${trangThaiDangChon == 'dang-ban'}">Đang bán</option>
                                 <option value="ngung-ban" th:selected="${trangThaiDangChon == 'ngung-ban'}">Ngừng bán</option>
                             </select>
-                            <button class="nut nut--nho" type="submit">Lọc</button>
+                            <button class="nut nut--nho btn" type="submit">Lọc</button>
                             <a th:if="${!#strings.isEmpty(thamSoLoc)}" th:href="@{/admin/san-pham}"
-                               class="nut nut--nho">Bỏ lọc</a>
+                               class="nut nut--nho btn">Bỏ lọc</a>
                         </form>
                     </div>
 
@@ -64,8 +64,8 @@
                             <span class="the-nhan the-nhan--vang">Tồn kho từ 5 trở xuống tô vàng</span>
                         </div>
 
-                        <div class="cuon-ngang">
-                            <table class="bang-dl bang-sp">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl bang-sp table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Ảnh</th>
@@ -104,17 +104,17 @@
                                             <span class="the-nhan the-nhan--ok" th:if="${sp.dangBan}">Đang bán</span>
                                             <span class="the-nhan the-nhan--tat" th:unless="${sp.dangBan}">Ngừng bán</span>
                                             <form th:action="@{'/admin/san-pham/doi-trang-thai/' + ${sp.id}}" method="post">
-                                                <button class="nut nut--nho" type="submit"
+                                                <button class="nut nut--nho btn" type="submit"
                                                         th:text="${sp.dangBan} ? 'Ngừng bán' : 'Mở bán lại'">Ngừng bán</button>
                                             </form>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="hang-thao-tac">
-                                            <a class="nut nut--nho" th:href="@{'/admin/san-pham/sua/' + ${sp.id}}">Sửa</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/san-pham/sua/' + ${sp.id}}">Sửa</a>
                                             <form th:action="@{'/admin/san-pham/xoa/' + ${sp.id}}" method="post"
                                                   onsubmit="return confirm('Bạn chắc chắn muốn xoá sản phẩm này?');">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>
@@ -123,14 +123,14 @@
                             </table>
                         </div>
 
-                        <nav class="trang" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
-                            <a class="trang__nut" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
+                        <nav class="trang pagination flex-wrap" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
+                            <a class="trang__nut page-link" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
                                th:href="@{'/admin/san-pham?' + ${thamSoLoc} + 'trang=' + ${ketQua.trangHienTai - 1}}">&lsaquo;</a>
-                            <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut"
+                            <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut page-link"
                                th:classappend="${so == ketQua.trangHienTai} ? 'dang-chon'"
                                th:attr="aria-current=${so == ketQua.trangHienTai} ? 'page' : null"
                                th:href="@{'/admin/san-pham?' + ${thamSoLoc} + 'trang=' + ${so}}" th:text="${so}">1</a>
-                            <a class="trang__nut" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
+                            <a class="trang__nut page-link" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
                                th:href="@{'/admin/san-pham?' + ${thamSoLoc} + 'trang=' + ${ketQua.trangHienTai + 1}}">&rsaquo;</a>
                         </nav>
                     </div>
@@ -139,7 +139,7 @@
                         <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                         <p th:if="${!#strings.isEmpty(thamSoLoc)}">Không có sản phẩm nào khớp với bộ lọc đang chọn.</p>
                         <p th:if="${#strings.isEmpty(thamSoLoc)}">Chưa có sản phẩm nào.</p>
-                        <a class="nut nut--dac" th:href="@{/admin/san-pham/them}">Thêm sản phẩm</a>
+                        <a class="nut nut--dac btn" th:href="@{/admin/san-pham/them}">Thêm sản phẩm</a>
                     </div>
                 </div>
             </div>

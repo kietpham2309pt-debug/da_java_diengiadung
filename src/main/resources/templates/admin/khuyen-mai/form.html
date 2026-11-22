@@ -38,15 +38,15 @@
                             <fieldset class="qt-nhom">
                                 <legend>Thông tin chương trình</legend>
                                 <div class="o-nhap">
-                                    <label for="ten">Tên chương trình</label>
-                                    <input type="text" id="ten" th:field="*{ten}" maxlength="120" placeholder="VD: Tuần lễ bếp từ - giảm 5%">
+                                    <label class="form-label" for="ten">Tên chương trình</label>
+                                    <input class="form-control" type="text" id="ten" th:field="*{ten}" maxlength="120" placeholder="VD: Tuần lễ bếp từ - giảm 5%">
                                     <span class="o-nhap__goi">Tên hiển thị cho khách ở trang thanh toán và trên đơn hàng.</span>
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('ten')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ten')}"></span>
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('ten')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'ten')}"></span>
                                 </div>
                                 <div class="o-nhap">
-                                    <label for="moTa">Mô tả</label>
-                                    <input type="text" id="moTa" th:field="*{moTa}" maxlength="255">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
+                                    <label class="form-label" for="moTa">Mô tả</label>
+                                    <input class="form-control" type="text" id="moTa" th:field="*{moTa}" maxlength="255">
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
                                 </div>
                             </fieldset>
 
@@ -60,22 +60,22 @@
                                     <label><input type="radio" th:field="*{phamVi}" value="THUONG_HIEU" data-pham-vi> Một thương hiệu</label>
                                 </div>
                                 <div class="o-nhap" data-theo="LOAI_SAN_PHAM" style="margin-top:16px">
-                                    <label for="loaiSanPham">Loại sản phẩm</label>
-                                    <select id="loaiSanPham" name="loaiSanPham">
+                                    <label class="form-label" for="loaiSanPham">Loại sản phẩm</label>
+                                    <select class="form-select" id="loaiSanPham" name="loaiSanPham">
                                         <option value="">Chọn loại sản phẩm</option>
                                         <option th:each="loai : ${dsLoai}" th:value="${loai.id}" th:text="${loai.tenLoai}"
                                                 th:selected="${khuyenMai.loaiSanPham != null and khuyenMai.loaiSanPham.id == loai.id}">Bếp từ</option>
                                     </select>
                                 </div>
                                 <div class="o-nhap" data-theo="THUONG_HIEU" style="margin-top:16px">
-                                    <label for="thuongHieu">Thương hiệu</label>
-                                    <select id="thuongHieu" name="thuongHieu">
+                                    <label class="form-label" for="thuongHieu">Thương hiệu</label>
+                                    <select class="form-select" id="thuongHieu" name="thuongHieu">
                                         <option value="">Chọn thương hiệu</option>
                                         <option th:each="hang : ${dsHang}" th:value="${hang.id}" th:text="${hang.tenThuongHieu}"
                                                 th:selected="${khuyenMai.thuongHieu != null and khuyenMai.thuongHieu.id == hang.id}">Bosch</option>
                                     </select>
                                 </div>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('phamViHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phamViHopLe')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('phamViHopLe')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'phamViHopLe')}"></span>
                                 <div class="qt-chon" style="margin-top:16px">
                                     <label><input type="checkbox" th:field="*{chiThanhVien}"> Chỉ dành cho thành viên đã đăng nhập</label>
                                 </div>
@@ -84,8 +84,8 @@
                             <div th:replace="~{admin/uu-dai-chung :: thoiGian}"></div>
 
                             <div class="hang-nut">
-                                <button class="nut nut--dac" type="submit">Lưu</button>
-                                <a class="nut" th:href="@{/admin/khuyen-mai}">Quay lại</a>
+                                <button class="nut nut--dac btn" type="submit">Lưu</button>
+                                <a class="nut btn" th:href="@{/admin/khuyen-mai}">Quay lại</a>
                             </div>
                         </form>
                     </div>

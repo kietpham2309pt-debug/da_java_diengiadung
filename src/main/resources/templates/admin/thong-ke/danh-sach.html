@@ -31,19 +31,19 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/thong-ke}" method="get">
-                            <select name="thang" aria-label="Chọn tháng">
+                            <select class="form-select" name="thang" aria-label="Chọn tháng">
                                 <option th:each="i : ${#numbers.sequence(1, 12)}"
                                         th:value="${i}"
                                         th:text="'Tháng ' + ${i}"
                                         th:selected="${i == thang}">Tháng 1</option>
                             </select>
-                            <select name="nam" aria-label="Chọn năm">
+                            <select class="form-select" name="nam" aria-label="Chọn năm">
                                 <option th:each="i : ${#numbers.sequence(namBatDau, namKetThuc)}"
                                         th:value="${i}"
                                         th:text="'Năm ' + ${i}"
                                         th:selected="${i == nam}">Năm 2026</option>
                             </select>
-                            <button class="nut nut--nho" type="submit">Xem thống kê</button>
+                            <button class="nut nut--nho btn" type="submit">Xem thống kê</button>
                         </form>
                     </div>
 
@@ -62,8 +62,8 @@
                         <h2>Top 10 sản phẩm bán chạy</h2>
                         <p>Xếp theo số lượng bán trong các đơn hoàn thành của tháng đã chọn.</p>
 
-                        <div class="cuon-ngang" th:if="${not #lists.isEmpty(sanPhamBanChay)}">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive" th:if="${not #lists.isEmpty(sanPhamBanChay)}">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Hạng</th>

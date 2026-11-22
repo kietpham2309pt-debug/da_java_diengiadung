@@ -15,18 +15,18 @@
             <div class="khoi">
                 <form th:action="@{/don-hang/tra-cuu}" method="post">
                     <div class="o-nhap">
-                        <label for="maDon">Mã đơn hàng</label>
-                        <input type="text" id="maDon" name="maDon" th:value="${maDon}" placeholder="Ví dụ: BN000123" required
+                        <label class="form-label" for="maDon">Mã đơn hàng</label>
+                        <input class="form-control" type="text" id="maDon" name="maDon" th:value="${maDon}" placeholder="Ví dụ: BN000123" required
                                maxlength="20" autocomplete="off">
                     </div>
                     <div class="o-nhap">
-                        <label for="soDienThoai">Số điện thoại người nhận</label>
-                        <input type="tel" id="soDienThoai" name="soDienThoai" th:value="${soDienThoai}" placeholder="09xx xxx xxx"
+                        <label class="form-label" for="soDienThoai">Số điện thoại người nhận</label>
+                        <input class="form-control" type="tel" id="soDienThoai" name="soDienThoai" th:value="${soDienThoai}" placeholder="09xx xxx xxx"
                                required maxlength="10" inputmode="tel" autocomplete="tel">
                     </div>
                     <div class="hang-nut">
-                        <button class="nut nut--dac" type="submit">Tra cứu</button>
-                        <a class="nut" th:href="@{/dang-nhap}">Đăng nhập để xem mọi đơn</a>
+                        <button class="nut nut--dac btn" type="submit">Tra cứu</button>
+                        <a class="nut btn" th:href="@{/dang-nhap}">Đăng nhập để xem mọi đơn</a>
                     </div>
                 </form>
             </div>

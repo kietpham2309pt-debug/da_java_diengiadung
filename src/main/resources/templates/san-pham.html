@@ -68,7 +68,7 @@
             </div>
 
             <div class="muc__chan">
-                <a class="nut nut--dac" th:href="@{/san-pham(sapXep='moi-nhat')}">
+                <a class="nut nut--dac btn" th:href="@{/san-pham(sapXep='moi-nhat')}">
                     Xem tất cả sản phẩm
                     <svg class="ic ic--nho"><use xlink:href="#ic-mui-ten-phai"></use></svg>
                 </a>
@@ -99,9 +99,9 @@
                         </p>
 
                         <div class="ds__sap">
-                            <label for="sapXep">Sắp xếp theo:</label>
+                            <label class="form-label" for="sapXep">Sắp xếp theo:</label>
                             <span class="ds__o">
-                                <select id="sapXep" name="sapXep">
+                                <select class="form-select" id="sapXep" name="sapXep">
                                     <option th:each="kieu : ${danhSachKieuSapXep}" th:value="${kieu.ma}"
                                             th:selected="${boLoc.sapXep == kieu.ma}" th:text="${kieu.ten}">Mới nhất</option>
                                 </select>
@@ -165,7 +165,7 @@
                         </details>
 
                         <noscript>
-                            <button type="submit" class="nut loc__ap">Áp dụng bộ lọc</button>
+                            <button type="submit" class="nut loc__ap btn">Áp dụng bộ lọc</button>
                         </noscript>
 
                         <p class="loc__ve">
@@ -180,21 +180,21 @@
                             </th:block>
                         </div>
 
-                        <nav class="trang hien-dan" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
-                            <a class="trang__nut" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
+                        <nav class="trang hien-dan pagination flex-wrap" aria-label="Phân trang" th:if="${ketQua.soTrang > 1}">
+                            <a class="trang__nut page-link" rel="prev" aria-label="Trang trước" th:if="${ketQua.coTrangTruoc}"
                                th:href="@{${boLoc.duongDanTrang(ketQua.trangHienTai - 1)}}">&lsaquo;</a>
-                            <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut"
+                            <a th:each="so : ${ketQua.danhSachSoTrang}" class="trang__nut page-link"
                                th:classappend="${so == ketQua.trangHienTai} ? 'dang-chon'"
                                th:attr="aria-current=${so == ketQua.trangHienTai} ? 'page' : null"
                                th:href="@{${boLoc.duongDanTrang(so)}}" th:text="${so}">1</a>
-                            <a class="trang__nut" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
+                            <a class="trang__nut page-link" rel="next" aria-label="Trang sau" th:if="${ketQua.coTrangSau}"
                                th:href="@{${boLoc.duongDanTrang(ketQua.trangHienTai + 1)}}">&rsaquo;</a>
                         </nav>
 
                         <div class="trong" th:if="${ketQua.trong}">
                             <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                             <p>Không tìm thấy sản phẩm nào khớp với lựa chọn của bạn.</p>
-                            <a class="nut" th:href="@{/san-pham}">Xem tất cả danh mục</a>
+                            <a class="nut btn" th:href="@{/san-pham}">Xem tất cả danh mục</a>
                         </div>
                     </div>
                 </div>

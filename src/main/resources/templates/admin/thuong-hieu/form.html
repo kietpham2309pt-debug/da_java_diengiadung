@@ -30,7 +30,7 @@
                     </div>
 
 
-                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                    <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${thongBaoLoi}" role="alert">
                         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                         <span th:text="${thongBaoLoi}">Có lỗi xảy ra</span>
                     </p>
@@ -41,22 +41,22 @@
                             <input type="hidden" th:field="*{id}">
 
                             <div class="o-nhap">
-                                <label for="tenThuongHieu">Tên thương hiệu</label>
-                                <input type="text" id="tenThuongHieu" th:field="*{tenThuongHieu}" placeholder="VD: Bosch">
+                                <label class="form-label" for="tenThuongHieu">Tên thương hiệu</label>
+                                <input class="form-control" type="text" id="tenThuongHieu" th:field="*{tenThuongHieu}" placeholder="VD: Bosch">
 
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenThuongHieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenThuongHieu')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('tenThuongHieu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenThuongHieu')}"></span>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="xuatXu">Xuất xứ</label>
-                                <input type="text" id="xuatXu" th:field="*{xuatXu}" placeholder="VD: Đức">
+                                <label class="form-label" for="xuatXu">Xuất xứ</label>
+                                <input class="form-control" type="text" id="xuatXu" th:field="*{xuatXu}" placeholder="VD: Đức">
 
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('xuatXu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'xuatXu')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('xuatXu')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'xuatXu')}"></span>
                             </div>
 
                             <div class="hang-nut">
-                                <button class="nut nut--dac" type="submit">Lưu</button>
-                                <a class="nut" th:href="@{/admin/thuong-hieu}">Quay lại</a>
+                                <button class="nut nut--dac btn" type="submit">Lưu</button>
+                                <a class="nut btn" th:href="@{/admin/thuong-hieu}">Quay lại</a>
                             </div>
                         </form>
                     </div>
