@@ -72,6 +72,23 @@ client-kho\thu-nhieu-client.bat localhost 9090 5 4  :: 5 client song song, mỗi
 
 Hoặc chạy trực tiếp: `java -Dfile.encoding=UTF-8 client-kho/KhoClient.java localhost 9090`.
 
+### 5. Lỗi thường gặp khi kéo code về chạy
+
+Khi không kết nối được SQL Server, ứng dụng dừng và in khung `APPLICATION FAILED TO START` bằng tiếng Việt, mục
+`Action` ghi cách sửa. Tóm tắt:
+
+| Thông báo | Nguyên nhân | Cách sửa |
+|---|---|---|
+| Không kết nối được SQL Server qua TCP | SQL Server chưa chạy hoặc chưa bật TCP/IP cổng 1433 | SQL Server Configuration Manager → Protocols → bật TCP/IP, IPAll đặt TCP Port = 1433 → khởi động lại dịch vụ. Bản Express có thể đặt `DB_URL=jdbc:sqlserver://localhost\SQLEXPRESS;databaseName=dien_gia_dung;encrypt=true;trustServerCertificate=true` và bật SQL Server Browser |
+| Không đăng nhập được SQL Server | Chưa có login `bepne` hoặc SQL Server chỉ cho đăng nhập Windows | Chạy `database/01_tao_csdl.sql` trong SSMS; Server Properties → Security → *SQL Server and Windows Authentication mode* → khởi động lại dịch vụ |
+| Chưa có cơ sở dữ liệu dien_gia_dung | Chưa chạy script | Chạy `database/01_tao_csdl.sql` rồi `02_du_lieu_mau.sql` |
+| `Port 8080 was already in use` | Đang mở một bản server khác | Tắt cửa sổ server cũ, hoặc chạy với `--server.port=8081` |
+| Client kho báo không kết nối được | Chưa chạy server hoặc server không mở được cổng 9090 | Chạy server trước; xem log có dòng `Máy chủ kho đang lắng nghe cổng 9090` |
+| Chữ tiếng Việt trong cửa sổ client bị lỗi font | Console chưa dùng UTF-8 | Chạy bằng `client-kho\chay-client.bat` (đã có `chcp 65001` và `-Dfile.encoding=UTF-8`) |
+
+`mvnw package` / `mvnw test` trên máy chưa cài SQL Server vẫn build được: 5 kiểm thử tích hợp tự bỏ qua (Skipped),
+18 unit test vẫn chạy. Muốn chạy đủ 23 ca thì login `bepne` cần quyền `dbcreator` (script 01 đã cấp).
+
 ## Tài khoản có sẵn
 
 | Vai trò | Tên đăng nhập | Mật khẩu |
