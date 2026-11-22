@@ -35,6 +35,13 @@ Mở SSMS bằng tài khoản quản trị, chạy lần lượt hai script tron
 |---|---|
 | `database/01_tao_csdl.sql` | Tạo CSDL `dien_gia_dung` (collation `Vietnamese_CI_AI`), login `bepne` / `BepNe@2026`, 14 bảng kèm khoá chính, khoá ngoại, ràng buộc duy nhất |
 | `database/02_du_lieu_mau.sql` | Dữ liệu mẫu (bảng dưới) |
+| `database/dien_gia_dung.bak` + `03_khoi_phuc_tu_bak.sql` | Cách thay thế: khôi phục nguyên CSDL từ file backup |
+
+**Cách nhanh hơn – khôi phục từ file backup:** thư mục `database/` có sẵn `dien_gia_dung.bak` (CSDL đã có bảng và
+dữ liệu mẫu). Mở `database/03_khoi_phuc_tu_bak.sql` trong SSMS, sửa dòng đầu `@tep_bak` thành đường dẫn thật tới file
+`.bak` trên máy mình, rồi bấm F5. Script tự tạo login `bepne`, khôi phục CSDL vào thư mục dữ liệu mặc định của
+SQL Server và gắn lại user. Lưu ý: tài khoản dịch vụ SQL Server phải đọc được file `.bak` (để file ở ổ C, không để
+trong thư mục cá nhân bị khoá quyền như Desktop/OneDrive nếu báo lỗi *Access is denied*).
 
 Nếu bỏ qua bước này thì chỉ cần tạo CSDL rỗng `dien_gia_dung` và login `bepne`: lần chạy đầu Hibernate tự tạo bảng,
 `src/main/resources/data.sql` tự nạp đúng bộ dữ liệu mẫu trên (bảng nào đã có dữ liệu thì bỏ qua).
