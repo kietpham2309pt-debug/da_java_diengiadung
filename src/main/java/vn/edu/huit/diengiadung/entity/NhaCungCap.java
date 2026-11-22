@@ -19,7 +19,9 @@ public class NhaCungCap {
     @Column(nullable = false, length = 150)
     private String tenNhaCungCap;
 
+    @NotBlank(message = "Số điện thoại không được để trống")
     @Pattern(regexp = "^$|^0\\d{9,10}$", message = "Số điện thoại gồm 10 hoặc 11 chữ số, bắt đầu bằng 0")
+    @Column(nullable = false, length = 20)
     private String soDienThoai;
 
     private String diaChi;
