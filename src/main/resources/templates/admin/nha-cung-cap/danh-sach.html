@@ -27,7 +27,7 @@
                             <p>Quản lý danh sách các đối tác cung cấp hàng hoá.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/nha-cung-cap/them}">Thêm đối tác</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/nha-cung-cap/them}">Thêm đối tác</a>
                         </div>
                     </div>
 
@@ -35,15 +35,15 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/nha-cung-cap}" method="get">
-                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc SĐT" aria-label="Từ khoá" th:value="${tuKhoa}">
-                            <button class="nut nut--nho" type="submit">Tìm</button>
-                            <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/nha-cung-cap}" class="nut nut--nho">Bỏ lọc</a>
+                            <input class="form-control" type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc SĐT" aria-label="Từ khoá" th:value="${tuKhoa}">
+                            <button class="nut nut--nho btn" type="submit">Tìm</button>
+                            <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/nha-cung-cap}" class="nut nut--nho btn">Bỏ lọc</a>
                         </form>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Tên nhà cung cấp</th>
@@ -61,9 +61,9 @@
                                     <td class="o-dai" th:text="${ncc.diaChi}"></td>
                                     <td>
                                         <div class="hang-thao-tac">
-                                            <a class="nut nut--nho" th:href="@{'/admin/nha-cung-cap/sua/' + ${ncc.id}}">Sửa</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/nha-cung-cap/sua/' + ${ncc.id}}">Sửa</a>
                                             <form th:action="@{'/admin/nha-cung-cap/xoa/' + ${ncc.id}}" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xoá nhà cung cấp này?');">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>
@@ -76,7 +76,7 @@
                     <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
                         <svg class="ic ic--to"><use xlink:href="#ic-tim-kiem"></use></svg>
                         <p>Chưa có dữ liệu nhà cung cấp nào.</p>
-                        <a class="nut nut--dac" th:href="@{/admin/nha-cung-cap/them}">Thêm nhà cung cấp đầu tiên</a>
+                        <a class="nut nut--dac btn" th:href="@{/admin/nha-cung-cap/them}">Thêm nhà cung cấp đầu tiên</a>
                     </div>
                 </div>
             </div>

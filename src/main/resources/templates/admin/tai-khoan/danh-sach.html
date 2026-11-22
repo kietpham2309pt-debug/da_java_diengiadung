@@ -32,15 +32,15 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/tai-khoan}" method="get">
-                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc tên đăng nhập"
+                            <input class="form-control" type="search" name="tuKhoa" placeholder="Tìm theo tên hoặc tên đăng nhập"
                                    aria-label="Từ khoá" th:value="${tuKhoa}">
-                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <button class="nut nut--nho btn" type="submit">Tìm</button>
                         </form>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Tên đăng nhập</th>
@@ -66,12 +66,12 @@
                                         <div class="hang-thao-tac">
                                             <form th:action="@{'/admin/tai-khoan/dat-lai-mat-khau/' + ${tk.id}}" method="post"
                                                   class="thanh-loc" style="margin:0">
-                                                <input type="password" name="matKhauMoi" placeholder="Mật khẩu mới"
+                                                <input class="form-control" type="password" name="matKhauMoi" placeholder="Mật khẩu mới"
                                                        aria-label="Mật khẩu mới" required>
-                                                <button class="nut nut--nho" type="submit">Đặt lại</button>
+                                                <button class="nut nut--nho btn" type="submit">Đặt lại</button>
                                             </form>
                                             <form th:action="@{'/admin/tai-khoan/doi-trang-thai/' + ${tk.id}}" method="post">
-                                                <button class="nut nut--nho" type="submit"
+                                                <button class="nut nut--nho btn" type="submit"
                                                         th:text="${tk.hoatDong} ? 'Khoá' : 'Mở khoá'">Khoá</button>
                                             </form>
                                         </div>

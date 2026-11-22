@@ -99,8 +99,8 @@
 
             <div class="khoi">
                 <h2>Sản phẩm trong đơn</h2>
-                <div class="cuon-ngang">
-                    <table class="bang-dl">
+                <div class="cuon-ngang table-responsive">
+                    <table class="bang-dl table table-hover align-middle">
                         <thead>
                         <tr>
                             <th>Sản phẩm</th>
@@ -150,13 +150,13 @@
             </div>
 
             <div class="hang-nut">
-                <a class="nut" th:if="${laChuDon}" th:href="@{/don-hang}">Quay lại danh sách</a>
-                <a class="nut" th:unless="${laChuDon}" th:href="@{/san-pham}">Tiếp tục mua sắm</a>
+                <a class="nut btn" th:if="${laChuDon}" th:href="@{/don-hang}">Quay lại danh sách</a>
+                <a class="nut btn" th:unless="${laChuDon}" th:href="@{/san-pham}">Tiếp tục mua sắm</a>
                 <form th:if="${laChuDon and (donHang.trangThai == 'HOAN_THANH' or donHang.trangThai == 'DA_HUY')}"
                       th:action="@{/don-hang/{id}/mua-lai(id=${donHang.id})}" method="post">
-                    <button class="nut nut--dac" type="submit">Mua lại đơn này</button>
+                    <button class="nut nut--dac btn" type="submit">Mua lại đơn này</button>
                 </form>
-                <button class="nut" type="button" data-mo-hop="hop-huy"
+                <button class="nut btn" type="button" data-mo-hop="hop-huy"
                         th:if="${laChuDon and donHang.trangThai == 'CHO_XAC_NHAN'}">Huỷ đơn</button>
             </div>
 

@@ -13,18 +13,18 @@
         <div class="khung">
             <div th:replace="~{layout/fragments :: thongBao}"></div>
 
-            <p class="thong-bao thong-bao--loi" th:each="canhBao : ${chiTiet.canhBao}" role="alert" th:text="${canhBao}">Cảnh báo</p>
+            <p class="thong-bao thong-bao--loi alert alert-danger" th:each="canhBao : ${chiTiet.canhBao}" role="alert" th:text="${canhBao}">Cảnh báo</p>
 
             <div class="trong" th:if="${chiTiet.trong}">
                 <svg class="ic ic--to"><use xlink:href="#ic-gio-hang"></use></svg>
                 <p>Giỏ hàng của bạn đang trống.</p>
-                <a class="nut nut--dac" th:href="@{/san-pham}">Tiếp tục mua hàng</a>
-                <a class="nut" th:href="@{/don-hang}">Đơn hàng của tôi</a>
+                <a class="nut nut--dac btn" th:href="@{/san-pham}">Tiếp tục mua hàng</a>
+                <a class="nut btn" th:href="@{/don-hang}">Đơn hàng của tôi</a>
             </div>
 
             <th:block th:unless="${chiTiet.trong}">
-                <div class="cuon-ngang">
-                    <table class="bang-dl">
+                <div class="cuon-ngang table-responsive">
+                    <table class="bang-dl table table-hover align-middle">
                         <thead>
                         <tr>
                             <th>Sản phẩm</th>
@@ -43,16 +43,16 @@
                             <td class="canh-giua">
                                 <form th:action="@{/gio-hang/cap-nhat}" method="post" class="hang-thao-tac">
                                     <input type="hidden" name="id" th:value="${dong.sanPham.id}">
-                                    <input type="number" name="soLuong" min="0" th:max="${dong.sanPham.soLuongTon}"
+                                    <input class="form-control" type="number" name="soLuong" min="0" th:max="${dong.sanPham.soLuongTon}"
                                            th:value="${dong.soLuong}" inputmode="numeric" aria-label="Số lượng">
-                                    <button class="nut nut--nho" type="submit">Cập nhật</button>
+                                    <button class="nut nut--nho btn" type="submit">Cập nhật</button>
                                 </form>
                             </td>
                             <td class="canh-giua" th:text="${#numbers.formatInteger(dong.thanhTien, 0, 'POINT')} + ' ₫'">0 ₫</td>
                             <td class="canh-giua">
                                 <form th:action="@{/gio-hang/xoa}" method="post">
                                     <input type="hidden" name="id" th:value="${dong.sanPham.id}">
-                                    <button class="nut nut--nho" type="submit">Xoá</button>
+                                    <button class="nut nut--nho btn" type="submit">Xoá</button>
                                 </form>
                             </td>
                         </tr>
@@ -72,16 +72,16 @@
                         <p>Bạn vẫn đặt hàng được mà không cần tài khoản. Đăng nhập để dùng <b>mã giảm giá</b> và nhận <b>khuyến mãi dành riêng cho thành viên</b>.</p>
                     </div>
                     <div class="tt-moi__nut">
-                        <a class="nut nut--dac nut--nho" th:href="@{/dang-nhap(tiepTuc='/gio-hang')}">Đăng nhập</a>
-                        <a class="nut nut--nho" th:href="@{/dang-ky}">Đăng ký</a>
+                        <a class="nut nut--dac nut--nho btn" th:href="@{/dang-nhap(tiepTuc='/gio-hang')}">Đăng nhập</a>
+                        <a class="nut nut--nho btn" th:href="@{/dang-ky}">Đăng ký</a>
                     </div>
                 </div>
 
                 <div class="hang-nut">
-                    <a class="nut" th:href="@{/san-pham}">Tiếp tục mua hàng</a>
-                    <a class="nut" th:if="${taiKhoanHienTai != null}" th:href="@{/don-hang}">Đơn hàng của tôi</a>
-                    <a class="nut" th:if="${taiKhoanHienTai != null}" th:href="@{/ho-so}">Hồ sơ</a>
-                    <a class="nut nut--dac" th:href="@{/dat-hang}">Đặt hàng</a>
+                    <a class="nut btn" th:href="@{/san-pham}">Tiếp tục mua hàng</a>
+                    <a class="nut btn" th:if="${taiKhoanHienTai != null}" th:href="@{/don-hang}">Đơn hàng của tôi</a>
+                    <a class="nut btn" th:if="${taiKhoanHienTai != null}" th:href="@{/ho-so}">Hồ sơ</a>
+                    <a class="nut nut--dac btn" th:href="@{/dat-hang}">Đặt hàng</a>
                 </div>
             </th:block>
         </div>

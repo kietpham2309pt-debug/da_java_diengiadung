@@ -30,21 +30,21 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/khach-hang}" method="get">
-                            <input type="search"
+                            <input class="form-control" type="search"
                                    name="tuKhoa"
                                    placeholder="Tìm tên, số điện thoại hoặc email"
                                    aria-label="Tìm kiếm khách hàng"
                                    th:value="${tuKhoa}">
-                            <button class="nut nut--nho" type="submit">Tìm kiếm</button>
+                            <button class="nut nut--nho btn" type="submit">Tìm kiếm</button>
                             <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}"
                                th:href="@{/admin/khach-hang}"
-                               class="nut nut--nho">Bỏ lọc</a>
+                               class="nut nut--nho btn">Bỏ lọc</a>
                         </form>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Mã khách hàng</th>

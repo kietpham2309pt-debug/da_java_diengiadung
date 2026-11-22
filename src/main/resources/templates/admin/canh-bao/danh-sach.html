@@ -28,13 +28,13 @@
                             <p>Danh sách các mặt hàng có số lượng tồn kho dưới 10 sản phẩm, cần ưu tiên lập phiếu nhập.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập ngay</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/phieu-nhap/them}">Lập phiếu nhập ngay</a>
                         </div>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Mã SP</th>

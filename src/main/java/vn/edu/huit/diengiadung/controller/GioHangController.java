@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import vn.edu.huit.diengiadung.model.GioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
 import vn.edu.huit.diengiadung.service.GioHangService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 

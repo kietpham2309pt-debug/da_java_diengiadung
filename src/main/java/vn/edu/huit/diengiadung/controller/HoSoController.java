@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.HoSoKhachHang;
+import vn.edu.huit.diengiadung.dto.HoSoKhachHang;
 import vn.edu.huit.diengiadung.service.HoSoService;
 import vn.edu.huit.diengiadung.service.TaiKhoanService;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;

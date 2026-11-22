@@ -2,7 +2,7 @@ package vn.edu.huit.diengiadung.service;
 
 import vn.edu.huit.diengiadung.entity.DanhGia;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.TongDanhGia;
+import vn.edu.huit.diengiadung.dto.TongDanhGia;
 
 import java.util.List;
 

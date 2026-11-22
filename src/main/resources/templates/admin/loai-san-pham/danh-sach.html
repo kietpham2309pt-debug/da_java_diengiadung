@@ -27,7 +27,7 @@
                             <p>Nhóm hàng hiển thị trên menu, trang chủ và trang sản phẩm.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/loai-san-pham/them}">Thêm loại</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/loai-san-pham/them}">Thêm loại</a>
                         </div>
                     </div>
 
@@ -35,17 +35,17 @@
 
                     <div class="thanh-loc">
                         <form th:action="@{/admin/loai-san-pham}" method="get">
-                            <input type="search" name="tuKhoa" placeholder="Tìm theo tên loại"
+                            <input class="form-control" type="search" name="tuKhoa" placeholder="Tìm theo tên loại"
                                    aria-label="Từ khoá" th:value="${tuKhoa}">
-                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <button class="nut nut--nho btn" type="submit">Tìm</button>
                             <a th:if="${tuKhoa != null and !tuKhoa.isBlank()}" th:href="@{/admin/loai-san-pham}"
-                               class="nut nut--nho">Bỏ lọc</a>
+                               class="nut nut--nho btn">Bỏ lọc</a>
                         </form>
                     </div>
 
                     <div class="khoi" th:if="${not #lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Icon</th>
@@ -67,10 +67,10 @@
                                     <td class="canh-giua" th:text="${#lists.size(loai.danhSachSanPham)}">0</td>
                                     <td>
                                         <div class="hang-thao-tac">
-                                            <a class="nut nut--nho" th:href="@{'/admin/loai-san-pham/sua/' + ${loai.id}}">Sửa</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/loai-san-pham/sua/' + ${loai.id}}">Sửa</a>
                                             <form th:action="@{'/admin/loai-san-pham/xoa/' + ${loai.id}}" method="post"
                                                   onsubmit="return confirm('Bạn chắc chắn muốn xoá loại này?');">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>
@@ -82,7 +82,7 @@
 
                     <div class="trong" th:if="${#lists.isEmpty(danhSach)}">
                         <p>Chưa có loại sản phẩm nào.</p>
-                        <a class="nut nut--dac" th:href="@{/admin/loai-san-pham/them}">Thêm loại đầu tiên</a>
+                        <a class="nut nut--dac btn" th:href="@{/admin/loai-san-pham/them}">Thêm loại đầu tiên</a>
                     </div>
                 </div>
             </div>

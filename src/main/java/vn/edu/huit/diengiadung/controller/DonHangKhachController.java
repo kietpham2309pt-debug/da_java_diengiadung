@@ -16,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import vn.edu.huit.diengiadung.entity.ChiTietDonHang;
 import vn.edu.huit.diengiadung.entity.DonHang;
 import vn.edu.huit.diengiadung.entity.SanPham;
-import vn.edu.huit.diengiadung.model.GioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
 import vn.edu.huit.diengiadung.service.GioHangService;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
 import vn.edu.huit.diengiadung.service.CauHinhThanhToan;

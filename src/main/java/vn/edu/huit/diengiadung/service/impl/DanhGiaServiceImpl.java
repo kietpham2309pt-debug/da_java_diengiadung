@@ -7,7 +7,7 @@ import vn.edu.huit.diengiadung.entity.DonHang;
 import vn.edu.huit.diengiadung.entity.KhachHang;
 import vn.edu.huit.diengiadung.entity.SanPham;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.TongDanhGia;
+import vn.edu.huit.diengiadung.dto.TongDanhGia;
 import vn.edu.huit.diengiadung.repository.ChiTietDonHangRepository;
 import vn.edu.huit.diengiadung.repository.DanhGiaRepository;
 import vn.edu.huit.diengiadung.repository.KhachHangRepository;

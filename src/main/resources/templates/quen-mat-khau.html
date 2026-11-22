@@ -12,7 +12,7 @@
     <section class="muc muc--sat-banner">
         <div class="khung khung--hep">
             <div th:replace="~{layout/fragments :: thongBao}"></div>
-            <p class="thong-bao thong-bao--loi" th:if="${loiQuenMatKhau}" role="alert">
+            <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${loiQuenMatKhau}" role="alert">
                 <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                 <span th:text="${loiQuenMatKhau}">Thông tin không khớp</span>
             </p>
@@ -21,15 +21,15 @@
                 <p class="the-tk__dan">Nhập tên đăng nhập và email hoặc số điện thoại bạn đã dùng khi đăng ký. Nếu khớp, bạn sẽ đặt được mật khẩu mới ngay.</p>
                 <form th:action="@{/quen-mat-khau}" method="post" novalidate data-kiem-tra>
                     <div class="o-nhap">
-                        <label for="tenDangNhap">Tên đăng nhập</label>
-                        <input type="text" id="tenDangNhap" name="tenDangNhap" th:value="${tenDangNhapCu}" autocomplete="username" required>
+                        <label class="form-label" for="tenDangNhap">Tên đăng nhập</label>
+                        <input class="form-control" type="text" id="tenDangNhap" name="tenDangNhap" th:value="${tenDangNhapCu}" autocomplete="username" required>
                     </div>
                     <div class="o-nhap">
-                        <label for="lienHe">Email hoặc số điện thoại đã đăng ký</label>
-                        <input type="text" id="lienHe" name="lienHe" th:value="${lienHeCu}" autocomplete="email" required
+                        <label class="form-label" for="lienHe">Email hoặc số điện thoại đã đăng ký</label>
+                        <input class="form-control" type="text" id="lienHe" name="lienHe" th:value="${lienHeCu}" autocomplete="email" required
                                placeholder="ten@gmail.com hoặc 09xx xxx xxx" data-thieu="Vui lòng nhập email hoặc số điện thoại đã đăng ký">
                     </div>
-                    <button type="submit" class="nut nut--dac the-tk__gui">Tiếp tục</button>
+                    <button type="submit" class="nut nut--dac the-tk__gui btn">Tiếp tục</button>
                 </form>
                 <p class="the-tk__doi"><a th:href="@{/dang-nhap}">Quay lại đăng nhập</a></p>
             </div>

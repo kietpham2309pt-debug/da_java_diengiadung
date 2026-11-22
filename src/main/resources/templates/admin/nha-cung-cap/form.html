@@ -29,7 +29,7 @@
                         </div>
                     </div>
 
-                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                    <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${thongBaoLoi}" role="alert">
                         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                         <span th:text="${thongBaoLoi}">Có lỗi</span>
                     </p>
@@ -40,33 +40,33 @@
                             <input type="hidden" th:field="*{id}">
 
                             <div class="o-nhap">
-                                <label for="tenNhaCungCap">Tên nhà cung cấp</label>
-                                <input type="text" id="tenNhaCungCap" th:field="*{tenNhaCungCap}" placeholder="VD: Công ty TNHH Bếp Xanh">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenNhaCungCap')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenNhaCungCap')}"></span>
+                                <label class="form-label" for="tenNhaCungCap">Tên nhà cung cấp</label>
+                                <input class="form-control" type="text" id="tenNhaCungCap" th:field="*{tenNhaCungCap}" placeholder="VD: Công ty TNHH Bếp Xanh">
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('tenNhaCungCap')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenNhaCungCap')}"></span>
                             </div>
 
-                            <div class="o-doi">
-                                <div class="o-nhap">
-                                    <label for="soDienThoai">Số điện thoại</label>
-                                    <input type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="VD: 0901234567">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('soDienThoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soDienThoai')}"></span>
+                            <div class="row g-3">
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="soDienThoai">Số điện thoại</label>
+                                    <input class="form-control" type="tel" id="soDienThoai" th:field="*{soDienThoai}" placeholder="VD: 0901234567">
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('soDienThoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soDienThoai')}"></span>
                                 </div>
-                                <div class="o-nhap">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" th:field="*{email}" placeholder="VD: contact@bepxanh.vn">
-                                    <span class="loi-nhap" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
+                                <div class="o-nhap col-md-6">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input class="form-control" type="email" id="email" th:field="*{email}" placeholder="VD: contact@bepxanh.vn">
+                                    <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('email')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'email')}"></span>
                                 </div>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="diaChi">Địa chỉ</label>
-                                <input type="text" id="diaChi" th:field="*{diaChi}" placeholder="VD: 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('diaChi')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'diaChi')}"></span>
+                                <label class="form-label" for="diaChi">Địa chỉ</label>
+                                <input class="form-control" type="text" id="diaChi" th:field="*{diaChi}" placeholder="VD: 140 Lê Trọng Tấn, Tây Thạnh, Tân Phú, TP.HCM">
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('diaChi')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'diaChi')}"></span>
                             </div>
 
                             <div class="hang-nut">
-                                <button class="nut nut--dac" type="submit">Lưu</button>
-                                <a class="nut" th:href="@{/admin/nha-cung-cap}">Quay lại</a>
+                                <button class="nut nut--dac btn" type="submit">Lưu</button>
+                                <a class="nut btn" th:href="@{/admin/nha-cung-cap}">Quay lại</a>
                             </div>
                         </form>
                     </div>

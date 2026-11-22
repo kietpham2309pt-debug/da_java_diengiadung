@@ -7,11 +7,11 @@ import vn.edu.huit.diengiadung.entity.DonHang;
 import vn.edu.huit.diengiadung.entity.KhachHang;
 import vn.edu.huit.diengiadung.entity.SanPham;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.BangGia;
-import vn.edu.huit.diengiadung.model.ChiTietGioHang;
-import vn.edu.huit.diengiadung.model.DongGioHang;
-import vn.edu.huit.diengiadung.model.GioHang;
-import vn.edu.huit.diengiadung.model.ThongTinGiaoHang;
+import vn.edu.huit.diengiadung.dto.BangGia;
+import vn.edu.huit.diengiadung.dto.ChiTietGioHang;
+import vn.edu.huit.diengiadung.dto.DongGioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
+import vn.edu.huit.diengiadung.dto.ThongTinGiaoHang;
 import vn.edu.huit.diengiadung.repository.DonHangRepository;
 import vn.edu.huit.diengiadung.repository.KhachHangRepository;
 import vn.edu.huit.diengiadung.repository.SanPhamRepository;
@@ -26,6 +26,7 @@ import vn.edu.huit.diengiadung.service.UuDaiService;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Service
 public class DatHangServiceImpl implements DatHangService {
@@ -120,8 +121,8 @@ public class DatHangServiceImpl implements DatHangService {
         donHang.setDaThanhToan(false);
 
         Map<SanPham, Long> thanhTienTheoSanPham = new LinkedHashMap<>();
-        for (Map.Entry<Long, Integer> muc : gioHang.getSoLuongTheoSanPham().entrySet()) {
-            SanPham sanPham = duLieuSanPham.findById(muc.getKey())
+        for (Map.Entry<Long, Integer> muc : new TreeMap<>(gioHang.getSoLuongTheoSanPham()).entrySet()) {
+            SanPham sanPham = duLieuSanPham.khoaTheoId(muc.getKey())
                     .filter(SanPham::isDangBan)
                     .orElseThrow(() -> new LoiNghiepVu("Có sản phẩm trong giỏ đã ngừng kinh doanh, hãy kiểm tra lại giỏ hàng"));
             int soLuong = muc.getValue();

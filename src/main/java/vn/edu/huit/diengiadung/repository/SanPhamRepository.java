@@ -3,8 +3,10 @@ package vn.edu.huit.diengiadung.repository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
 import vn.edu.huit.diengiadung.entity.SanPham;
 
 import java.util.List;
@@ -49,6 +51,12 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long>, JpaSpec
     List<SanPham> laySanPhamCungLoai(@Param("idLoai") Long idLoai,
                                      @Param("idBoQua") Long idBoQua,
                                      Pageable gioiHan);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select sp from SanPham sp where sp.id = :id")
+    Optional<SanPham> khoaTheoId(@Param("id") Long id);
+
+    List<SanPham> findTop20ByTenSanPhamContainingIgnoreCaseOrMaSanPhamContainingIgnoreCaseOrderByIdAsc(String ten, String ma);
 
     @Query("select sp from SanPham sp where lower(sp.maSanPham) = lower(:maSanPham)")
     Optional<SanPham> timTheoMaSanPham(@Param("maSanPham") String maSanPham);

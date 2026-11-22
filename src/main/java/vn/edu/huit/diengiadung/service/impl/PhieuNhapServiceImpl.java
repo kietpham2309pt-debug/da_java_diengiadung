@@ -57,7 +57,7 @@ public class PhieuNhapServiceImpl implements PhieuNhapService {
                 throw new LoiNghiepVu("Giá nhập phải lớn hơn 0!");
             }
 
-            SanPham sanPham = sanPhamRepository.findById(chiTiet.getSanPham().getId())
+            SanPham sanPham = sanPhamRepository.khoaTheoId(chiTiet.getSanPham().getId())
                     .orElseThrow(() -> new LoiNghiepVu("Không tìm thấy sản phẩm!"));
 
 

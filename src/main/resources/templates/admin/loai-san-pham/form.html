@@ -27,7 +27,7 @@
                         </div>
                     </div>
 
-                    <p class="thong-bao thong-bao--loi" th:if="${thongBaoLoi}" role="alert">
+                    <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${thongBaoLoi}" role="alert">
                         <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                         <span th:text="${thongBaoLoi}">Có lỗi</span>
                     </p>
@@ -38,30 +38,30 @@
                             <input type="hidden" th:field="*{id}">
 
                             <div class="o-nhap">
-                                <label for="tenLoai">Tên loại</label>
-                                <input type="text" id="tenLoai" th:field="*{tenLoai}" placeholder="Bếp điện từ">
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('tenLoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenLoai')}"></span>
+                                <label class="form-label" for="tenLoai">Tên loại</label>
+                                <input class="form-control" type="text" id="tenLoai" th:field="*{tenLoai}" placeholder="Bếp điện từ">
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('tenLoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'tenLoai')}"></span>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="maLoai">Mã loại</label>
-                                <input type="text" id="maLoai" th:field="*{maLoai}" placeholder="bep-dien-tu">
+                                <label class="form-label" for="maLoai">Mã loại</label>
+                                <input class="form-control" type="text" id="maLoai" th:field="*{maLoai}" placeholder="bep-dien-tu">
                                 <span class="goi-y">Chữ thường không dấu, nối bằng dấu gạch ngang. Mã này chọn icon,
                                     ảnh danh mục <b>/img/sp-&lt;mã&gt;.jpg</b> và ảnh banner <b>/img/banner-&lt;mã&gt;.jpg</b>.
                                     Mã có sẵn ảnh: bep-dien-tu, bep-hong-ngoai, hut-mui, rua-chen, lo-nuong, lo-vi-song.</span>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('maLoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'maLoai')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('maLoai')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'maLoai')}"></span>
                             </div>
 
                             <div class="o-nhap">
-                                <label for="moTa">Mô tả</label>
-                                <textarea id="moTa" rows="3" th:field="*{moTa}"
+                                <label class="form-label" for="moTa">Mô tả</label>
+                                <textarea class="form-control" id="moTa" rows="3" th:field="*{moTa}"
                                           placeholder="Một câu ngắn mô tả nhóm hàng này"></textarea>
-                                <span class="loi-nhap" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
+                                <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('moTa')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'moTa')}"></span>
                             </div>
 
                             <div class="hang-nut">
-                                <button class="nut nut--dac" type="submit">Lưu</button>
-                                <a class="nut" th:href="@{/admin/loai-san-pham}">Quay lại</a>
+                                <button class="nut nut--dac btn" type="submit">Lưu</button>
+                                <a class="nut btn" th:href="@{/admin/loai-san-pham}">Quay lại</a>
                             </div>
                         </form>
                     </div>

@@ -109,8 +109,8 @@
                     <div class="khoi">
                         <h2>Sản phẩm trong đơn</h2>
 
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Sản phẩm</th>
@@ -165,7 +165,7 @@
                         <form th:if="${donHang.choThanhToan}"
                               th:action="@{/admin/don-hang/{id}/da-thanh-toan(id=${donHang.id})}"
                               method="post">
-                            <button class="nut nut--dac" type="submit">
+                            <button class="nut nut--dac btn" type="submit">
                                 Xác nhận đã nhận tiền
                             </button>
                         </form>
@@ -174,7 +174,7 @@
                               th:action="@{/admin/don-hang/{id}/cap-nhat-trang-thai(id=${donHang.id})}"
                               method="post">
                             <input type="hidden" name="trangThai" value="DA_XAC_NHAN">
-                            <button class="nut" type="submit">
+                            <button class="nut btn" type="submit">
                                 Xác nhận đơn hàng
                             </button>
                         </form>
@@ -183,7 +183,7 @@
                               th:action="@{/admin/don-hang/{id}/cap-nhat-trang-thai(id=${donHang.id})}"
                               method="post">
                             <input type="hidden" name="trangThai" value="DANG_GIAO">
-                            <button class="nut" type="submit">
+                            <button class="nut btn" type="submit">
                                 Chuyển sang đang giao
                             </button>
                         </form>
@@ -192,11 +192,11 @@
                               th:action="@{/admin/don-hang/{id}/cap-nhat-trang-thai(id=${donHang.id})}"
                               method="post">
                             <input type="hidden" name="trangThai" value="HOAN_THANH">
-                            <button class="nut" type="submit">
+                            <button class="nut btn" type="submit">
                                 Xác nhận hoàn thành
                             </button>
                         </form>
-                        <button class="nut nut--nho" type="button" data-mo-hop="hop-huy"
+                        <button class="nut nut--nho btn" type="button" data-mo-hop="hop-huy"
                                 th:if="${donHang.trangThai == 'CHO_XAC_NHAN' or donHang.trangThai == 'DA_XAC_NHAN'}">
                             Hủy đơn hàng
                         </button>
@@ -215,10 +215,10 @@
                     </div>
 
                     <p>
-                        <a class="nut nut--nho" th:href="@{/admin/don-hang}">
+                        <a class="nut nut--nho btn" th:href="@{/admin/don-hang}">
                             Quay lại danh sách
                         </a>
-                        <a class="nut nut--nho" th:href="@{/admin/don-hang/{id}/in(id=${donHang.id})}" target="_blank" rel="noopener">
+                        <a class="nut nut--nho btn" th:href="@{/admin/don-hang/{id}/in(id=${donHang.id})}" target="_blank" rel="noopener">
                             In hoá đơn
                         </a>
                     </p>

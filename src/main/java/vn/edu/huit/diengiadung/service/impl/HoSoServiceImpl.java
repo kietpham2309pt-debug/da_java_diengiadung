@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.edu.huit.diengiadung.entity.KhachHang;
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.HoSoKhachHang;
+import vn.edu.huit.diengiadung.dto.HoSoKhachHang;
 import vn.edu.huit.diengiadung.repository.KhachHangRepository;
 import vn.edu.huit.diengiadung.repository.TaiKhoanRepository;
 import vn.edu.huit.diengiadung.service.HoSoService;

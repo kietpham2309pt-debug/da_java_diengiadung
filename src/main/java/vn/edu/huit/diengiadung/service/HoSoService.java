@@ -1,7 +1,7 @@
 package vn.edu.huit.diengiadung.service;
 
 import vn.edu.huit.diengiadung.entity.TaiKhoan;
-import vn.edu.huit.diengiadung.model.HoSoKhachHang;
+import vn.edu.huit.diengiadung.dto.HoSoKhachHang;
 
 public interface HoSoService {
 

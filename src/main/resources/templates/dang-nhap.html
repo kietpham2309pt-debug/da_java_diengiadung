@@ -13,7 +13,7 @@
         <div class="khung khung--hep">
             <div th:replace="~{layout/fragments :: thongBao}"></div>
 
-            <p class="thong-bao thong-bao--loi" th:if="${loiDangNhap}" role="alert">
+            <p class="thong-bao thong-bao--loi alert alert-danger" th:if="${loiDangNhap}" role="alert">
                 <svg class="ic" aria-hidden="true"><use xlink:href="#ic-tn-canh-bao"></use></svg>
                 <span th:text="${loiDangNhap}">Sai tên đăng nhập hoặc mật khẩu</span>
             </p>
@@ -22,18 +22,18 @@
                 <form th:action="@{/dang-nhap}" method="post">
                     <input type="hidden" name="tiepTuc" th:if="${tiepTuc}" th:value="${tiepTuc}">
                     <div class="o-nhap">
-                        <label for="tenDangNhap">Tên đăng nhập</label>
-                        <input type="text" id="tenDangNhap" name="tenDangNhap" required
+                        <label class="form-label" for="tenDangNhap">Tên đăng nhập</label>
+                        <input class="form-control" type="text" id="tenDangNhap" name="tenDangNhap" required
                                autocomplete="username" th:value="${tenDangNhapCu}" placeholder="admin">
                     </div>
 
                     <div class="o-nhap">
-                        <label for="matKhau">Mật khẩu</label>
-                        <input type="password" id="matKhau" name="matKhau" required autocomplete="current-password">
+                        <label class="form-label" for="matKhau">Mật khẩu</label>
+                        <input class="form-control" type="password" id="matKhau" name="matKhau" required autocomplete="current-password">
                         <a class="o-nhap__phu" th:href="@{/quen-mat-khau}">Quên mật khẩu?</a>
                     </div>
 
-                    <button type="submit" class="nut nut--dac the-tk__gui">Đăng nhập</button>
+                    <button type="submit" class="nut nut--dac the-tk__gui btn">Đăng nhập</button>
                 </form>
 
                 <p class="the-tk__doi">

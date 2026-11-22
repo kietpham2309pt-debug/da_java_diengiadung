@@ -1,7 +1,7 @@
 package vn.edu.huit.diengiadung.service;
 
-import vn.edu.huit.diengiadung.model.ChiTietGioHang;
-import vn.edu.huit.diengiadung.model.GioHang;
+import vn.edu.huit.diengiadung.dto.ChiTietGioHang;
+import vn.edu.huit.diengiadung.dto.GioHang;
 
 public interface GioHangService {
 

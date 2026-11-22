@@ -27,7 +27,7 @@
                             <p>Mã khách nhập ở bước thanh toán. Chỉ tài khoản thành viên đã đăng nhập mới dùng được.</p>
                         </div>
                         <div class="qt-dau__nut">
-                            <a class="nut nut--dac nut--nho" th:href="@{/admin/ma-giam-gia/them}">Tạo mã giảm giá</a>
+                            <a class="nut nut--dac nut--nho btn" th:href="@{/admin/ma-giam-gia/them}">Tạo mã giảm giá</a>
                         </div>
                     </div>
 
@@ -46,8 +46,8 @@
                     <div class="thanh-loc">
                         <form th:action="@{/admin/ma-giam-gia}" method="get">
                             <input type="hidden" name="trangThai" th:value="${trangThai}">
-                            <input type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo mã hoặc mô tả..." aria-label="Từ khoá">
-                            <button class="nut nut--nho" type="submit">Tìm</button>
+                            <input class="form-control" type="search" name="tuKhoa" th:value="${tuKhoa}" placeholder="Tìm theo mã hoặc mô tả..." aria-label="Từ khoá">
+                            <button class="nut nut--nho btn" type="submit">Tìm</button>
                         </form>
                     </div>
 
@@ -56,8 +56,8 @@
                     </div>
 
                     <div class="khoi" th:unless="${#lists.isEmpty(danhSach)}">
-                        <div class="cuon-ngang">
-                            <table class="bang-dl">
+                        <div class="cuon-ngang table-responsive">
+                            <table class="bang-dl table table-hover align-middle">
                                 <thead>
                                 <tr>
                                     <th>Mã</th>
@@ -87,13 +87,13 @@
                                     </td>
                                     <td>
                                         <div class="hang-thao-tac qt-doc">
-                                            <a class="nut nut--nho" th:href="@{'/admin/ma-giam-gia/sua/' + ${ma.id}}">Sửa</a>
+                                            <a class="nut nut--nho btn" th:href="@{'/admin/ma-giam-gia/sua/' + ${ma.id}}">Sửa</a>
                                             <form th:action="@{'/admin/ma-giam-gia/doi-trang-thai/' + ${ma.id}}" method="post">
-                                                <button class="nut nut--nho" type="submit" th:text="${ma.hoatDong} ? 'Tạm dừng' : 'Kích hoạt'">Tạm dừng</button>
+                                                <button class="nut nut--nho btn" type="submit" th:text="${ma.hoatDong} ? 'Tạm dừng' : 'Kích hoạt'">Tạm dừng</button>
                                             </form>
                                             <form th:action="@{'/admin/ma-giam-gia/xoa/' + ${ma.id}}" method="post"
                                                   onsubmit="return confirm('Xoá mã giảm giá này?');">
-                                                <button class="nut nut--nho nut--do" type="submit">Xoá</button>
+                                                <button class="nut nut--nho nut--do btn" type="submit">Xoá</button>
                                             </form>
                                         </div>
                                     </td>

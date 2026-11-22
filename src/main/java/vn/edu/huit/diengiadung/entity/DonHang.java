@@ -250,6 +250,9 @@ public class DonHang {
         if (huyBoi == null) {
             return null;
         }
+        if ("HE_THONG".equals(huyBoi)) {
+            return "Hệ thống";
+        }
         return "KHACH".equals(huyBoi) ? "Khách hàng" : "Cửa hàng";
     }
 
