@@ -514,3 +514,43 @@ label{display:revert}
 .pagination.trang{--bs-pagination-padding-x:12px; --bs-pagination-bg:transparent; --bs-pagination-border-color:var(--vien); --bs-pagination-color:var(--chu-nhat); --bs-pagination-hover-bg:transparent; --bs-pagination-hover-color:var(--chu); --bs-pagination-border-radius:0}
 .page-link.trang__nut{margin-left:0; border-radius:0}
 .page-link.trang__nut.dang-chon{background:var(--dong); border-color:var(--dong); color:#231A05}
+
+.dt-form{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px 28px; padding:22px; align-items:end}
+.dt-o{display:grid; gap:8px; min-width:0}
+.dt-o label{font-size:14px; color:var(--chu-nhat)}
+.dt-o label b{color:var(--dong); font-size:16px; margin-left:6px}
+.dt-o input[type=range]{width:100%; accent-color:var(--dong)}
+.dt-che-do{grid-column:1 / -1; border:0; padding:0; margin:0}
+.dt-che-do legend{font-size:14px; color:var(--chu-nhat); margin-bottom:8px}
+.dt-che-do label{display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border:1px solid var(--vien); margin-bottom:8px; cursor:pointer}
+.dt-che-do label:has(input:checked){border-color:var(--dong); background:rgba(203,170,125,.06)}
+.dt-che-do input{accent-color:var(--dong); margin-top:4px}
+.dt-form .nut{grid-column:1 / -1; justify-self:start}
+#dt-ket-qua{margin-top:24px; display:grid; gap:18px}
+#dt-ket-qua[hidden]{display:none}
+.dt-ket-luan{padding:14px 18px; font-size:15px; line-height:1.55; border-left:4px solid}
+.dt-ket-luan--dung{border-color:#3FB950; background:rgba(63,185,80,.09); color:#9BE3A6}
+.dt-ket-luan--sai{border-color:#D9534F; background:rgba(217,83,79,.1); color:#F5A3A0}
+.dt-so{display:grid; grid-template-columns:repeat(5, minmax(0,1fr)); gap:12px}
+.dt-so .khoi{padding:14px 16px; display:grid; gap:6px; margin:0; align-content:start}
+.dt-so span{font-size:12.5px; color:var(--chu-mo)}
+.dt-so b{font-size:28px; font-weight:var(--dam-vua); color:var(--chu)}
+.dt-tieu-de{font-size:17px; font-weight:var(--dam-nhan); padding:16px 18px 4px; margin:0}
+.dt-tieu-de small{font-size:13px; color:var(--chu-mo); font-weight:var(--dam-thuong)}
+.dt-chu-thich{padding:0 18px 10px; font-size:12.5px; color:var(--chu-mo); display:flex; flex-wrap:wrap; align-items:center; gap:6px}
+.dt-mau{display:inline-block; width:12px; height:12px; border-radius:3px}
+.dt-mau--ok, .dt-thanh--ok{background:#3FB950}
+.dt-mau--het, .dt-thanh--het{background:#6e6862}
+.dt-tl{padding:4px 18px 18px; display:grid; gap:6px}
+.dt-hang{display:grid; grid-template-columns:72px minmax(0,1fr) minmax(0,38%); gap:12px; align-items:center; font-size:12.5px}
+.dt-ten{color:var(--chu-nhat); font-family:Consolas, monospace}
+.dt-ray{position:relative; height:14px; background:var(--nen); border-radius:7px}
+.dt-thanh{position:absolute; top:0; bottom:0; border-radius:7px; animation:dt-chay .5s ease}
+.dt-ghi-chu{color:var(--chu-mo); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+@keyframes dt-chay{from{transform:scaleX(0); transform-origin:left}to{transform:scaleX(1)}}
+@media (max-width:760px){
+  .dt-form{grid-template-columns:1fr}
+  .dt-so{grid-template-columns:repeat(2, minmax(0,1fr))}
+  .dt-hang{grid-template-columns:60px minmax(0,1fr)}
+  .dt-ghi-chu{grid-column:1 / -1}
+}

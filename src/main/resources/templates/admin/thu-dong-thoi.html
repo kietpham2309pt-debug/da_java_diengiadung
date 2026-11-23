@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Thử đặt hàng đồng thời', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Thử đồng thời</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('thu-dong-thoi')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Thử đặt hàng đồng thời</h1>
+                            <p>Nhiều khách (mỗi khách một luồng) cùng bấm đặt mua một sản phẩm sắp hết hàng tại cùng một thời điểm.
+                                Hệ thống tạo một sản phẩm tạm, chạy thử, rồi tự xoá sản phẩm và các đơn thử.</p>
+                        </div>
+                    </div>
+
+                    <form class="khoi dt-form" id="dt-form" th:action="@{/admin/thu-dong-thoi/chay}" method="post">
+                        <div class="dt-o">
+                            <label for="soKhach">Số khách cùng mua <b id="soKhach-gt">10</b></label>
+                            <input type="range" id="soKhach" name="soKhach" min="2" max="30" value="10">
+                        </div>
+                        <div class="dt-o">
+                            <label for="tonBanDau">Tồn kho ban đầu <b id="tonBanDau-gt">3</b></label>
+                            <input type="range" id="tonBanDau" name="tonBanDau" min="1" max="10" value="3">
+                        </div>
+                        <fieldset class="dt-o dt-che-do">
+                            <legend>Cách xử lý</legend>
+                            <label><input type="radio" name="coKhoa" value="true" checked>
+                                <span><b>Có khoá dòng</b> (cách hệ thống đang chạy: @Transactional + PESSIMISTIC_WRITE)</span></label>
+                            <label><input type="radio" name="coKhoa" value="false">
+                                <span><b>Không khoá</b> (mô phỏng code chưa xử lý đồng thời: đọc tồn, chờ 40 ms, ghi tồn)</span></label>
+                        </fieldset>
+                        <button type="submit" class="nut nut--dac btn" id="dt-chay">Chạy thử</button>
+                    </form>
+
+                    <div id="dt-ket-qua" hidden>
+                        <div class="dt-ket-luan" id="dt-ket-luan"></div>
+                        <div class="dt-so">
+                            <div class="khoi"><span>Số khách</span><b id="dt-so-khach">0</b></div>
+                            <div class="khoi"><span>Tồn ban đầu</span><b id="dt-ton-dau">0</b></div>
+                            <div class="khoi"><span>Mua thành công</span><b id="dt-thanh-cong">0</b></div>
+                            <div class="khoi"><span>Báo hết hàng</span><b id="dt-het-hang">0</b></div>
+                            <div class="khoi"><span>Tồn cuối trong CSDL</span><b id="dt-ton-cuoi">0</b></div>
+                        </div>
+                        <div class="khoi">
+                            <h2 class="dt-tieu-de">Dòng thời gian từng luồng <small id="dt-tong-ms"></small></h2>
+                            <p class="dt-chu-thich"><span class="dt-mau dt-mau--ok"></span> Mua được
+                                <span class="dt-mau dt-mau--het"></span> Báo hết hàng · Thanh càng dài là luồng càng phải chờ.
+                                Xếp theo thứ tự hoàn thành.</p>
+                            <div class="dt-tl" id="dt-tl"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+<script th:src="@{/js/thu-dong-thoi.js}" defer></script>
+</body>
+</html>

@@ -1,8 +1,12 @@
 package vn.edu.huit.diengiadung.dongthoi;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.EntityManagerHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import vn.edu.huit.diengiadung.dto.GioHang;
 import vn.edu.huit.diengiadung.dto.ThongTinGiaoHang;
 import vn.edu.huit.diengiadung.entity.DonHang;
@@ -45,6 +49,9 @@ class DatHangDongThoiTest extends CoSoKiemThuSqlServer {
     @Autowired
     private DonHangService donHangService;
 
+    @Autowired
+    private EntityManagerFactory nhaMayEntityManager;
+
     @Test
     void haiMuoiKhachCungMuaNamSanPhamCuoiThiChiNamDonThanhCong() throws Exception {
         int tonBanDau = 5;
@@ -85,6 +92,54 @@ class DatHangDongThoiTest extends CoSoKiemThuSqlServer {
         assertEquals(soKhach - tonBanDau, hetHang.get());
         assertEquals(0, tonKho(sp.getId()));
         assertEquals(tonBanDau, sanPhamRepository.demSoDongDonHang(sp.getId()));
+    }
+
+    @Test
+    void khachQuaWebDaXemSanPhamTruocKhiDatThiVanKhongBanVuotTon() throws Exception {
+        int soKhach = 6;
+        SanPham sp = taoSanPham(1, 3_000_000L);
+
+        CountDownLatch daXemXong = new CountDownLatch(soKhach);
+        CountDownLatch cungDat = new CountDownLatch(1);
+        ExecutorService nhom = Executors.newFixedThreadPool(soKhach);
+        AtomicInteger thanhCong = new AtomicInteger();
+        AtomicInteger hetHang = new AtomicInteger();
+        ConcurrentLinkedQueue<Throwable> loiKhac = new ConcurrentLinkedQueue<>();
+        for (int i = 0; i < soKhach; i++) {
+            int stt = i;
+            nhom.execute(() -> {
+                EntityManager phienJpa = nhaMayEntityManager.createEntityManager();
+                TransactionSynchronizationManager.bindResource(nhaMayEntityManager, new EntityManagerHolder(phienJpa));
+                try {
+                    sanPhamRepository.findById(sp.getId()).orElseThrow();
+                    daXemXong.countDown();
+                    cungDat.await();
+                    GioHang gio = new GioHang();
+                    gio.datSoLuong(sp.getId(), 1);
+                    datHangService.datHang(null, gio, thongTin("Khách web " + stt));
+                    thanhCong.incrementAndGet();
+                } catch (LoiNghiepVu e) {
+                    hetHang.incrementAndGet();
+                } catch (Throwable e) {
+                    loiKhac.add(e);
+                } finally {
+                    TransactionSynchronizationManager.unbindResource(nhaMayEntityManager);
+                    phienJpa.close();
+                }
+            });
+        }
+        assertTrue(daXemXong.await(60, TimeUnit.SECONDS));
+        cungDat.countDown();
+        nhom.shutdown();
+        assertTrue(nhom.awaitTermination(120, TimeUnit.SECONDS));
+
+        System.out.printf("Đặt hàng qua web (phiên JPA mở suốt request): %d khách tranh 1 sản phẩm, thành công %d, hết hàng %d, tồn còn %d%n",
+                soKhach, thanhCong.get(), hetHang.get(), tonKho(sp.getId()));
+        assertTrue(loiKhac.isEmpty(), () -> "Có lỗi ngoài dự kiến: " + loiKhac);
+        assertEquals(1, thanhCong.get());
+        assertEquals(soKhach - 1, hetHang.get());
+        assertEquals(0, tonKho(sp.getId()));
+        assertEquals(1, sanPhamRepository.demSoDongDonHang(sp.getId()));
     }
 
     @Test
