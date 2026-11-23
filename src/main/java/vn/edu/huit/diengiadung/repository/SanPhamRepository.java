@@ -3,16 +3,15 @@ package vn.edu.huit.diengiadung.repository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import jakarta.persistence.LockModeType;
 import vn.edu.huit.diengiadung.entity.SanPham;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface SanPhamRepository extends JpaRepository<SanPham, Long>, JpaSpecificationExecutor<SanPham> {
+public interface SanPhamRepository extends JpaRepository<SanPham, Long>, JpaSpecificationExecutor<SanPham>,
+        SanPhamRepositoryKhoa {
 
     List<SanPham> findByDangBanTrueOrderByIdDesc();
 
@@ -52,9 +51,8 @@ public interface SanPhamRepository extends JpaRepository<SanPham, Long>, JpaSpec
                                      @Param("idBoQua") Long idBoQua,
                                      Pageable gioiHan);
 
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select sp from SanPham sp where sp.id = :id")
-    Optional<SanPham> khoaTheoId(@Param("id") Long id);
+    @Query("select sp.soLuongTon from SanPham sp where sp.id = :id")
+    Integer docTonKho(@Param("id") Long id);
 
     List<SanPham> findTop20ByTenSanPhamContainingIgnoreCaseOrMaSanPhamContainingIgnoreCaseOrderByIdAsc(String ten, String ma);
 
