@@ -9,4 +9,7 @@ public interface NhaCungCapRepository extends JpaRepository<NhaCungCap, Long> {
 
     List<NhaCungCap> findAllByOrderByTenNhaCungCapAsc();
     List<NhaCungCap> findByTenNhaCungCapContainingIgnoreCaseOrSoDienThoaiContaining(String ten, String sdt);
+
+    boolean existsBySoDienThoai(String soDienThoai);
+    boolean existsBySoDienThoaiAndIdNot(String soDienThoai, Long id);
 }

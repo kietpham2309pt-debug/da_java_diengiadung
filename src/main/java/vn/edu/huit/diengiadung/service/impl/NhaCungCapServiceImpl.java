@@ -43,9 +43,25 @@ public class NhaCungCapServiceImpl implements NhaCungCapService {
     @Override
     @Transactional
     public NhaCungCap luu(NhaCungCap nhaCungCap) {
+        String sdt = nhaCungCap.getSoDienThoai();
+        if (sdt == null || sdt.trim().isEmpty()) {
+            throw new LoiNghiepVu("Số điện thoại không được để trống.");
+        }
+        sdt = sdt.trim();
+        nhaCungCap.setSoDienThoai(sdt);
+
+        boolean biTrung;
+        if (nhaCungCap.getId() == null) {
+            biTrung = nhaCungCapRepository.existsBySoDienThoai(sdt);
+        } else {
+            biTrung = nhaCungCapRepository.existsBySoDienThoaiAndIdNot(sdt, nhaCungCap.getId());
+        }
+        if (biTrung) {
+            throw new LoiNghiepVu("Số điện thoại \"" + sdt + "\" đã được sử dụng cho nhà cung cấp khác.");
+        }
+
         return nhaCungCapRepository.save(nhaCungCap);
     }
-
     @Override
     @Transactional
     public void xoa(Long id) {

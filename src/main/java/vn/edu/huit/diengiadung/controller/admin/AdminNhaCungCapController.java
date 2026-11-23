@@ -49,11 +49,18 @@ public class AdminNhaCungCapController {
     }
 
     @PostMapping("/luu")
-    public String luu(@Valid @ModelAttribute("nhaCungCap") NhaCungCap nhaCungCap, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String luu(@Valid @ModelAttribute("nhaCungCap") NhaCungCap nhaCungCap,
+                      BindingResult bindingResult,
+                      RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return "admin/nha-cung-cap/form";
         }
-        nhaCungCapService.luu(nhaCungCap);
+        try {
+            nhaCungCapService.luu(nhaCungCap);
+        } catch (LoiNghiepVu loi) {
+            bindingResult.rejectValue("soDienThoai", "trungSoDienThoai", loi.getMessage());
+            return "admin/nha-cung-cap/form";
+        }
         redirectAttributes.addFlashAttribute("thongBao", "Đã lưu thông tin nhà cung cấp.");
         return "redirect:/admin/nha-cung-cap";
     }
