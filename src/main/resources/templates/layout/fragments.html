@@ -44,6 +44,7 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/site.css}">
     <link rel="stylesheet" th:href="@{/css/ung-dung.css}">
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
 </head>
 <body>
 
@@ -147,12 +148,18 @@
     <a th:href="@{/admin/ma-giam-gia}" th:classappend="${trang == 'ma-giam-gia'} ? 'dang-chon'">Mã giảm giá</a>
     <a th:href="@{/admin/danh-gia}" th:classappend="${trang == 'danh-gia'} ? 'dang-chon'">Đánh giá</a>
     <a th:href="@{/admin/khach-hang}" th:classappend="${trang == 'khach-hang'} ? 'dang-chon'">Khách hàng</a>
+    <a th:href="@{/admin/khach-hang/tin-nhan}" th:classappend="${trang == 'tin-nhan'} ? 'dang-chon'">Tin nhắn tư vấn
+        <span class="qt-ben__so" id="qt-so-tin" th:hidden="${soTinChoTuVan == null or soTinChoTuVan == 0}"
+              th:text="${soTinChoTuVan != null and soTinChoTuVan > 99 ? '99+' : soTinChoTuVan}">0</span>
+    </a>
     <a th:href="@{/admin/thong-ke}" th:classappend="${trang == 'thong-ke'} ? 'dang-chon'">Thống kê</a>
     <a th:href="@{/admin/tai-khoan}" th:classappend="${trang == 'tai-khoan'} ? 'dang-chon'">Tài khoản</a>
     <span class="qt-ben__nhan">Kho hàng</span>
     <a th:href="@{/admin/nha-cung-cap}" th:classappend="${trang == 'nha-cung-cap'} ? 'dang-chon'">Nhà cung cấp</a>
     <a th:href="@{/admin/phieu-nhap}" th:classappend="${trang == 'phieu-nhap'} ? 'dang-chon'">Phiếu nhập</a>
     <a th:href="@{/admin/canh-bao}" th:classappend="${trang == 'canh-bao'} ? 'dang-chon'">Sắp hết hàng</a>
+    <script th:src="@{/js/chat-chung.js}" defer></script>
+    <script th:src="@{/js/chat-quan-tri.js}" defer></script>
 </nav>
 
 <div th:fragment="tomTatLoi" class="tom-tat-loi" role="alert" tabindex="-1" data-tom-tat-loi
@@ -289,6 +296,12 @@
     <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}" defer></script>
     <script th:src="@{/js/site.js}"></script>
     <script th:src="@{/js/chung.js}"></script>
+
+    <th:block th:if="${taiKhoanHienTai == null or !taiKhoanHienTai.laQuanTri()}">
+        <div th:replace="~{layout/chat :: hoTroChat}"></div>
+        <script th:src="@{/js/chat-chung.js}" defer></script>
+        <script th:src="@{/js/chat.js}" defer></script>
+    </th:block>
 </div>
 
 </body>

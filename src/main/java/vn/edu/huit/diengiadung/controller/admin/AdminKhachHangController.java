@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import vn.edu.huit.diengiadung.service.ChatService;
 import vn.edu.huit.diengiadung.service.KhachHangService;
 
 @Controller
@@ -12,9 +13,11 @@ import vn.edu.huit.diengiadung.service.KhachHangService;
 public class AdminKhachHangController {
 
     private final KhachHangService khachHangService;
+    private final ChatService chatService;
 
-    public AdminKhachHangController(KhachHangService khachHangService) {
+    public AdminKhachHangController(KhachHangService khachHangService, ChatService chatService) {
         this.khachHangService = khachHangService;
+        this.chatService = chatService;
     }
 
     @GetMapping
@@ -24,6 +27,7 @@ public class AdminKhachHangController {
 
         model.addAttribute("danhSach", khachHangService.timKiem(tuKhoa));
         model.addAttribute("tuKhoa", tuKhoa);
+        model.addAttribute("phienChat", chatService.phienTheoKhachHang());
 
         return "admin/khach-hang/danh-sach";
     }

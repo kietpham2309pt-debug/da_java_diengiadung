@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Tin nhắn tư vấn', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin/khach-hang}">Khách hàng</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Tin nhắn tư vấn</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('tin-nhan')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Tin nhắn tư vấn</h1>
+                            <p>Khách bấm "Gặp nhân viên tư vấn" ở khung chat sẽ hiện ở đây, số đỏ là số tin đang chờ trả lời.</p>
+                        </div>
+                        <div class="tn-loc" role="group" aria-label="Lọc cuộc trò chuyện">
+                            <a class="nut nut--nho btn" th:href="@{/admin/khach-hang}">Danh sách khách hàng</a>
+                        </div>
+                    </div>
+
+                    <div class="tn" id="tn" th:attr="data-phien=${phienDangMo}">
+                        <aside class="tn-ds" aria-label="Danh sách cuộc trò chuyện">
+                            <div class="tn-ds__dau">
+                                <input type="search" id="tn-tim" placeholder="Tìm tên hoặc số điện thoại"
+                                       aria-label="Tìm cuộc trò chuyện">
+                                <div class="tn-loc" role="group" aria-label="Lọc">
+                                    <button type="button" class="dang-chon" data-loc="tat-ca">Tất cả</button>
+                                    <button type="button" data-loc="can-tu-van">Cần tư vấn</button>
+                                </div>
+                            </div>
+                            <div class="tn-ds__than" id="tn-ds-than">
+                                <div class="tn-trong">Đang tải...</div>
+                            </div>
+                        </aside>
+
+                        <div class="tn-khung">
+                            <div class="tn-khung__trong" id="tn-khung-trong">
+                                <div>
+                                    <p>Chọn một cuộc trò chuyện ở bên trái để bắt đầu tư vấn.</p>
+                                    <p>Có tổng cộng <b th:text="${#lists.size(danhSachPhien)}">0</b> cuộc trò chuyện.</p>
+                                </div>
+                            </div>
+
+                            <div class="tn-khung" id="tn-khung-chat" hidden style="flex:1">
+                                <header class="tn-dau">
+                                    <div class="cb-dau__anh">
+                                        <span class="cb-anh" id="tn-anh" aria-hidden="true">?</span>
+                                        <span class="cb-cham" id="tn-cham" aria-hidden="true"></span>
+                                    </div>
+                                    <div class="tn-dau__chu">
+                                        <div class="cb-dau__ten" id="tn-ten">Khách hàng</div>
+                                        <div class="cb-dau__phu" id="tn-phu"></div>
+                                    </div>
+                                    <div class="tn-dau__nut">
+                                        <a class="nut nut--nho btn" id="tn-lien-ket-khach" href="#" hidden>Hồ sơ khách</a>
+                                        <button type="button" class="nut nut--nho btn" id="tn-ket-thuc" hidden>Kết thúc tư vấn</button>
+                                    </div>
+                                </header>
+                                <div class="cb-than" id="tn-than" aria-live="polite"></div>
+                                <div class="cb-dang-go" id="tn-dang-go" hidden>
+                                    <span class="cb-ba-cham" aria-hidden="true"><i></i><i></i><i></i></span>
+                                    <span>Khách đang soạn tin</span>
+                                </div>
+                                <div class="tn-nhanh" id="tn-nhanh" aria-label="Tin nhắn nhanh">
+                                    <button type="button" class="cb-chip" data-mau="Dạ em chào anh/chị, em là nhân viên tư vấn của Bep Nè. Anh/chị cần em hỗ trợ gì ạ?">Chào khách</button>
+                                    <button type="button" class="cb-chip" data-mau="Anh/chị vui lòng cho em xin mã đơn hàng (dạng BN000123) để em kiểm tra giúp ạ.">Xin mã đơn</button>
+                                    <button type="button" class="cb-chip" data-mau="Anh/chị cho em xin diện tích bếp và ngân sách dự kiến, em tư vấn sản phẩm phù hợp nhất ạ.">Hỏi nhu cầu</button>
+                                    <button type="button" class="cb-chip" data-mau="Em đã kiểm tra, đơn của anh/chị đang được xử lý, nhân viên giao hàng sẽ gọi trước khi giao ạ.">Đơn đang xử lý</button>
+                                    <button type="button" class="cb-chip" data-mau="Cảm ơn anh/chị đã liên hệ Bep Nè. Nếu cần thêm hỗ trợ, anh/chị cứ nhắn em nhé!">Cảm ơn</button>
+                                </div>
+                                <form class="cb-nhap" id="tn-form" autocomplete="off">
+                                    <textarea id="tn-o-nhap" rows="1" maxlength="1000" placeholder="Nhập câu trả lời cho khách..."
+                                              aria-label="Nội dung trả lời"></textarea>
+                                    <button type="submit" class="cb-gui" id="tn-gui" aria-label="Gửi" disabled>
+                                        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3.39 10.1 15 12 3.39 13.9z"/></svg>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

@@ -451,3 +451,44 @@ GO
 
 ALTER TABLE [dbo].[san_pham_yeu_thich] CHECK CONSTRAINT [FKqsxfxu1rxpucxpnvm1a293a5y]
 GO
+
+CREATE TABLE [dbo].[phien_chat](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[cap_nhat_luc] [datetime2](6) NULL,
+	[ma_khach] [nvarchar](64) NULL,
+	[ngay_tao] [datetime2](6) NULL,
+	[so_chua_doc_khach] [int] NOT NULL,
+	[so_chua_doc_quan_tri] [int] NOT NULL,
+	[so_dien_thoai] [nvarchar](20) NULL,
+	[ten_khach] [nvarchar](80) NULL,
+	[ten_nhan_vien] [nvarchar](80) NULL,
+	[trang_thai] [nvarchar](20) NOT NULL,
+	[khach_hang_id] [bigint] NULL,
+PRIMARY KEY CLUSTERED ([id] ASC)
+) ON [PRIMARY]
+GO
+
+CREATE UNIQUE NONCLUSTERED INDEX [UKag9mow9ubpm1qmvm91mg9vcn0] ON [dbo].[phien_chat] ([ma_khach] ASC)
+WHERE ([ma_khach] IS NOT NULL)
+GO
+
+CREATE TABLE [dbo].[tin_nhan_chat](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[can_thong_tin] [bit] NOT NULL,
+	[goiy] [nvarchar](500) NULL,
+	[nguoi_gui] [nvarchar](20) NOT NULL,
+	[noi_dung] [nvarchar](2000) NOT NULL,
+	[ten_nguoi_gui] [nvarchar](80) NULL,
+	[thoi_gian] [datetime2](6) NULL,
+	[phien_chat_id] [bigint] NOT NULL,
+PRIMARY KEY CLUSTERED ([id] ASC)
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[phien_chat]  WITH CHECK ADD  CONSTRAINT [FKmj7nkflrgf7mnett2tpqyr2wa] FOREIGN KEY([khach_hang_id])
+REFERENCES [dbo].[khach_hang] ([id])
+GO
+
+ALTER TABLE [dbo].[tin_nhan_chat]  WITH CHECK ADD  CONSTRAINT [FKq24py5y3oju1lq4y92caowv9x] FOREIGN KEY([phien_chat_id])
+REFERENCES [dbo].[phien_chat] ([id])
+GO

@@ -26,6 +26,10 @@
                             <h1>Quản lý khách hàng</h1>
                             <p>Danh sách và thông tin liên hệ của khách hàng.</p>
                         </div>
+                        <a class="nut nut--nho btn kh-chat" th:href="@{/admin/khach-hang/tin-nhan}">
+                            Tin nhắn tư vấn
+                            <span class="tn-so" th:if="${soTinChoTuVan > 0}" th:text="${soTinChoTuVan}">2</span>
+                        </a>
                     </div>
 
                     <div class="thanh-loc">
@@ -52,6 +56,7 @@
                                     <th>Số điện thoại</th>
                                     <th>Email</th>
                                     <th>Địa chỉ</th>
+                                    <th>Tư vấn</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -61,6 +66,15 @@
                                     <td th:text="${kh.soDienThoai != null and !kh.soDienThoai.isBlank() ? kh.soDienThoai : 'Chưa cập nhật'}">0900000000</td>
                                     <td th:text="${kh.email != null and !kh.email.isBlank() ? kh.email : 'Chưa cập nhật'}">email@example.com</td>
                                     <td th:text="${kh.diaChi != null and !kh.diaChi.isBlank() ? kh.diaChi : 'Chưa cập nhật'}">TP. Hồ Chí Minh</td>
+                                    <td th:with="pc=${phienChat[kh.id]}">
+                                        <a class="nut nut--nho btn kh-chat"
+                                           th:href="${pc != null} ? @{/admin/khach-hang/tin-nhan(phien=${pc.id})} : @{/admin/khach-hang/tin-nhan(khachHang=${kh.id})}"
+                                           th:attr="aria-label='Nhắn tin với ' + ${kh.hoTen}">
+                                            Nhắn tin
+                                            <span class="tn-so" th:if="${pc != null and pc.soChuaDocQuanTri > 0}"
+                                                  th:text="${pc.soChuaDocQuanTri}">1</span>
+                                        </a>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
