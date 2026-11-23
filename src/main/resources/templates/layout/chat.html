@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="hoTroChat" class="ho-tro" id="ho-tro" th:attr="data-ten=${taiKhoanHienTai != null ? taiKhoanHienTai.hoTen : ''}">
+    <button type="button" class="ho-tro__bong" id="ho-tro-bong" aria-label="Mở khung chat hỗ trợ" aria-expanded="false"
+            aria-controls="ho-tro-khung">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 3C6.48 3 2 6.97 2 11.86c0 2.6 1.27 4.94 3.3 6.56-.1 1.05-.5 2.33-1.45 3.4a.5.5 0 0 0 .42.83c1.87-.13 3.43-.86 4.47-1.52 1 .27 2.08.42 3.26.42 5.52 0 10-3.97 10-8.86S17.52 3 12 3Zm-4.5 10.1a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4.5 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Zm4.5 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6Z"/>
+        </svg>
+        <span class="ho-tro__so" id="ho-tro-so" hidden>0</span>
+    </button>
+    <div class="ho-tro__goi" id="ho-tro-goi" role="tooltip">
+        <strong>Bạn cần hỗ trợ?</strong>
+        <span>Nhắn cho Bep Nè, trợ lý trả lời ngay và nhân viên sẵn sàng tư vấn.</span>
+    </div>
+
+    <section class="ho-tro__khung" id="ho-tro-khung" role="dialog" aria-label="Chat hỗ trợ Bep Nè" hidden>
+        <header class="cb-dau">
+            <div class="cb-dau__anh">
+                <span class="cb-anh" id="ho-tro-anh" aria-hidden="true">B</span>
+                <span class="cb-cham" aria-hidden="true"></span>
+            </div>
+            <div class="cb-dau__chu">
+                <div class="cb-dau__ten" id="ho-tro-ten">Bep Nè hỗ trợ</div>
+                <div class="cb-dau__phu" id="ho-tro-phu">Trợ lý tự động · Trả lời ngay</div>
+            </div>
+            <button type="button" class="cb-nut" id="ho-tro-thu" aria-label="Thu nhỏ khung chat">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/></svg>
+            </button>
+        </header>
+
+        <p class="cb-ket-noi" id="ho-tro-ket-noi" hidden>Mất kết nối, đang thử kết nối lại...</p>
+        <div class="cb-than" id="ho-tro-than" aria-live="polite"></div>
+        <div class="cb-dang-go" id="ho-tro-dang-go" hidden>
+            <span class="cb-ba-cham" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span id="ho-tro-dang-go-chu">Đang soạn tin</span>
+        </div>
+        <div class="cb-goi-y" id="ho-tro-goi-y" aria-label="Gợi ý câu hỏi"></div>
+
+        <form class="cb-nhap" id="ho-tro-form" autocomplete="off">
+            <textarea id="ho-tro-o-nhap" rows="1" maxlength="1000" placeholder="Nhập tin nhắn..."
+                      aria-label="Nội dung tin nhắn"></textarea>
+            <button type="submit" class="cb-gui" id="ho-tro-gui" aria-label="Gửi tin nhắn" disabled>
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.4 20.4 21 12 3.4 3.6 3.39 10.1 15 12 3.39 13.9z"/></svg>
+            </button>
+        </form>
+        <div class="cb-chan">Bep Nè · Nhân viên trực 8:00 tới 21:00 hằng ngày</div>
+    </section>
+</div>
+</body>
+</html>
