@@ -214,6 +214,77 @@
                         </p>
                     </div>
 
+                    <div class="khoi" id="van-chuyen-ghn">
+                        <h2>Vận chuyển GHN
+                            <span class="the-nhan the-nhan--vang" th:if="${ghn.bat and ghn.moiTruongThu}">Môi trường thử</span></h2>
+                        <p th:unless="${ghn.bat}" class="goi-y">Chưa bật kết nối GHN. Khai báo <code>ghn.bat=true</code>, <code>ghn.token</code>
+                            và <code>ghn.shop-id</code> trong file <code>tich-hop.properties</code> rồi chạy lại web
+                            (xem <code>docs/HUONG_DAN_SEPAY_GHN.md</code>).</p>
+                        <th:block th:if="${ghn.bat}">
+                            <p th:unless="${ghn.sanSang}" class="goi-y">Đã bật GHN nhưng còn thiếu <code>ghn.token</code> hoặc <code>ghn.shop-id</code>.</p>
+                            <p>
+                                <strong>Mã vận đơn:</strong>
+                                <span th:text="${donHang.maVanDon != null ? donHang.maVanDon : 'Chưa tạo'}">Chưa tạo</span>
+                            </p>
+                            <p th:if="${donHang.maVanDon != null}">
+                                <strong>Trạng thái GHN:</strong>
+                                <span class="the-nhan" th:classappend="${donHang.trangThaiVanChuyen == 'delivered'} ? ' the-nhan--ok' : (${donHang.trangThaiVanChuyen == 'cancel'} ? ' the-nhan--do' : '')"
+                                      th:text="${donHang.tenTrangThaiVanChuyen}">Chờ lấy hàng</span>
+                                <span class="goi-y" th:if="${donHang.capNhatVanChuyen != null}"
+                                      th:text="'Cập nhật lúc ' + ${#temporals.format(donHang.capNhatVanChuyen, 'dd/MM/yyyy HH:mm')}"></span>
+                            </p>
+                            <p th:if="${donHang.phiVanChuyen != null}">
+                                <strong>Phí GHN (cửa hàng trả):</strong>
+                                <span th:text="${#numbers.formatInteger(donHang.phiVanChuyen, 1, 'POINT')} + ' ₫'">0 ₫</span>
+                            </p>
+                            <p th:if="${donHang.ngayGiaoDuKien != null}">
+                                <strong>Dự kiến giao:</strong>
+                                <span th:text="${#temporals.format(donHang.ngayGiaoDuKien, 'dd/MM/yyyy')}">01/01/2026</span>
+                            </p>
+                            <p th:if="${!donHang.coVanDon and donHang.trangThai != 'DA_XAC_NHAN'}" class="goi-y">
+                                Chỉ tạo vận đơn khi đơn ở trạng thái «Đã xác nhận».</p>
+                            <div th:if="${donHang.trangThai == 'DA_XAC_NHAN' and !donHang.coVanDon}">
+                                <form th:action="@{/admin/don-hang/{id}/ghn/xem-phi(id=${donHang.id})}" method="post" style="display:inline">
+                                    <button class="nut nut--nho btn" type="submit">Xem phí GHN</button>
+                                </form>
+                                <form th:action="@{/admin/don-hang/{id}/ghn/tao(id=${donHang.id})}" method="post" style="display:inline">
+                                    <button class="nut nut--dac nut--nho btn" type="submit">Tạo vận đơn GHN</button>
+                                </form>
+                            </div>
+                            <div th:if="${donHang.maVanDon != null}">
+                                <form th:action="@{/admin/don-hang/{id}/ghn/dong-bo(id=${donHang.id})}" method="post" style="display:inline">
+                                    <button class="nut nut--nho btn" type="submit">Cập nhật trạng thái từ GHN</button>
+                                </form>
+                                <form th:if="${donHang.coVanDon}" th:action="@{/admin/don-hang/{id}/ghn/huy(id=${donHang.id})}" method="post" style="display:inline">
+                                    <button class="nut nut--nho btn" type="submit">Huỷ vận đơn GHN</button>
+                                </form>
+                            </div>
+                        </th:block>
+                    </div>
+
+                    <div class="khoi" th:if="${donHang.thanhToanTruoc}" id="giao-dich-sepay">
+                        <h2>Giao dịch chuyển khoản (SePay)</h2>
+                        <p th:unless="${sePay.bat}" class="goi-y">Chưa bật SePay: đang xác nhận tiền thủ công bằng nút «Xác nhận đã nhận tiền».</p>
+                        <p th:if="${sePay.bat and #lists.isEmpty(dsGiaoDichSePay)}" class="goi-y">Chưa nhận được giao dịch nào có nội dung
+                            <b th:text="${donHang.maDon}">BN000001</b>.</p>
+                        <div class="cuon-ngang table-responsive" th:unless="${#lists.isEmpty(dsGiaoDichSePay)}">
+                            <table class="bang-dl table align-middle">
+                                <thead>
+                                <tr><th>Mã GD</th><th>Thời gian</th><th class="canh-phai">Số tiền</th><th>Nội dung</th><th>Kết quả</th></tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="gd : ${dsGiaoDichSePay}">
+                                    <td th:text="${gd.maGiaoDich}">1</td>
+                                    <td th:text="${gd.thoiGianGiaoDich}">2026-01-01 10:00:00</td>
+                                    <td class="canh-phai" th:text="${#numbers.formatInteger(gd.soTien, 1, 'POINT')} + ' ₫'">0 ₫</td>
+                                    <td th:text="${gd.noiDung}">BN000001</td>
+                                    <td th:text="${gd.ketQua}">Đã xác nhận</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <p>
                         <a class="nut nut--nho btn" th:href="@{/admin/don-hang}">
                             Quay lại danh sách

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout/fragments :: dauTrang('Giao dịch SePay', false)}"></head>
+<body>
+<div th:replace="~{layout/bo-icon :: boIcon}"></div>
+<div class="luoi-chuyen" id="luoi-chuyen" aria-hidden="true"></div>
+<div th:replace="~{layout/fragments :: thanh}"></div>
+
+<main>
+    <section class="muc muc--dau-trang">
+        <div class="khung">
+            <nav class="duong-dan" aria-label="Đường dẫn phân cấp">
+                <a th:href="@{/}">Trang chủ</a>
+                <span aria-hidden="true">&middot;</span>
+                <a th:href="@{/admin}">Quản trị</a>
+                <span aria-hidden="true">&middot;</span>
+                <span aria-current="page">Giao dịch SePay</span>
+            </nav>
+
+            <div class="qt">
+                <div th:replace="~{layout/fragments :: menuQuanTri('giao-dich-sepay')}"></div>
+
+                <div>
+                    <div class="qt-dau">
+                        <div>
+                            <h1>Giao dịch SePay</h1>
+                            <p>100 giao dịch chuyển khoản gần nhất SePay báo về qua webhook, kể cả giao dịch không khớp đơn nào.</p>
+                        </div>
+                    </div>
+
+                    <p th:unless="${sePay.bat}" class="goi-y">SePay đang tắt (<code>sepay.bat=false</code>). Xem
+                        <code>docs/HUONG_DAN_SEPAY_GHN.md</code> để bật.</p>
+
+                    <div class="khoi">
+                        <p th:if="${#lists.isEmpty(dsGiaoDich)}">Chưa có giao dịch nào.</p>
+                        <div class="cuon-ngang table-responsive" th:unless="${#lists.isEmpty(dsGiaoDich)}">
+                            <table class="bang-dl table table-hover align-middle">
+                                <thead>
+                                <tr>
+                                    <th>Mã GD</th>
+                                    <th>Nhận lúc</th>
+                                    <th>Ngân hàng</th>
+                                    <th class="canh-phai">Số tiền</th>
+                                    <th>Nội dung</th>
+                                    <th>Đơn</th>
+                                    <th>Kết quả</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="gd : ${dsGiaoDich}">
+                                    <td th:text="${gd.maGiaoDich}">1</td>
+                                    <td th:text="${#temporals.format(gd.nhanLuc, 'dd/MM HH:mm:ss')}">01/01 10:00</td>
+                                    <td th:text="${gd.nganHang}">MBBank</td>
+                                    <td class="canh-phai" th:text="${(gd.loai == 'out' ? '-' : '') + #numbers.formatInteger(gd.soTien, 1, 'POINT')} + ' ₫'">0 ₫</td>
+                                    <td th:text="${gd.noiDung}">BN000001</td>
+                                    <td>
+                                        <a th:if="${gd.donHang != null}" th:href="@{/admin/don-hang/{id}(id=${gd.donHang.id})}"
+                                           th:text="${gd.donHang.maDon}">BN000001</a>
+                                        <span th:if="${gd.donHang == null}">-</span>
+                                    </td>
+                                    <td>
+                                        <span class="the-nhan" th:classappend="${gd.daGhiNhan} ? ' the-nhan--ok' : ' the-nhan--vang'"
+                                              th:text="${gd.ketQua}">Đã xác nhận</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="~{layout/fragments :: chanTrang}"></div>
+<div th:replace="~{layout/fragments :: menuNho}"></div>
+</body>
+</html>

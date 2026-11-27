@@ -235,6 +235,13 @@ Biến môi trường dùng được: `DB_URL`, `DB_USER`, `DB_PASS`, `PORT`, `T
 `mvnw test` chạy 23 ca: 18 unit test (lọc sản phẩm, thực thể, giỏ hàng, tài khoản, ưu đãi) và 5 kiểm thử tích hợp
 đồng thời và mạng trên SQL Server (tự tạo CSDL `dien_gia_dung_test`, login cần quyền `dbcreator`).
 
+## Kết nối SePay và GHN (môi trường thử)
+
+- **SePay Test mode:** webhook `POST /api/thanh-toan/sepay` tự xác nhận đơn chuyển khoản khi nội dung có mã `BNxxxxxx`.
+- **GHN staging:** tạo, huỷ và đồng bộ vận đơn ngay trong trang chi tiết đơn của admin. Webhook nhận ở `POST /api/van-chuyen/ghn`.
+- **Mặc định cả hai đều tắt.** Muốn bật, sao chép `tich-hop.mau.properties` thành `tich-hop.properties` rồi điền khoá. File này không đưa lên git.
+- Hướng dẫn từng bước cho thành viên: `docs/HUONG_DAN_SEPAY_GHN.md`.
+
 ## Quy ước làm việc
 
 - Nhánh riêng cho từng chức năng: `tvX-ten-chuc-nang`, không đẩy thẳng lên `main`.

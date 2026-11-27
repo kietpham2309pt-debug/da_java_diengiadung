@@ -12,6 +12,8 @@ public interface DonHangRepository extends JpaRepository<DonHang, Long> {
 
     List<DonHang> findByTrangThaiOrderByNgayDatDesc(String trangThai);
 
+    java.util.Optional<DonHang> findByMaVanDon(String maVanDon);
+
     List<DonHang> findByKhachHangIdOrderByNgayDatDesc(Long khachHangId);
 
     long countByTrangThai(String trangThai);

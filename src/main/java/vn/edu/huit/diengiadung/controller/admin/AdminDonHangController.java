@@ -17,6 +17,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import vn.edu.huit.diengiadung.service.LoiNghiepVu;
 import vn.edu.huit.diengiadung.service.LyDoHuyDon;
+import vn.edu.huit.diengiadung.repository.GiaoDichSePayRepository;
+import vn.edu.huit.diengiadung.tichhop.CauHinhGhn;
+import vn.edu.huit.diengiadung.tichhop.CauHinhSePay;
 
 @Controller
 @RequestMapping("/admin/don-hang")
@@ -25,9 +28,23 @@ public class AdminDonHangController {
     private static final int SO_DON_MOI_TRANG = 15;
 
     private final DonHangService donHangService;
+    private final GiaoDichSePayRepository giaoDichSePayRepository;
+    private final CauHinhGhn cauHinhGhn;
+    private final CauHinhSePay cauHinhSePay;
 
-    public AdminDonHangController(DonHangService donHangService) {
+    public AdminDonHangController(DonHangService donHangService, GiaoDichSePayRepository giaoDichSePayRepository,
+                                  CauHinhGhn cauHinhGhn, CauHinhSePay cauHinhSePay) {
         this.donHangService = donHangService;
+        this.giaoDichSePayRepository = giaoDichSePayRepository;
+        this.cauHinhGhn = cauHinhGhn;
+        this.cauHinhSePay = cauHinhSePay;
+    }
+
+    @GetMapping("/giao-dich-sepay")
+    public String giaoDichSePay(Model model) {
+        model.addAttribute("dsGiaoDich", giaoDichSePayRepository.findTop100ByOrderByNhanLucDesc());
+        model.addAttribute("sePay", cauHinhSePay);
+        return "admin/don-hang/giao-dich-sepay";
     }
 
     @GetMapping
@@ -75,6 +92,9 @@ public class AdminDonHangController {
         try {
             model.addAttribute("donHang", donHangService.layTheoId(id));
             model.addAttribute("dsLyDoHuy", LyDoHuyDon.CUA_CUA_HANG);
+            model.addAttribute("ghn", cauHinhGhn);
+            model.addAttribute("sePay", cauHinhSePay);
+            model.addAttribute("dsGiaoDichSePay", giaoDichSePayRepository.findByDonHangIdOrderByNhanLucDesc(id));
             return "admin/don-hang/chi-tiet";
         } catch (LoiNghiepVu loi) {
             thongBao.addFlashAttribute("thongBaoLoi", loi.getMessage());
