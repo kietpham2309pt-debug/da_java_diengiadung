@@ -99,8 +99,11 @@
                             <div class="row g-3">
                                 <div class="o-nhap col-md-6">
                                     <label class="form-label" for="soLuongTon">Số lượng tồn</label>
-                                    <input class="form-control" type="number" id="soLuongTon" th:field="*{soLuongTon}" min="0">
-                                    <span class="goi-y">Sau này tăng tự động khi lập phiếu nhập kho.</span>
+                                    <input class="form-control" type="number" id="soLuongTon" th:if="${sanPham.id == null}"
+                                           value="0" readonly aria-describedby="goiYTon">
+                                    <input class="form-control" type="number" id="soLuongTon" th:if="${sanPham.id != null}"
+                                           th:field="*{soLuongTon}" min="0" aria-describedby="goiYTon">
+                                    <span class="goi-y" id="goiYTon" th:text="${sanPham.id == null} ? 'Sản phẩm mới luôn bắt đầu với 0, tồn kho tăng khi lập phiếu nhập kho.' : 'Tồn kho tăng tự động khi lập phiếu nhập kho.'">Sản phẩm mới luôn bắt đầu với 0.</span>
                                     <span class="loi-nhap invalid-feedback d-block" th:if="${#fields.hasErrors('soLuongTon')}" th:text="${@tomTatLoi.thongBaoCua(#fields.detailedErrors(), 'soLuongTon')}"></span>
                                 </div>
                                 <div class="o-nhap col-md-6">
