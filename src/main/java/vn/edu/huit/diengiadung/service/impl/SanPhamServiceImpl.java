@@ -118,6 +118,10 @@ public class SanPhamServiceImpl implements SanPhamService {
             kiemTraTepAnh(tepAnh);
         }
 
+        if (sanPham.getId() == null) {
+            sanPham.setSoLuongTon(0);
+        }
+
         String anhCu = null;
         String anhPhuCu = null;
         if (sanPham.getId() != null) {
