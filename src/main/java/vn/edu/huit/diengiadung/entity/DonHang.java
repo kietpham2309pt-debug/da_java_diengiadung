@@ -75,6 +75,18 @@ public class DonHang {
     @Column(length = 500)
     private String ghiChu;
 
+    @Column(length = 30)
+    private String maVanDon;
+
+    @Column(length = 40)
+    private String trangThaiVanChuyen;
+
+    private Long phiVanChuyen;
+
+    private LocalDateTime ngayGiaoDuKien;
+
+    private LocalDateTime capNhatVanChuyen;
+
     @ManyToOne
     @JoinColumn(name = "khach_hang_id")
     private KhachHang khachHang;
@@ -298,6 +310,54 @@ public class DonHang {
 
     public void setGhiChu(String ghiChu) {
         this.ghiChu = ghiChu;
+    }
+
+    public String getMaVanDon() {
+        return maVanDon;
+    }
+
+    public void setMaVanDon(String maVanDon) {
+        this.maVanDon = maVanDon;
+    }
+
+    public String getTrangThaiVanChuyen() {
+        return trangThaiVanChuyen;
+    }
+
+    public void setTrangThaiVanChuyen(String trangThaiVanChuyen) {
+        this.trangThaiVanChuyen = trangThaiVanChuyen;
+    }
+
+    public Long getPhiVanChuyen() {
+        return phiVanChuyen;
+    }
+
+    public void setPhiVanChuyen(Long phiVanChuyen) {
+        this.phiVanChuyen = phiVanChuyen;
+    }
+
+    public LocalDateTime getNgayGiaoDuKien() {
+        return ngayGiaoDuKien;
+    }
+
+    public void setNgayGiaoDuKien(LocalDateTime ngayGiaoDuKien) {
+        this.ngayGiaoDuKien = ngayGiaoDuKien;
+    }
+
+    public LocalDateTime getCapNhatVanChuyen() {
+        return capNhatVanChuyen;
+    }
+
+    public void setCapNhatVanChuyen(LocalDateTime capNhatVanChuyen) {
+        this.capNhatVanChuyen = capNhatVanChuyen;
+    }
+
+    public boolean isCoVanDon() {
+        return maVanDon != null && !"cancel".equals(trangThaiVanChuyen);
+    }
+
+    public String getTenTrangThaiVanChuyen() {
+        return TrangThaiGhn.tenTiengViet(trangThaiVanChuyen);
     }
 
     public KhachHang getKhachHang() {

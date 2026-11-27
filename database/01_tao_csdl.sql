@@ -94,6 +94,11 @@ CREATE TABLE [dbo].[don_hang](
 	[tinh_thanh] [nvarchar](80) NULL,
 	[tong_tien] [bigint] NULL,
 	[trang_thai] [nvarchar](255) NULL,
+	[ma_van_don] [nvarchar](30) NULL,
+	[trang_thai_van_chuyen] [nvarchar](40) NULL,
+	[phi_van_chuyen] [bigint] NULL,
+	[ngay_giao_du_kien] [datetime2](6) NULL,
+	[cap_nhat_van_chuyen] [datetime2](6) NULL,
 	[khach_hang_id] [bigint] NULL,
 PRIMARY KEY CLUSTERED 
 (
@@ -491,4 +496,28 @@ GO
 
 ALTER TABLE [dbo].[tin_nhan_chat]  WITH CHECK ADD  CONSTRAINT [FKq24py5y3oju1lq4y92caowv9x] FOREIGN KEY([phien_chat_id])
 REFERENCES [dbo].[phien_chat] ([id])
+GO
+
+CREATE TABLE [dbo].[giao_dich_sepay](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[da_ghi_nhan] [bit] NOT NULL,
+	[ket_qua] [nvarchar](200) NULL,
+	[loai] [nvarchar](10) NULL,
+	[ma_giao_dich] [bigint] NOT NULL,
+	[ma_tham_chieu] [nvarchar](60) NULL,
+	[ma_thanh_toan] [nvarchar](40) NULL,
+	[ngan_hang] [nvarchar](60) NULL,
+	[nhan_luc] [datetime2](6) NULL,
+	[noi_dung] [nvarchar](500) NULL,
+	[so_tai_khoan] [nvarchar](40) NULL,
+	[so_tien] [bigint] NULL,
+	[thoi_gian_giao_dich] [nvarchar](30) NULL,
+	[don_hang_id] [bigint] NULL,
+PRIMARY KEY CLUSTERED ([id] ASC),
+CONSTRAINT [UKqaci9ttvot07uteqqw6s5dqb6] UNIQUE NONCLUSTERED ([ma_giao_dich] ASC)
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[giao_dich_sepay]  WITH CHECK ADD  CONSTRAINT [FK80wgr0mkue4rln38q8vw52wor] FOREIGN KEY([don_hang_id])
+REFERENCES [dbo].[don_hang] ([id])
 GO

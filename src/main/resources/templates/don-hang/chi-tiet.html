@@ -68,6 +68,13 @@
                     Nhân viên Bep Nè sẽ gọi xác nhận đơn trong giờ hành chính.</p>
             </section>
 
+            <section class="dh-tt dh-tt--gon" th:if="${donHang.maVanDon != null}">
+                <h2>Giao hàng nhanh (GHN)</h2>
+                <p>Mã vận đơn <b th:text="${donHang.maVanDon}">GHN123</b> ·
+                    <span th:text="${donHang.tenTrangThaiVanChuyen}">Chờ lấy hàng</span><th:block th:if="${donHang.ngayGiaoDuKien != null and donHang.coVanDon}">
+                    · dự kiến giao <b th:text="${#temporals.format(donHang.ngayGiaoDuKien, 'dd/MM/yyyy')}">01/01/2026</b></th:block>.</p>
+            </section>
+
             <div class="khoi">
                 <h2 th:text="'Đơn hàng ' + ${donHang.maDon}">Đơn hàng BN000001</h2>
                 <p>

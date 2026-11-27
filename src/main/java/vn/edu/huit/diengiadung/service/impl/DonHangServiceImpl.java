@@ -87,6 +87,10 @@ public class DonHangServiceImpl implements DonHangService {
                 && !DonHang.DA_XAC_NHAN.equals(trangThai)) {
             throw new LoiNghiepVu("Chỉ có thể hủy đơn đang chờ xác nhận hoặc đã xác nhận.");
         }
+        if (donHang.isCoVanDon()) {
+            throw new LoiNghiepVu("Đơn đã được giao cho GHN (vận đơn " + donHang.getMaVanDon()
+                    + "). Cửa hàng cần huỷ vận đơn GHN trước khi huỷ đơn.");
+        }
         List<ChiTietDonHang> theoSanPham = new java.util.ArrayList<>(donHang.getDanhSachChiTiet());
         theoSanPham.sort(java.util.Comparator.comparing(ct -> ct.getSanPham() == null ? 0L : ct.getSanPham().getId()));
         for (ChiTietDonHang chiTiet : theoSanPham) {
